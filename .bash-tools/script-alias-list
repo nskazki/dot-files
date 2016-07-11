@@ -1,0 +1,181 @@
+#! /usr/bin/env node
+
+'use strict'
+
+if ((process.argv[2] === '-h') || (process.argv[2] === '--help')) {
+  console.log('alias-list [-k] [block1, block2, block3, ...]')
+  process.reallyExit(0)
+}
+
+var readFileSync = require('fs').readFileSync
+var bashFiles = [
+  '/home/nskazki/.bash-tools/bash-aliases'
+]
+var isOnlyKeys = (process.argv[2] === '-k') || (process.argv[2] === '--keys')
+var allowBlocks = process.argv
+  .splice(isOnlyKeys ? 3 : 2)
+  .map(function(ab) { return new RegExp(ab.replace(/\*/g, '.*')) })
+if (allowBlocks.length === 0) allowBlocks = [ /.*/ ]
+
+var helpers = bashFiles
+  .map(function(file) { return readFileSync(file, 'utf8') })
+  .map(function(text) { return extrHelpInfo(text) })
+  .reduce(function(acc, part) { return assign(acc, part) }, {})
+
+Object.keys(helpers).forEach(function(blockName) {
+  var isAllow = allowBlocks.some(function(ab) { return ab.test(blockName) })
+  if (!isAllow) {
+    delete helpers[blockName]
+  }
+})
+
+helpers = sortObject(helpers)
+helpers = isOnlyKeys ? Object.keys(helpers) : helpers
+console.log(stringify(helpers))
+
+// extrHelpInfo
+function extrHelpInfo(text) {
+  var allHelpers   = {}
+  var isBlockBody  = false
+  var blockName    = null
+  var blockHelpers = []
+
+  text.split('\n').forEach(function(line) {
+    line = line.trim()
+    var startBlock = false
+      || (line.indexOf('# !') === 0)
+    var closeBlock = false
+      || (line.indexOf('## !') === 0)
+      || (isBlockBody && startBlock)
+    isBlockBody = startBlock
+      ? true
+      : closeBlock
+        ? false
+        : isBlockBody
+
+    if (closeBlock) onCloseBlock(line)
+    if (startBlock) onStartBlock(line)
+    if (isBlockBody) onBlockLine(line)
+  })
+
+  return allHelpers
+
+  function onCloseBlock(line) {
+    allHelpers[blockName] = blockHelpers
+  }
+
+  function onStartBlock(line) {
+    blockHelpers = []
+    blockName = '\u001b[33m' + /# !(\S+)/.exec(line)[1] + '\u001b[39m'
+  }
+
+  function onBlockLine(line) {
+    if(/(alias|function) ([^_][^={\s]+)/.test(line)) {
+      var name = /(alias|function) ([^_][^={\s]+)/.exec(line)[2]
+      blockHelpers.push(name)
+    }
+  }
+}
+
+// sortObject
+// from http://stackoverflow.com/questions/1359761/sorting-a-json-object-in-javascript
+function sortObject(o) {
+  if (Array.isArray(o)) {
+    return o.map(sortObject);
+  } else if (Object.prototype.toString.call(o) !== '[object Object]') {
+    return o;
+  }
+
+  var sorted = {},
+  key, a = [];
+
+  for (key in o) {
+    if (o.hasOwnProperty(key)) {
+      a.push(key);
+    }
+  }
+
+  a.sort();
+
+  for (key = 0; key < a.length; key++) {
+    sorted[a[key]] = sortObject(o[a[key]]);
+  }
+  return sorted;
+}
+
+// stringify
+function typeOf(obj) {
+  return (null === obj || undefined === obj)
+    ? String(obj)
+    : Object.prototype.toString.call(obj).match(/ (\w+)]/)[1].toLowerCase()
+}
+
+function stringify(data) {
+  var handlers, indentLevel = '';
+
+  handlers = {
+    "string": function(x) {
+      return ''+x;
+    },
+    "array": function(x) {
+      var output = '';
+      if (0 === x.length) {
+        output += '[]';
+        return output;
+      }
+      indentLevel = indentLevel.replace(/$/, '  ');
+      x.forEach(function(y) {
+        var handler = handlers[typeOf(y)];
+        output += '\n' + indentLevel + '' + handler(y);
+      });
+      indentLevel = indentLevel.replace(/  /, '');
+      return output;
+    },
+    "object": function(x) {
+      var output = '';
+      if (0 === Object.keys(x).length) {
+        output += '{}';
+        return output;
+      }
+      indentLevel = indentLevel.replace(/$/, '  ');
+      Object.keys(x).forEach(function(k) {
+        var val = x[k],
+          handler = handlers[typeOf(val)];
+        if ('undefined' === typeof val) {
+          return;
+        }
+        output += '\n' + indentLevel + k + handler(val);
+      });
+      indentLevel = indentLevel.replace(/  /, '');
+
+      return output;
+    }
+  };
+
+  return handlers[typeOf(data)](data) + '\n';
+}
+
+// assign
+function assign(target, firstSource) {
+  if (target === undefined || target === null) {
+    throw new TypeError('Cannot convert first argument to object');
+  }
+
+  var to = Object(target);
+  for (var i = 1; i < arguments.length; i++) {
+    var nextSource = arguments[i];
+    if (nextSource === undefined || nextSource === null) {
+      continue;
+    }
+
+    var keysArray = Object.keys(Object(nextSource));
+    for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+      var nextKey = keysArray[nextIndex];
+      var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+      if (desc !== undefined && desc.enumerable) {
+        to[nextKey] = nextSource[nextKey];
+      }
+    }
+  }
+  return to;
+}

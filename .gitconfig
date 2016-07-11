@@ -1,0 +1,252 @@
+[user]
+	name = nskazki
+	email = nskazki@gmail.com
+
+[core]
+	autocrlf = input
+	safecrlf = true
+
+[alias]
+  alias-list = "!f() { \
+    git config --list \
+    | grep alias \
+    | grep -v -P ^alias.alias \
+    | grep -v -P ^alias.cmd- \
+    | sed -e s/=.*// \
+    | grep - \
+    | sort; \
+  }; f"
+
+  type = cat-file -t
+  dump = cat-file -p
+
+  # external-scripts
+  script-wtf         = "!~/.git-tools/git-wtf"
+  script-show-merges = "!~/.git-tools/git-show-merges"
+  script-server      = "!~/.git-tools/git-server"
+  script-contributors-debug = "!~/.git-tools/git-contributors-debug"
+
+  # notes
+  note-reset = "!f() { \
+    echo 'git reflog';\
+    echo 'git reset --hard HEAD@{0}';\
+  }; f"
+
+  # base
+  recommit = commit --amend
+  uncommit = reset --soft HEAD^
+  unstage = reset HEAD
+
+  # push-branch
+  pushb       = !"git cmd-push-branch"
+  push-branch = !"git cmd-push-branch"
+
+  cmd-push-branch = "!f() { \
+    local branch=\"$(test \"$1\" && echo \"$1\" || echo $(git branch-name))\"; \
+    local remote=\"$(test \"$2\" && echo \"$2\" || echo $(git remote | head -n 1))\"; \
+    echo $branch '->' $remote; \
+    git push -u $remote $branch --tags; \
+  }; f"
+
+  # pull-branch
+  pullb       = !"git cmd-pull-branch"
+  pull-branch = !"git cmd-pull-branch"
+
+  cmd-pull-branch = "!f() { \
+    local branch=\"$(test \"$1\" && echo \"$1\" || echo $(git branch-name))\"; \
+    local remote=\"$(test \"$2\" && echo \"$2\" || echo $(git remote | head -n 1))\"; \
+    echo $branch '<-' $remote; \
+    git branch -u $remote/$branch; \
+    git pull $remote $branch; \
+  }; f"
+
+  # pull-all
+  pull-all = !"git cmd-pull-all"
+  cmd-pull-all = "!f() { \
+    git branch -r | grep -v '\\->' | while read remote; do git branch --track \"${remote#origin/}\" \"$remote\"; done; \
+    git fetch --all; \
+    git pull --all; \
+  }; f"
+
+  # recursive
+  cmd-clone-recursive = "clone --recursive"
+  clone-recursive = !"git cmd-clone-recursive"
+
+  # branch-delete
+  branch-delete = !"git cmd-branch-delete"
+  cmd-branch-delete = "!f() { \
+    if [ -z \"$1\" ]; then \
+      echo \"usage: git branchd <branch-name>\"; \
+      return 1; \
+    fi; \
+    local branch=\"$1\"; \
+    echo \"delete: $branch\"; \
+    if [ $(git prompt) -eq 0 ]; then \
+      echo -n \"local: \"; \
+      git branch -D $branch; \
+      echo -n \"origin: \"; \
+      git push origin --delete $branch; \
+    fi; \
+  }; f"
+
+  prompt = "!f() { \
+    read -r -p 'Are you sure? [y/N] ' response; \
+    case $response in \
+      [yY][eE][sS]|[yY]) \
+        echo 0; \
+        return 0; \
+      ;; \
+      *) \
+        echo 1; \
+        return 1; \
+      ;; \
+    esac \
+  }; f"
+
+  # logs
+  cmd-log-hist = "log --color --graph --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --abbrev-commit --date=short"
+  cmd-log-last = "!git cmd-log-hist -n 10"
+  cmd-log-find-in-branch = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=\"$1\"; }; f"
+  cmd-log-find-in-repo   = "!f() { git log --branches --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=\"$1\"; }; f"
+
+  log-hist = !"git cmd-log-hist"
+  log-last = !"git cmd-log-last"
+  log-find-in-branch = !"git cmd-log-find-in-branch"
+  log-find-in-repo   = !"git cmd-log-find-in-repo"
+
+  # Show verbose output about tags, branches or remotes
+  cmd-branch-verbose = "branch -av"
+  cmd-remote-verbose = "remote -v"
+
+  branch-verbose = !"git cmd-branch-verbose"
+  remote-verbose = !"git cmd-remote-verbose"
+
+  # rebase
+  cmd-rebase-by       = "!r() { git rebase -i HEAD~$1; }; r"
+  cmd-rebase-contunue = "!git rebase --continue"
+  cmd-rebase-abort    = "!git rebase --abort"
+  cmd-rebase-skip     = "!git rebase --skip"
+
+  rb = !"git cmd-rebase-by"
+  rc = !"git cmd-rebase-contunue"
+  ra = !"git cmd-rebase-abort"
+  rs = !"git cmd-rebase-skip"
+
+  rebase-by       = !"git cmd-rebase-by"
+  rebase-continue = !"git cmd-rebase-contunue"
+  rebase-abort    = !"git cmd-rebase-abort"
+  rebase-skip     = !"git cmd-rebase-skip"
+
+  # gitignore [git cmd <path>]
+  cmd-gitignore-reset-all = "!git rm -r --cached . && git add ."
+  cmd-gitignore-print-all = "!f() { git ls-files --other --ignored --exclude-standard $@ | grep -v node_modules; }; f"
+
+  gitignore-reset = !"git cmd-gitignore-reset-all"
+  gitignore-print = !"git cmd-gitignore-print-all"
+
+  # status
+  cmd-status-short = "status -s"
+
+  ss           = !"git cmd-status-short"
+  status-short = !"git cmd-status-short"
+
+  # branch
+  cmd-branch-name   = "!git rev-parse --abbrev-ref HEAD"
+  cmd-branch-rename = "!f() { \
+    local rename=\"$(test \"$2\" && echo \"$2\" || echo \"$1\")\"; \
+    local branch=\"$(test \"$2\" && echo \"$1\" || echo $(git branch-name))\"; \
+    echo $branch '->' $rename; \
+    git branch -m $branch $rename; \
+  }; f"
+
+  branch-name   = !"git cmd-branch-name"
+  branch-rename = !"git cmd-branch-rename"
+
+  # config
+  config-bare = "!git config --bool core.bare true"
+  config-show = "!git config --list --local"
+
+[apply]
+  # Detect whitespace errors when applying a patch
+  whitespace = fix
+
+[core]
+  # Treat spaces before tabs and all kinds of trailing whitespace as an error
+  # [default] trailing-space: looks for spaces at the end of a line
+  # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+  whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+  # Make `git rebase` safer on OS X
+  # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+  trustctime = false
+  # Prevent showing files whose names contain non-ASCII symbols as unversioned.
+  # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+  precomposeunicode = false
+
+[color]
+  # Use colors in Git commands that are capable of colored output when
+  # outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
+  ui = auto
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold # line info
+  old = red # deletions
+  new = green # additions
+
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+
+[diff]
+  # Detect copies as well as renames
+  renames = copies
+
+# [help]
+  # Automatically correct and execute mistyped commands
+  # autocorrect = 1
+
+[merge]
+  # Include summaries of merged commits in newly created merge commit messages
+  log = true
+
+[merge]
+  conflictstyle = diff3
+
+[push]
+  # Use the Git 1.x.x default to avoid errors on machines with old Git
+  # installations. To use `simple` instead, add this to your `~/.extra` file:
+  # `git config --global push.default simple`. See http://git.io/mMah-w.
+  default = simple
+  # Make `git push` push relevant annotated tags when pushing branches out.
+  followTags = true
+
+[url "git@github.com:"]
+  insteadOf = "gh:"
+  pushInsteadOf = "github:"
+  pushInsteadOf = "git://github.com/"
+
+[url "git://github.com/"]
+  insteadOf = "github:"
+
+[url "git@gist.github.com:"]
+  insteadOf = "gst:"
+  pushInsteadOf = "gist:"
+  pushInsteadOf = "git://gist.github.com/"
+
+[url "git://gist.github.com/"]
+  insteadOf = "gist:"
+
+[url "https://"]
+  insteadOf = git://
+
+[stash]
+  showPatch = true
+
+[rebase]
+  autostash = true

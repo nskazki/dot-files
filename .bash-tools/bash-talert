@@ -1,0 +1,25 @@
+function talert-debug {
+  local token="0d8b520859fbc2f3b8b3b57ca3d85734bc6654d4"
+  local ipAdd="91.142.90.218:8080"
+  echo "ipAdd: $ipAdd"
+  echo "token: $token"
+
+  local code="$([ $? == 0 ] && echo ✔️ || echo ✖️)"
+  local user="$USER"
+  local host="$([ $(hostname -f) == localhost ] && echo $(hostname) || echo $(hostname -f))"
+  local wlcm="$([ $USER == root ] && echo \# || echo \$)"
+  local aps1="$user@$host$wlcm"
+  echo "aps1: $aps1"
+
+  local hist="$(history | tail -n1 | sed -e 's/^\s*[0-9]\+\s*//;s/[|;&]\+\s*talert\s*$//')"
+  local text="$code $aps1 $hist"
+  echo "text: $text"
+
+  curl -f -s "$ipAdd" \
+    --data-urlencode "text=$text" \
+    --data-urlencode "token=$token"
+}
+
+function talert {
+  talert-debug $@ > /dev/null 2>&1
+}

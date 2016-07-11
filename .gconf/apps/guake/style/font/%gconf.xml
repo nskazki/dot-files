@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<gconf>
+	<entry name="allow_bold" mtime="1463781581" schema="/schemas/apps/guake/style/font/allow_bold" type="bool" value="true"/>
+	<entry name="palette_name" mtime="1463781640" schema="/schemas/apps/guake/style/font/palette_name" type="string">
+		<stringvalue>Custom</stringvalue>
+	</entry>
+	<entry name="palette" mtime="1463781640" schema="/schemas/apps/guake/style/font/palette" type="string">
+		<stringvalue>#111114141717:#c8c841413434:#77ccc4c44b4b:#e417a33c0000:#59997be6e2cd:#d0d03c3c9191:#3c3cc6c6d0d0:#ffffef98e13e:#8a528a528a52:#ffff93f98d20:#59e5ffff5880:#fffffebe8c42:#aac1b2f6ffff:#ffff9173f31c:#b926ffffff8c:#ffffffffffff:#e5e5c6c6a8a8:#282824242020</stringvalue>
+	</entry>
+	<entry name="color" mtime="1463396667" schema="/schemas/apps/guake/style/font/color"/>
+	<entry name="style" mtime="1463396667" schema="/schemas/apps/guake/style/font/style"/>
+</gconf>

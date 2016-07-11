@@ -1,0 +1,735 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" width="1200" height="1426" onload="init(evt)" viewBox="0 0 1200 1426" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<!-- Flame graph stack visualization. See https://github.com/brendangregg/FlameGraph for latest version, and http://www.brendangregg.com/flamegraphs.html for examples. -->
+<defs >
+	<linearGradient id="background" y1="0" y2="1" x1="0" x2="0" >
+		<stop stop-color="#eeeeee" offset="5%" />
+		<stop stop-color="#eeeeb0" offset="95%" />
+	</linearGradient>
+</defs>
+<style type="text/css">
+	.func_g:hover { stroke:black; stroke-width:0.5; cursor:pointer; }
+</style>
+<script type="text/ecmascript">
+<![CDATA[
+	var details, searchbtn, matchedtxt, svg;
+	function init(evt) {
+		details = document.getElementById("details").firstChild;
+		searchbtn = document.getElementById("search");
+		matchedtxt = document.getElementById("matched");
+		svg = document.getElementsByTagName("svg")[0];
+		searching = 0;
+	}
+
+	// mouse-over for info
+	function s(node) {		// show
+		info = g_to_text(node);
+		details.nodeValue = "Function: " + info;
+	}
+	function c() {			// clear
+		details.nodeValue = ' ';
+	}
+
+	// ctrl-F for search
+	window.addEventListener("keydown",function (e) {
+		if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+			e.preventDefault();
+			search_prompt();
+		}
+	})
+
+	// functions
+	function find_child(parent, name, attr) {
+		var children = parent.childNodes;
+		for (var i=0; i<children.length;i++) {
+			if (children[i].tagName == name)
+				return (attr != undefined) ? children[i].attributes[attr].value : children[i];
+		}
+		return;
+	}
+	function orig_save(e, attr, val) {
+		if (e.attributes["_orig_"+attr] != undefined) return;
+		if (e.attributes[attr] == undefined) return;
+		if (val == undefined) val = e.attributes[attr].value;
+		e.setAttribute("_orig_"+attr, val);
+	}
+	function orig_load(e, attr) {
+		if (e.attributes["_orig_"+attr] == undefined) return;
+		e.attributes[attr].value = e.attributes["_orig_"+attr].value;
+		e.removeAttribute("_orig_"+attr);
+	}
+	function g_to_text(e) {
+		var text = find_child(e, "title").firstChild.nodeValue;
+		return (text)
+	}
+	function g_to_func(e) {
+		var func = g_to_text(e);
+		if (func != null)
+			func = func.replace(/ .*/, "");
+		return (func);
+	}
+	function update_text(e) {
+		var r = find_child(e, "rect");
+		var t = find_child(e, "text");
+		var w = parseFloat(r.attributes["width"].value) -3;
+		var txt = find_child(e, "title").textContent.replace(/\([^(]*\)$/,"");
+		t.attributes["x"].value = parseFloat(r.attributes["x"].value) +3;
+
+		// Smaller than this size won't fit anything
+		if (w < 2*12*0.59) {
+			t.textContent = "";
+			return;
+		}
+
+		t.textContent = txt;
+		// Fit in full text width
+		if (/^ *$/.test(txt) || t.getSubStringLength(0, txt.length) < w)
+			return;
+
+		for (var x=txt.length-2; x>0; x--) {
+			if (t.getSubStringLength(0, x+2) <= w) {
+				t.textContent = txt.substring(0,x) + "..";
+				return;
+			}
+		}
+		t.textContent = "";
+	}
+
+	// zoom
+	function zoom_reset(e) {
+		if (e.attributes != undefined) {
+			orig_load(e, "x");
+			orig_load(e, "width");
+		}
+		if (e.childNodes == undefined) return;
+		for(var i=0, c=e.childNodes; i<c.length; i++) {
+			zoom_reset(c[i]);
+		}
+	}
+	function zoom_child(e, x, ratio) {
+		if (e.attributes != undefined) {
+			if (e.attributes["x"] != undefined) {
+				orig_save(e, "x");
+				e.attributes["x"].value = (parseFloat(e.attributes["x"].value) - x - 10) * ratio + 10;
+				if(e.tagName == "text") e.attributes["x"].value = find_child(e.parentNode, "rect", "x") + 3;
+			}
+			if (e.attributes["width"] != undefined) {
+				orig_save(e, "width");
+				e.attributes["width"].value = parseFloat(e.attributes["width"].value) * ratio;
+			}
+		}
+
+		if (e.childNodes == undefined) return;
+		for(var i=0, c=e.childNodes; i<c.length; i++) {
+			zoom_child(c[i], x-10, ratio);
+		}
+	}
+	function zoom_parent(e) {
+		if (e.attributes) {
+			if (e.attributes["x"] != undefined) {
+				orig_save(e, "x");
+				e.attributes["x"].value = 10;
+			}
+			if (e.attributes["width"] != undefined) {
+				orig_save(e, "width");
+				e.attributes["width"].value = parseInt(svg.width.baseVal.value) - (10*2);
+			}
+		}
+		if (e.childNodes == undefined) return;
+		for(var i=0, c=e.childNodes; i<c.length; i++) {
+			zoom_parent(c[i]);
+		}
+	}
+	function zoom(node) {
+		var attr = find_child(node, "rect").attributes;
+		var width = parseFloat(attr["width"].value);
+		var xmin = parseFloat(attr["x"].value);
+		var xmax = parseFloat(xmin + width);
+		var ymin = parseFloat(attr["y"].value);
+		var ratio = (svg.width.baseVal.value - 2*10) / width;
+
+		// XXX: Workaround for JavaScript float issues (fix me)
+		var fudge = 0.0001;
+
+		var unzoombtn = document.getElementById("unzoom");
+		unzoombtn.style["opacity"] = "1.0";
+
+		var el = document.getElementsByTagName("g");
+		for(var i=0;i<el.length;i++){
+			var e = el[i];
+			var a = find_child(e, "rect").attributes;
+			var ex = parseFloat(a["x"].value);
+			var ew = parseFloat(a["width"].value);
+			// Is it an ancestor
+			if (0 == 0) {
+				var upstack = parseFloat(a["y"].value) > ymin;
+			} else {
+				var upstack = parseFloat(a["y"].value) < ymin;
+			}
+			if (upstack) {
+				// Direct ancestor
+				if (ex <= xmin && (ex+ew+fudge) >= xmax) {
+					e.style["opacity"] = "0.5";
+					zoom_parent(e);
+					e.onclick = function(e){unzoom(); zoom(this);};
+					update_text(e);
+				}
+				// not in current path
+				else
+					e.style["display"] = "none";
+			}
+			// Children maybe
+			else {
+				// no common path
+				if (ex < xmin || ex + fudge >= xmax) {
+					e.style["display"] = "none";
+				}
+				else {
+					zoom_child(e, xmin, ratio);
+					e.onclick = function(e){zoom(this);};
+					update_text(e);
+				}
+			}
+		}
+	}
+	function unzoom() {
+		var unzoombtn = document.getElementById("unzoom");
+		unzoombtn.style["opacity"] = "0.0";
+
+		var el = document.getElementsByTagName("g");
+		for(i=0;i<el.length;i++) {
+			el[i].style["display"] = "block";
+			el[i].style["opacity"] = "1";
+			zoom_reset(el[i]);
+			update_text(el[i]);
+		}
+	}
+
+	// search
+	function reset_search() {
+		var el = document.getElementsByTagName("rect");
+		for (var i=0; i < el.length; i++) {
+			orig_load(el[i], "fill")
+		}
+	}
+	function search_prompt() {
+		if (!searching) {
+			var term = prompt("Enter a search term (regexp " +
+			    "allowed, eg: ^ext4_)", "");
+			if (term != null) {
+				search(term)
+			}
+		} else {
+			reset_search();
+			searching = 0;
+			searchbtn.style["opacity"] = "0.1";
+			searchbtn.firstChild.nodeValue = "Search"
+			matchedtxt.style["opacity"] = "0.0";
+			matchedtxt.firstChild.nodeValue = ""
+		}
+	}
+	function search(term) {
+		var re = new RegExp(term);
+		var el = document.getElementsByTagName("g");
+		var matches = new Object();
+		var maxwidth = 0;
+		for (var i = 0; i < el.length; i++) {
+			var e = el[i];
+			if (e.attributes["class"].value != "func_g")
+				continue;
+			var func = g_to_func(e);
+			var rect = find_child(e, "rect");
+			if (rect == null) {
+				// the rect might be wrapped in an anchor
+				// if nameattr href is being used
+				if (rect = find_child(e, "a")) {
+				    rect = find_child(r, "rect");
+				}
+			}
+			if (func == null || rect == null)
+				continue;
+
+			// Save max width. Only works as we have a root frame
+			var w = parseFloat(rect.attributes["width"].value);
+			if (w > maxwidth)
+				maxwidth = w;
+
+			if (func.match(re)) {
+				// highlight
+				var x = parseFloat(rect.attributes["x"].value);
+				orig_save(rect, "fill");
+				rect.attributes["fill"].value =
+				    "rgb(230,0,230)";
+
+				// remember matches
+				if (matches[x] == undefined) {
+					matches[x] = w;
+				} else {
+					if (w > matches[x]) {
+						// overwrite with parent
+						matches[x] = w;
+					}
+				}
+				searching = 1;
+			}
+		}
+		if (!searching)
+			return;
+
+		searchbtn.style["opacity"] = "1.0";
+		searchbtn.firstChild.nodeValue = "Reset Search"
+
+		// calculate percent matched, excluding vertical overlap
+		var count = 0;
+		var lastx = -1;
+		var lastw = 0;
+		var keys = Array();
+		for (k in matches) {
+			if (matches.hasOwnProperty(k))
+				keys.push(k);
+		}
+		// sort the matched frames by their x location
+		// ascending, then width descending
+		keys.sort(function(a, b){
+				return a - b;
+			if (a < b || a > b)
+				return a - b;
+			return matches[b] - matches[a];
+		});
+		// Step through frames saving only the biggest bottom-up frames
+		// thanks to the sort order. This relies on the tree property
+		// where children are always smaller than their parents.
+		for (var k in keys) {
+			var x = parseFloat(keys[k]);
+			var w = matches[keys[k]];
+			if (x >= lastx + lastw) {
+				count += w;
+				lastx = x;
+				lastw = w;
+			}
+		}
+		// display matched percent
+		matchedtxt.style["opacity"] = "1.0";
+		pct = 100 * count / maxwidth;
+		if (pct == 100)
+			pct = "100"
+		else
+			pct = pct.toFixed(1)
+		matchedtxt.firstChild.nodeValue = "Matched: " + pct + "%";
+	}
+	function searchover(e) {
+		searchbtn.style["opacity"] = "1.0";
+	}
+	function searchout(e) {
+		if (searching) {
+			searchbtn.style["opacity"] = "1.0";
+		} else {
+			searchbtn.style["opacity"] = "0.1";
+		}
+	}
+]]>
+</script>
+<rect x="0.0" y="0" width="1200.0" height="1426.0" fill="url(#background)"  />
+<text text-anchor="middle" x="600.00" y="24" font-size="17" font-family="Verdana" fill="rgb(0,0,0)"  >Flame Graph</text>
+<text text-anchor="" x="10.00" y="1409" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" id="details" > </text>
+<text text-anchor="" x="10.00" y="24" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" id="unzoom" onclick="unzoom()" style="opacity:0.0;cursor:pointer" >Reset Zoom</text>
+<text text-anchor="" x="1090.00" y="24" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" id="search" onmouseover="searchover()" onmouseout="searchout()" onclick="search_prompt()" style="opacity:0.1;cursor:pointer" >Search</text>
+<text text-anchor="" x="1090.00" y="1409" font-size="12" font-family="Verdana" fill="rgb(0,0,0)" id="matched" > </text>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE (1 samples, 50.00%)</title><rect x="10.0" y="113" width="590.0" height="15.0" fill="rgb(221,81,81)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="123.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~preferredMediaTypes /home/nskazki/.test/0x/examples/rest-api/node_modules/negotiator/lib/mediaType.js:123 (1 samples, 50.00%)</title><rect x="600.0" y="433" width="590.0" height="15.0" fill="rgb(91,237,91)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="443.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~preferredMediaTypes /home/nskazki/.test/0x/examples/rest-api/node_mo..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88Function4CallENS_6HandleINS_5ValueEEEiPS3_ (2 samples, 100.00%)</title><rect x="10.0" y="1217" width="1180.0" height="15.0" fill="rgb(243,113,113)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1227.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88Function4CallENS_6HandleINS_5ValueEEEiPS3_</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~format /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/response.js:96 (1 samples, 50.00%)</title><rect x="600.0" y="497" width="590.0" height="15.0" fill="rgb(54,203,54)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="507.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~format /home/nskazki/.test/0x/examples/rest-api/node_modules/restify..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~Readable.push _stream_readable.js:115 (2 samples, 100.00%)</title><rect x="10.0" y="1089" width="1180.0" height="15.0" fill="rgb(70,183,183)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1099.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~Readable.push _stream_readable.js:115</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~f /home/nskazki/.test/0x/examples/rest-api/node_modules/once/once.js:14 (2 samples, 100.00%)</title><rect x="10.0" y="609" width="1180.0" height="15.0" fill="rgb(55,204,55)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="619.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~f /home/nskazki/.test/0x/examples/rest-api/node_modules/once/once.js:14</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal9Execution4CallEPNS0_7IsolateENS0_6HandleINS0_6ObjectEEES6_iPS6_b (2 samples, 100.00%)</title><rect x="10.0" y="897" width="1180.0" height="15.0" fill="rgb(246,117,117)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="907.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal9Execution4CallEPNS0_7IsolateENS0_6HandleINS0_6ObjectEEES6_iPS6_b</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>__libc_start_main (2 samples, 100.00%)</title><rect x="10.0" y="1329" width="1180.0" height="15.0" fill="rgb(254,129,129)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1339.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >__libc_start_main</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal7JSArray17SetElementsLengthENS0_6HandleIS1_EENS2_INS0_6ObjectEEE (1 samples, 50.00%)</title><rect x="600.0" y="337" width="590.0" height="15.0" fill="rgb(245,116,116)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="347.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal7JSArray17SetElementsLengthENS0_6HandleIS1_EENS2_INS0_6ObjectEEE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~onRoute /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:747 (2 samples, 100.00%)</title><rect x="10.0" y="673" width="1180.0" height="15.0" fill="rgb(77,225,77)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="683.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~onRoute /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:747</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal8Compiler18GetUnoptimizedCodeENS0_6HandleINS0_10JSFunctionEEE (1 samples, 50.00%)</title><rect x="10.0" y="321" width="590.0" height="15.0" fill="rgb(230,94,94)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="331.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal8Compiler18GetUnoptimizedCodeENS0_6HandleINS0_10JSFunctionEEE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~ /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:705 (2 samples, 100.00%)</title><rect x="10.0" y="657" width="1180.0" height="15.0" fill="rgb(77,224,77)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="667.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~ /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:705</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Stub:CEntryStub (1 samples, 50.00%)</title><rect x="600.0" y="385" width="590.0" height="15.0" fill="rgb(62,176,176)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="395.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Stub:CEntryStub</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Stub:JSEntryStub (2 samples, 100.00%)</title><rect x="10.0" y="865" width="1180.0" height="15.0" fill="rgb(79,192,192)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="875.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Stub:JSEntryStub</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~formatJSON /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/formatters/json.js:17 (1 samples, 50.00%)</title><rect x="10.0" y="481" width="590.0" height="15.0" fill="rgb(79,227,79)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="491.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~formatJSON /home/nskazki/.test/0x/examples/rest-api/node_modules/res..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~_run /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:801 (2 samples, 100.00%)</title><rect x="10.0" y="641" width="1180.0" height="15.0" fill="rgb(96,243,96)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="651.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~_run /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:801</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator10VisitBlockEPNS0_5BlockE (1 samples, 50.00%)</title><rect x="10.0" y="177" width="590.0" height="15.0" fill="rgb(254,128,128)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="187.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator10VisitBlockEPNS0_5BlockE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Stub:CEntryStub (1 samples, 50.00%)</title><rect x="10.0" y="353" width="590.0" height="15.0" fill="rgb(95,206,206)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="363.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Stub:CEntryStub</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~parserOnHeadersComplete _http_common.js:63 (2 samples, 100.00%)</title><rect x="10.0" y="833" width="1180.0" height="15.0" fill="rgb(51,165,165)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="843.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~parserOnHeadersComplete _http_common.js:63</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~readableAddChunk _stream_readable.js:139 (2 samples, 100.00%)</title><rect x="10.0" y="1073" width="1180.0" height="15.0" fill="rgb(83,195,195)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1083.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~readableAddChunk _stream_readable.js:139</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~routeAndRun /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:704 (2 samples, 100.00%)</title><rect x="10.0" y="737" width="1180.0" height="15.0" fill="rgb(86,233,86)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="747.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~routeAndRun /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:704</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88Function4CallENS_6HandleINS_5ValueEEEiPS3_ (2 samples, 100.00%)</title><rect x="10.0" y="913" width="1180.0" height="15.0" fill="rgb(225,87,87)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="923.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88Function4CallENS_6HandleINS_5ValueEEEiPS3_</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~mediaType /home/nskazki/.test/0x/examples/rest-api/node_modules/negotiator/index.js:45 (1 samples, 50.00%)</title><rect x="600.0" y="465" width="590.0" height="15.0" fill="rgb(76,224,76)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="475.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~mediaType /home/nskazki/.test/0x/examples/rest-api/node_modules/nego..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:ArgumentsAdaptorTrampoline (1 samples, 50.00%)</title><rect x="10.0" y="449" width="590.0" height="15.0" fill="rgb(94,205,205)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="459.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:ArgumentsAdaptorTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:ArgumentsAdaptorTrampoline (1 samples, 50.00%)</title><rect x="600.0" y="529" width="590.0" height="15.0" fill="rgb(59,173,173)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="539.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:ArgumentsAdaptorTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:ArgumentsAdaptorTrampoline (2 samples, 100.00%)</title><rect x="10.0" y="1057" width="1180.0" height="15.0" fill="rgb(72,185,185)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1067.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:ArgumentsAdaptorTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:ArgumentsAdaptorTrampoline (1 samples, 50.00%)</title><rect x="10.0" y="529" width="590.0" height="15.0" fill="rgb(59,173,173)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="539.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:ArgumentsAdaptorTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~_cb /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/response.js:307 (1 samples, 50.00%)</title><rect x="10.0" y="465" width="590.0" height="15.0" fill="rgb(87,234,87)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="475.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~_cb /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/li..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~socketOnData _http_server.js:340 (2 samples, 100.00%)</title><rect x="10.0" y="1025" width="1180.0" height="15.0" fill="rgb(87,199,199)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1035.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~socketOnData _http_server.js:340</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:ArgumentsAdaptorTrampoline (2 samples, 100.00%)</title><rect x="10.0" y="801" width="1180.0" height="15.0" fill="rgb(99,210,210)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="811.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:ArgumentsAdaptorTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:ArgumentsAdaptorTrampoline (1 samples, 50.00%)</title><rect x="10.0" y="401" width="590.0" height="15.0" fill="rgb(53,168,168)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="411.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:ArgumentsAdaptorTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE (1 samples, 50.00%)</title><rect x="10.0" y="49" width="590.0" height="15.0" fill="rgb(240,108,108)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="59.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN4node5StartEiPPc (2 samples, 100.00%)</title><rect x="10.0" y="1313" width="1180.0" height="15.0" fill="rgb(243,112,112)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1323.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN4node5StartEiPPc</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~ /home/nskazki/.test/0x/examples/rest-api/index.js:19 (1 samples, 50.00%)</title><rect x="10.0" y="545" width="590.0" height="15.0" fill="rgb(97,243,97)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="555.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~ /home/nskazki/.test/0x/examples/rest-api/index.js:19</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Stub:JSEntryStub (2 samples, 100.00%)</title><rect x="10.0" y="1169" width="1180.0" height="15.0" fill="rgb(89,201,201)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1179.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Stub:JSEntryStub</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator10VisitThrowEPNS0_5ThrowE (1 samples, 50.00%)</title><rect x="10.0" y="97" width="590.0" height="15.0" fill="rgb(211,66,66)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="107.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator10VisitThrowEPNS0_5ThrowE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>all (2 samples, 100%)</title><rect x="10.0" y="1377" width="1180.0" height="15.0" fill="rgb(210,65,65)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1387.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  ></text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:FunctionApply (2 samples, 100.00%)</title><rect x="10.0" y="593" width="1180.0" height="15.0" fill="rgb(73,186,186)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="603.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:FunctionApply</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE (1 samples, 50.00%)</title><rect x="10.0" y="225" width="590.0" height="15.0" fill="rgb(252,126,126)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="235.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal25FunctionCallbackArguments4CallEPFvRKNS_20FunctionCallbackInfoINS_5ValueEEEE (2 samples, 100.00%)</title><rect x="10.0" y="977" width="1180.0" height="15.0" fill="rgb(253,128,128)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="987.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal25FunctionCallbackArguments4CallEPFvRKNS_20FunctionCallbackInfoINS_5ValueEEEE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:ArgumentsAdaptorTrampoline (2 samples, 100.00%)</title><rect x="10.0" y="721" width="1180.0" height="15.0" fill="rgb(100,210,210)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="731.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:ArgumentsAdaptorTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator8MakeCodeEPNS0_15CompilationInfoE (1 samples, 50.00%)</title><rect x="10.0" y="273" width="590.0" height="15.0" fill="rgb(240,108,108)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="283.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator8MakeCodeEPNS0_15CompilationInfoE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~parserOnIncoming _http_server.js:421 (2 samples, 100.00%)</title><rect x="10.0" y="817" width="1180.0" height="15.0" fill="rgb(95,206,206)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="827.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~parserOnIncoming _http_server.js:421</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~emit events.js:68 (2 samples, 100.00%)</title><rect x="10.0" y="1041" width="1180.0" height="15.0" fill="rgb(63,177,177)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1051.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~emit events.js:68</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~_handle /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:701 (2 samples, 100.00%)</title><rect x="10.0" y="753" width="1180.0" height="15.0" fill="rgb(109,254,109)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="763.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~_handle /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:701</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Stub:CEntryStub (2 samples, 100.00%)</title><rect x="10.0" y="1009" width="1180.0" height="15.0" fill="rgb(52,167,167)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1019.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Stub:CEntryStub</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~ /home/nskazki/.test/0x/examples/rest-api/index.js:8 (1 samples, 50.00%)</title><rect x="600.0" y="545" width="590.0" height="15.0" fill="rgb(73,221,73)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="555.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~ /home/nskazki/.test/0x/examples/rest-api/index.js:8</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:JSEntryTrampoline (2 samples, 100.00%)</title><rect x="10.0" y="849" width="1180.0" height="15.0" fill="rgb(62,176,176)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="859.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:JSEntryTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN4node19StreamWrapCallbacks6DoReadEP11uv_stream_slPK8uv_buf_t14uv_handle_type (2 samples, 100.00%)</title><rect x="10.0" y="1249" width="1180.0" height="15.0" fill="rgb(233,98,98)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1259.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN4node19StreamWrapCallbacks6DoReadEP11uv_stream_slPK8uv_buf_t14uv_handle_type</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:CompileUnoptimized (1 samples, 50.00%)</title><rect x="10.0" y="369" width="590.0" height="15.0" fill="rgb(51,166,166)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="379.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:CompileUnoptimized</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>[unknown] (2 samples, 100.00%)</title><rect x="10.0" y="1345" width="1180.0" height="15.0" fill="rgb(232,96,96)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1355.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >[unknown]</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal24GetUnoptimizedCodeCommonEPNS0_15CompilationInfoE (1 samples, 50.00%)</title><rect x="10.0" y="305" width="590.0" height="15.0" fill="rgb(238,106,106)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="315.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal24GetUnoptimizedCodeCommonEPNS0_15CompilationInfoE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~parseAccept /home/nskazki/.test/0x/examples/rest-api/node_modules/negotiator/lib/mediaType.js:12 (1 samples, 50.00%)</title><rect x="600.0" y="417" width="590.0" height="15.0" fill="rgb(68,216,68)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="427.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~parseAccept /home/nskazki/.test/0x/examples/rest-api/node_modules/ne..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal6InvokeEbNS0_6HandleINS0_10JSFunctionEEENS1_INS0_6ObjectEEEiPS5_ (2 samples, 100.00%)</title><rect x="10.0" y="881" width="1180.0" height="15.0" fill="rgb(208,63,63)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="891.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal6InvokeEbNS0_6HandleINS0_10JSFunctionEEENS1_INS0_6ObjectEEEiPS5_</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator16VisitIfStatementEPNS0_11IfStatementE (1 samples, 50.00%)</title><rect x="10.0" y="209" width="590.0" height="15.0" fill="rgb(254,128,128)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="219.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator16VisitIfStatementEPNS0_11IfStatementE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>node (2 samples, 100.00%)</title><rect x="10.0" y="1361" width="1180.0" height="15.0" fill="rgb(222,82,82)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1371.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >node</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZNK2v88internal17FullCodeGenerator17StackValueContext4PlugENS0_8RegisterE (1 samples, 50.00%)</title><rect x="10.0" y="33" width="590.0" height="15.0" fill="rgb(234,100,100)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="43.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZNK2v88internal17FullCodeGenerator17StackValueContext4PlugENS0_8RegisterE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal21StoreCallbackPropertyEiPPNS0_6ObjectEPNS0_7IsolateE (1 samples, 50.00%)</title><rect x="600.0" y="369" width="590.0" height="15.0" fill="rgb(225,86,86)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="379.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal21StoreCallbackPropertyEiPPNS0_6ObjectEPNS0_7IsolateE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal10AstVisitor15VisitStatementsEPNS0_8ZoneListIPNS0_9StatementEEE (1 samples, 50.00%)</title><rect x="10.0" y="161" width="590.0" height="15.0" fill="rgb(214,70,70)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="171.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal10AstVisitor15VisitStatementsEPNS0_8ZoneListIPNS0_9StatementEEE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~next /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:824 (2 samples, 100.00%)</title><rect x="10.0" y="561" width="1180.0" height="15.0" fill="rgb(102,248,102)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="571.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~next /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:824</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~_route /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:740 (2 samples, 100.00%)</title><rect x="10.0" y="705" width="1180.0" height="15.0" fill="rgb(81,228,81)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="715.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~_route /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:740</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN4node6Parser20on_headers_complete_Ev (2 samples, 100.00%)</title><rect x="10.0" y="929" width="1180.0" height="15.0" fill="rgb(201,52,52)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="939.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN4node6Parser20on_headers_complete_Ev</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~accepts /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/request.js:76 (1 samples, 50.00%)</title><rect x="600.0" y="481" width="590.0" height="15.0" fill="rgb(80,228,80)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="491.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~accepts /home/nskazki/.test/0x/examples/rest-api/node_modules/restif..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~send /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/response.js:270 (1 samples, 50.00%)</title><rect x="600.0" y="513" width="590.0" height="15.0" fill="rgb(63,212,63)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="523.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~send /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/l..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~mediaTypes /home/nskazki/.test/0x/examples/rest-api/node_modules/negotiator/index.js:50 (1 samples, 50.00%)</title><rect x="600.0" y="449" width="590.0" height="15.0" fill="rgb(52,202,52)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="459.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~mediaTypes /home/nskazki/.test/0x/examples/rest-api/node_modules/neg..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator24VisitExpressionStatementEPNS0_19ExpressionStatementE (1 samples, 50.00%)</title><rect x="10.0" y="129" width="590.0" height="15.0" fill="rgb(225,87,87)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="139.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator24VisitExpressionStatementEPNS0_19ExpressionSta..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal22CompileUnoptimizedCodeEPNS0_15CompilationInfoE (1 samples, 50.00%)</title><rect x="10.0" y="289" width="590.0" height="15.0" fill="rgb(213,69,69)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="299.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal22CompileUnoptimizedCodeEPNS0_15CompilationInfoE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE (1 samples, 50.00%)</title><rect x="10.0" y="193" width="590.0" height="15.0" fill="rgb(209,63,63)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="203.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal26Runtime_CompileUnoptimizedEiPPNS0_6ObjectEPNS0_7IsolateE (1 samples, 50.00%)</title><rect x="10.0" y="337" width="590.0" height="15.0" fill="rgb(204,56,56)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="347.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal26Runtime_CompileUnoptimizedEiPPNS0_6ObjectEPNS0_7IsolateE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:ArgumentsAdaptorTrampoline (2 samples, 100.00%)</title><rect x="10.0" y="1105" width="1180.0" height="15.0" fill="rgb(81,194,194)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1115.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:ArgumentsAdaptorTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:JSEntryTrampoline (2 samples, 100.00%)</title><rect x="10.0" y="1153" width="1180.0" height="15.0" fill="rgb(80,193,193)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1163.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:JSEntryTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~send /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/response.js:270 (1 samples, 50.00%)</title><rect x="10.0" y="513" width="590.0" height="15.0" fill="rgb(78,226,78)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="523.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~send /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/l..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~ServerResponse.writeHead _http_server.js:175 (1 samples, 50.00%)</title><rect x="10.0" y="385" width="590.0" height="15.0" fill="rgb(108,218,218)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="395.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~ServerResponse.writeHead _http_server.js:175</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal6InvokeEbNS0_6HandleINS0_10JSFunctionEEENS1_INS0_6ObjectEEEiPS5_ (2 samples, 100.00%)</title><rect x="10.0" y="1185" width="1180.0" height="15.0" fill="rgb(209,64,64)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1195.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal6InvokeEbNS0_6HandleINS0_10JSFunctionEEENS1_INS0_6ObjectEEEiPS5_</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE (1 samples, 50.00%)</title><rect x="10.0" y="81" width="590.0" height="15.0" fill="rgb(233,98,98)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="91.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~format /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/response.js:96 (1 samples, 50.00%)</title><rect x="10.0" y="497" width="590.0" height="15.0" fill="rgb(99,245,99)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="507.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~format /home/nskazki/.test/0x/examples/rest-api/node_modules/restify..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal25PropertyCallbackArguments4CallEPFvNS_5LocalINS_6StringEEENS2_INS_5ValueEEERKNS_20PropertyCallbackInfoIvEEES4_S6_ (1 samples, 50.00%)</title><rect x="600.0" y="353" width="590.0" height="15.0" fill="rgb(242,111,111)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="363.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal25PropertyCallbackArguments4CallEPFvNS_5LocalINS_6StringEEENS2_INS..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:ArgumentsAdaptorTrampoline (2 samples, 100.00%)</title><rect x="10.0" y="577" width="1180.0" height="15.0" fill="rgb(85,197,197)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="587.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:ArgumentsAdaptorTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~emit events.js:68 (2 samples, 100.00%)</title><rect x="10.0" y="785" width="1180.0" height="15.0" fill="rgb(62,176,176)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="795.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~emit events.js:68</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>uv__stream_io (2 samples, 100.00%)</title><rect x="10.0" y="1265" width="1180.0" height="15.0" fill="rgb(254,129,129)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1275.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >uv__stream_io</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal10AstVisitor15VisitStatementsEPNS0_8ZoneListIPNS0_9StatementEEE (1 samples, 50.00%)</title><rect x="10.0" y="241" width="590.0" height="15.0" fill="rgb(229,93,93)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="251.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal10AstVisitor15VisitStatementsEPNS0_8ZoneListIPNS0_9StatementEEE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>http_parser_execute (2 samples, 100.00%)</title><rect x="10.0" y="945" width="1180.0" height="15.0" fill="rgb(236,102,102)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="955.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >http_parser_execute</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~Domain.run domain.js:230 (2 samples, 100.00%)</title><rect x="10.0" y="625" width="1180.0" height="15.0" fill="rgb(102,212,212)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="635.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~Domain.run domain.js:230</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator8GenerateEv (1 samples, 50.00%)</title><rect x="10.0" y="257" width="590.0" height="15.0" fill="rgb(234,99,99)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="267.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator8GenerateEv</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal21Builtin_HandleApiCallEiPPNS0_6ObjectEPNS0_7IsolateE (2 samples, 100.00%)</title><rect x="10.0" y="993" width="1180.0" height="15.0" fill="rgb(247,119,119)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1003.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal21Builtin_HandleApiCallEiPPNS0_6ObjectEPNS0_7IsolateE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN4node6Parser7ExecuteERKN2v820FunctionCallbackInfoINS1_5ValueEEE (2 samples, 100.00%)</title><rect x="10.0" y="961" width="1180.0" height="15.0" fill="rgb(230,94,94)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="971.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN4node6Parser7ExecuteERKN2v820FunctionCallbackInfoINS1_5ValueEEE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:find /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/router.js:403 (2 samples, 100.00%)</title><rect x="10.0" y="689" width="1180.0" height="15.0" fill="rgb(77,225,77)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="699.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:find /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/router.js:403</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~onread net.js:518 (2 samples, 100.00%)</title><rect x="10.0" y="1121" width="1180.0" height="15.0" fill="rgb(74,187,187)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1131.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~onread net.js:518</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~onRequest /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:318 (2 samples, 100.00%)</title><rect x="10.0" y="769" width="1180.0" height="15.0" fill="rgb(91,237,91)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="779.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~onRequest /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/server.js:318</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>uv_run (2 samples, 100.00%)</title><rect x="10.0" y="1297" width="1180.0" height="15.0" fill="rgb(209,64,64)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1307.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >uv_run</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator12VisitCallNewEPNS0_7CallNewE (1 samples, 50.00%)</title><rect x="10.0" y="65" width="590.0" height="15.0" fill="rgb(201,52,52)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="75.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator12VisitCallNewEPNS0_7CallNewE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN4node9AsyncWrap12MakeCallbackEN2v86HandleINS1_8FunctionEEEiPNS2_INS1_5ValueEEE (2 samples, 100.00%)</title><rect x="10.0" y="1233" width="1180.0" height="15.0" fill="rgb(251,124,124)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1243.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN4node9AsyncWrap12MakeCallbackEN2v86HandleINS1_8FunctionEEEiPNS2_INS1_5ValueEEE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE (1 samples, 50.00%)</title><rect x="10.0" y="145" width="590.0" height="15.0" fill="rgb(216,73,73)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="155.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal17FullCodeGenerator5VisitEPNS0_7AstNodeE</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~splitMediaTypes /home/nskazki/.test/0x/examples/rest-api/node_modules/negotiator/lib/mediaType.js:164 (1 samples, 50.00%)</title><rect x="600.0" y="401" width="590.0" height="15.0" fill="rgb(103,248,103)" rx="2" ry="2" />
+<text text-anchor="" x="603.00" y="411.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~splitMediaTypes /home/nskazki/.test/0x/examples/rest-api/node_module..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:FunctionApply (1 samples, 50.00%)</title><rect x="10.0" y="417" width="590.0" height="15.0" fill="rgb(55,170,170)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="427.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:FunctionApply</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>LazyCompile:~restifyWriteHead /home/nskazki/.test/0x/examples/rest-api/node_modules/restify/lib/response.js:422 (1 samples, 50.00%)</title><rect x="10.0" y="433" width="590.0" height="15.0" fill="rgb(95,241,95)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="443.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >LazyCompile:~restifyWriteHead /home/nskazki/.test/0x/examples/rest-api/node_modul..</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>_ZN2v88internal9Execution4CallEPNS0_7IsolateENS0_6HandleINS0_6ObjectEEES6_iPS6_b (2 samples, 100.00%)</title><rect x="10.0" y="1201" width="1180.0" height="15.0" fill="rgb(236,103,103)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1211.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >_ZN2v88internal9Execution4CallEPNS0_7IsolateENS0_6HandleINS0_6ObjectEEES6_iPS6_b</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>Builtin:ArgumentsAdaptorTrampoline (2 samples, 100.00%)</title><rect x="10.0" y="1137" width="1180.0" height="15.0" fill="rgb(84,196,196)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1147.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >Builtin:ArgumentsAdaptorTrampoline</text>
+</g>
+<g class="func_g" onmouseover="s(this)" onmouseout="c()" onclick="zoom(this)">
+<title>uv__io_poll (2 samples, 100.00%)</title><rect x="10.0" y="1281" width="1180.0" height="15.0" fill="rgb(240,108,108)" rx="2" ry="2" />
+<text text-anchor="" x="13.00" y="1291.5" font-size="12" font-family="Verdana" fill="rgb(0,0,0)"  >uv__io_poll</text>
+</g>
+</svg>

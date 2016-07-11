@@ -1,0 +1,22 @@
+#!/bin/bash
+
+source ~/.bash-tools/bash-clr
+
+function git-contributors-debug {
+  echo 'Number of commits per author:'
+  git --no-pager shortlog -sn --all
+  local authors=$( git shortlog -sn | cut -f2 | cut -f1 -d' ')
+
+  for a in $authors
+  do
+    echo '-------------------'
+    echo "statistic for: $(clr_magenta $a)"
+    echo "commits done:  $(clr_cyan  $(git --no-pager shortlog -sn | grep $a | sed -r s/[^0-9]+//g))"
+    echo "files changed: $(clr_blue  $(git log --all --numstat --format="%n" --author=$a | cut -f3 | sort -iu | wc -l))"
+    echo "lines added:   $(clr_green $(git log --all --numstat --format="%n" --author=$a | cut -f1 | awk '{s+=$1} END {print s}'))"
+    echo "lines deleted: $(clr_red   $(git log --all --numstat --format="%n" --author=$a | cut -f2 | awk '{s+=$1} END {print s}'))"
+    echo "branch merges: $(clr_brown $(git log --all --merges --author=$a | grep -c '^commit'))"
+  done
+}
+
+git-contributors-debug $@
