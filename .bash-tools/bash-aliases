@@ -32,6 +32,13 @@ alias m='mocha'
 alias b='npm run build'
 alias npm-ls='ls-scripts'
 alias ns='ls-scripts'
+alias script-tslint-fix='~/.bash-tools/script-tslint-fix'
+
+function tslint-fix {
+  tslint $(find src test app e2e -name '*.ts' 2>/dev/null) > .tslint.log
+  script-tslint-fix .tslint.log
+  rm .tslint.log
+}
 
 function e {
   if [ -f "$(resolve $(npm root)/../.eslintrc)" ]; then
@@ -360,6 +367,7 @@ files=(
   "$HOME/.bash-tools/bash-z"
   "$HOME/.bash-tools/script-alias-list"
   "$HOME/.bash-tools/script-rename-node"
+  "$HOME/.bash-tools/script-tslint-fix"
   # git-tools
   "$HOME/.git-tools/git-contributors-debug"
   "$HOME/.git-tools/git-server"
