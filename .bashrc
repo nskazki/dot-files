@@ -443,3 +443,8 @@ if [ -d "$HOME/Загрузки/android-sdk-linux" ]; then
   export JAVA_HOME="/home/nskazki/Загрузки/jdk1.7.0_79"
   PATH="$JAVA_HOME/bin:$PATH"
 fi
+
+# worktools
+if [ -f "$HOME/.bash-tools/bash-worktools" ]; then
+  source "$HOME/.bash-tools/bash-worktools"
+fi
