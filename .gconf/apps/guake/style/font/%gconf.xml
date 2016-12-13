@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <gconf>
-	<entry name="allow_bold" mtime="1463781581" schema="/schemas/apps/guake/style/font/allow_bold" type="bool" value="true"/>
-	<entry name="palette_name" mtime="1463781640" schema="/schemas/apps/guake/style/font/palette_name" type="string">
+	<entry name="allow_bold" mtime="1481651648" schema="/schemas/apps/guake/style/font/allow_bold" type="bool" value="true"/>
+	<entry name="palette_name" mtime="1481651682" schema="/schemas/apps/guake/style/font/palette_name" type="string">
 		<stringvalue>Custom</stringvalue>
 	</entry>
-	<entry name="palette" mtime="1463781640" schema="/schemas/apps/guake/style/font/palette" type="string">
-		<stringvalue>#111114141717:#c8c841413434:#77ccc4c44b4b:#e417a33c0000:#59997be6e2cd:#d0d03c3c9191:#3c3cc6c6d0d0:#ffffef98e13e:#8a528a528a52:#ffff93f98d20:#59e5ffff5880:#fffffebe8c42:#aac1b2f6ffff:#ffff9173f31c:#b926ffffff8c:#ffffffffffff:#e5e5c6c6a8a8:#282824242020</stringvalue>
+	<entry name="palette" mtime="1481651682" schema="/schemas/apps/guake/style/font/palette" type="string">
+		<stringvalue>#000000000000:#b3b300003a3a:#0000aeae0000:#cdc6cf5e0000:#00006464b0b0:#89893737b3b3:#00007a7a6efc:#bfbfbfbfbfbf:#666666666666:#ffff00005656:#4e4effff4f4f:#f5f5ffff0000:#17349364f25e:#d3d37c7cffff:#0000aeae9023:#e5e5e5e5e5e5:#cacacacacaca:#11eb11eb11eb</stringvalue>
 	</entry>
 	<entry name="color" mtime="1463396667" schema="/schemas/apps/guake/style/font/color"/>
 	<entry name="style" mtime="1463396667" schema="/schemas/apps/guake/style/font/style"/>
