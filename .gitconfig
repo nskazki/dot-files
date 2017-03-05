@@ -218,6 +218,12 @@
 [merge]
   conflictstyle = diff3
 
+[merge]
+  tool = meld_diff3
+
+[mergetool "meld_diff3"]
+  cmd = "meld $LOCAL $BASE & sleep 0.5 && meld $BASE $REMOTE & sleep 0.5 && meld $LOCAL $MERGED $REMOTE &"
+
 [push]
   # Use the Git 1.x.x default to avoid errors on machines with old Git
   # installations. To use `simple` instead, add this to your `~/.extra` file:
