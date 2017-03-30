@@ -10,8 +10,8 @@ export HISTCONTROL='ignoreboth:ignoredups:ignorespace:erasedups'
 # Append to the history file, don't overwrite it
 shopt -s histappend
 # Setting history length
-export HISTSIZE=10000
-export HISTFILESIZE=20000
+export HISTSIZE=-1
+export HISTFILESIZE=-1
 
 # Check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
