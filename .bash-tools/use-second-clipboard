@@ -1,0 +1,2 @@
+#! /usr/bin/env bash
+xdotool type --window $(xdotool getactivewindow) "$(cat $HOME/.second-clip)"
