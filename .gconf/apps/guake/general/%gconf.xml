@@ -17,7 +17,7 @@
 	<entry name="max_tab_name_length" mtime="1463396667" schema="/schemas/apps/guake/general/max_tab_name_length"/>
 	<entry name="use_vte_titles" mtime="1463396667" schema="/schemas/apps/guake/general/use_vte_titles"/>
 	<entry name="use_palette_font_and_background_color" mtime="1481651648" schema="/schemas/apps/guake/general/use_palette_font_and_background_color" type="bool" value="true"/>
-	<entry name="use_default_font" mtime="1481651648" schema="/schemas/apps/guake/general/use_default_font" type="bool" value="true"/>
+	<entry name="use_default_font" mtime="1496750674" schema="/schemas/apps/guake/general/use_default_font" type="bool" value="false"/>
 	<entry name="scroll_keystroke" mtime="1481651648" schema="/schemas/apps/guake/general/scroll_keystroke" type="bool" value="true"/>
 	<entry name="scroll_output" mtime="1463396667" schema="/schemas/apps/guake/general/scroll_output"/>
 	<entry name="history_size" mtime="1481651648" schema="/schemas/apps/guake/general/history_size" type="int" value="100000"/>
