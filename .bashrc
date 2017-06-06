@@ -448,3 +448,8 @@ fi
 if [ -f "$HOME/.bash-tools/bash-worktools" ]; then
   source "$HOME/.bash-tools/bash-worktools"
 fi
+
+# even-better-ls
+if [ -f "$HOME/.bash-tools/setup-better-ls" ]; then
+  source "$HOME/.bash-tools/setup-better-ls"
+fi
