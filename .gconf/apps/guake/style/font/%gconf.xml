@@ -4,8 +4,8 @@
 	<entry name="palette_name" mtime="1481651682" schema="/schemas/apps/guake/style/font/palette_name" type="string">
 		<stringvalue>Custom</stringvalue>
 	</entry>
-	<entry name="palette" mtime="1481651682" schema="/schemas/apps/guake/style/font/palette" type="string">
-		<stringvalue>#000000000000:#b3b300003a3a:#0000aeae0000:#cdc6cf5e0000:#00006464b0b0:#89893737b3b3:#00007a7a6efc:#bfbfbfbfbfbf:#666666666666:#ffff00005656:#4e4effff4f4f:#f5f5ffff0000:#17349364f25e:#d3d37c7cffff:#0000aeae9023:#e5e5e5e5e5e5:#cacacacacaca:#11eb11eb11eb</stringvalue>
+	<entry name="palette" mtime="1496752095" schema="/schemas/apps/guake/style/font/palette" type="string">
+		<stringvalue>#000000000000:#b3b300003a3a:#0000aeae0000:#cdc6cf5e0000:#00006464b0b0:#89893737b3b3:#00007a7a6f6f:#bfbfe8e8ebeb:#666666666666:#ffff00005656:#4e4effff4f4f:#f5f5ffff0000:#17349364f25e:#d3d37c7cffff:#0000aeae9090:#e9e9fdfdffff:#e9e9fdfdffff:#11eb11eb11eb</stringvalue>
 	</entry>
 	<entry name="color" mtime="1463396667" schema="/schemas/apps/guake/style/font/color"/>
 	<entry name="style" mtime="1496750674" schema="/schemas/apps/guake/style/font/style" type="string">
