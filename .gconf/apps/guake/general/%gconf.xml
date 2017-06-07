@@ -39,7 +39,7 @@
 	<entry name="window_tabbar" mtime="1481651648" schema="/schemas/apps/guake/general/window_tabbar" type="bool" value="true"/>
 	<entry name="window_losefocus" mtime="1481651648" schema="/schemas/apps/guake/general/window_losefocus" type="bool" value="false"/>
 	<entry name="tab_ontop" mtime="1463396667" schema="/schemas/apps/guake/general/tab_ontop"/>
-	<entry name="window_ontop" mtime="1463396667" schema="/schemas/apps/guake/general/window_ontop"/>
+	<entry name="window_ontop" mtime="1496842016" schema="/schemas/apps/guake/general/window_ontop" type="bool" value="false"/>
 	<entry name="prompt_on_close_Tab" mtime="1463396667" schema="/schemas/apps/guake/general/prompt_on_close_tab"/>
 	<entry name="prompt_on_quit" mtime="1481651648" schema="/schemas/apps/guake/general/prompt_on_quit" type="bool" value="true"/>
 	<entry name="use_popup" mtime="1481651648" schema="/schemas/apps/guake/general/use_popup" type="bool" value="true"/>
