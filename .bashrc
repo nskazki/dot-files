@@ -453,3 +453,9 @@ fi
 if [ -f "$HOME/.bash-tools/setup-better-ls" ]; then
   source "$HOME/.bash-tools/setup-better-ls"
 fi
+
+# rust
+if [ -d "$HOME/.cargo/bin" ]; then
+  PATH="$PATH:$HOME/.cargo/bin"
+  source $HOME/.cargo/env
+fi
