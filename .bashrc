@@ -459,3 +459,8 @@ if [ -d "$HOME/.cargo/bin" ]; then
   PATH="$PATH:$HOME/.cargo/bin"
   source $HOME/.cargo/env
 fi
+
+# yarn-completion
+if [ -f "$HOME/.bash-tools/yarn-completion" ]; then
+  source $HOME/.bash-tools/yarn-completion
+fi
