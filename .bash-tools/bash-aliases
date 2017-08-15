@@ -1,3 +1,4 @@
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
   test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -543,6 +544,7 @@ alias timer='time read'
 alias ping8='ping 8.8.8.8'
 alias toggle='amixer -q -D pulse sset Master toggle'
 alias mit='license -y 2016 -n "Nikita Skazki <nskazki@gmail.com>" MIT -o LICENSE.md'
+alias stopwatch="ts '[%Y-%m-%d %H:%M:%.S]'"
 
 function pipe {
   local import_aliases="source $HOME/.bash-tools/bash-aliases"
