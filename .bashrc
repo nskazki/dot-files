@@ -464,3 +464,8 @@ fi
 if [ -f "$HOME/.bash-tools/yarn-completion" ]; then
   source $HOME/.bash-tools/yarn-completion
 fi
+
+# fuck
+if [[ -n "$(which thefuck)" ]]; then
+  eval $(thefuck --alias)
+fi
