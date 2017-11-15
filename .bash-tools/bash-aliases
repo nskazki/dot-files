@@ -19,7 +19,7 @@ alias -- -='cd - > /dev/null'
 
 # !node
 alias node-h='node --harmony --harmony-proxies'
-alias node-brk='node --debug-brk'
+alias node-brk='node --inspect --debug-brk'
 alias node-gc='node --nouse-idle-notification --expose-gc'
 
 alias node-perf-launch='node --perf-basic-prof'
