@@ -319,7 +319,7 @@ function rand-port {
 # !git-tools
 alias got='git'
 alias gut='gut'
-alias ss='git status --short'
+alias ss='git status'
 alias s='git status --short'
 alias d='git diff'
 alias a='git add'
