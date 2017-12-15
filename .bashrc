@@ -469,3 +469,13 @@ fi
 if [[ -n "$(which thefuck)" ]]; then
   eval $(thefuck --alias)
 fi
+
+# fzf
+if [[ -f "$HOME/.bash-tools/fzf.bash" ]]; then
+  source $HOME/.bash-tools/fzf.bash
+fi
+
+# fzf-git
+if [[ -f "$HOME/.bash-tools/fzf.git" ]]; then
+  source $HOME/.bash-tools/fzf.git
+fi
