@@ -547,6 +547,7 @@ alias toggle='amixer -q -D pulse sset Master toggle'
 alias mit='license -y 2016 -n "Nikita Skazki <nskazki@gmail.com>" MIT -o LICENSE.md'
 alias stopwatch="ts '[%Y-%m-%d %H:%M:%.S]'"
 
+alias p=pipe
 function pipe {
   local import_aliases="source $HOME/.bash-tools/bash-aliases"
   local user_input="$*"
