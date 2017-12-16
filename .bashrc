@@ -74,6 +74,9 @@ cr_magenta_i="\e[0;95m"
 cr_cyan_i="\e[0;96m"
 cr_white_i="\e[0;97m"
 
+# try to fix logout issue
+sleep 1
+
 # Alias definitions
 if [ -f "$HOME/.bash-tools/bash-aliases" ]; then
   source "$HOME/.bash-tools/bash-aliases"
