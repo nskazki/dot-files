@@ -409,8 +409,10 @@ function git-commit-tmp {
   if $(git-has-not-changes); then
     echo "$(clr_yellow_b "nothing to do!")"
   else
-    git log-last | tac && clr_reset
-    git add .
+    if $(git-has-not-staged); then
+      git add .
+    fi
+
     git status
 
     local last=$(git log --format=%B -n 1 HEAD | rg '^[0-9]+$' | uncolor)
@@ -421,6 +423,9 @@ function git-commit-tmp {
       local first="1"
       git commit -m "$first"
     fi
+
+    echo
+    git log-last | tac && clr_reset
   fi
 }
 
