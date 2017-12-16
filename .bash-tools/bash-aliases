@@ -360,6 +360,8 @@ files=(
   "$HOME/.tmux.conf"
   "$HOME/.ssh/config"
   # bash-tools
+  "$HOME/.bash-tools/fzf.bash"
+  "$HOME/.bash-tools/fzf.git"
   "$HOME/.bash-tools/bash-aliases"
   "$HOME/.bash-tools/bash-clr"
   "$HOME/.bash-tools/bash-preexec"
