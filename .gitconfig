@@ -75,6 +75,23 @@
   cmd-clone-recursive = "clone --recursive"
   clone-recursive = !"git cmd-clone-recursive"
 
+  # tag-delete
+  tag-delete = !"git cmd-tag-delete"
+  cmd-tag-delete = "!f() { \
+    if [ -z \"$1\" ]; then \
+      echo \"usage: git tag-delete <tag-name>\"; \
+      return 1; \
+    fi; \
+    local tag=\"$1\"; \
+    echo \"delete: $tag\"; \
+    if [ $(git prompt) -eq 0 ]; then \
+      echo -n \"local: \"; \
+      git tag -d $tag; \
+      echo -n \"origin: \"; \
+      git push origin :refs/tags/$tag; \
+    fi; \
+  }; f"
+
   # branch-delete
   branch-delete = !"git cmd-branch-delete"
   cmd-branch-delete = "!f() { \
