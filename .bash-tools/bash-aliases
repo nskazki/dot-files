@@ -169,7 +169,6 @@ alias clip-get='xclip -selection clipboard -o'
 
 # !ls
 alias ls='ls -h --color=auto --group-directories-first -1'
-alias l='ls'
 alias ll='ls -l'
 alias la='ls -la'
 
@@ -318,11 +317,174 @@ function rand-port {
 
 # !git-tools
 alias got='git'
-alias gut='gut'
+alias gut='git'
+alias get='git'
+
 alias ss='git status'
 alias s='git status --short'
+
+alias rb='git-rebase-smart'
+alias rc='git-recommit-smart'
+
+alias c='git-commit-tmp'
+alias m='git-commit-smart'
+
 alias d='git diff'
-alias a='git add'
+alias g='tig'
+alias v='git show HEAD'
+alias l='git log-last'
+alias u='git-unstage-smart'
+alias a='git-add-smart'
+
+function git-has-not-staged {
+  local git_ss="$(git status -s)"
+  local modified_staged=$(echo "$git_ss" | grep -c -s -P '^M')
+  local renamed=$(echo "$git_ss" | grep -c -s -P '^R')
+  local added_staged=$(echo "$git_ss" | grep -c -s -P '^A')
+  local deleted_staged=$(echo "$git_ss" | grep -c -s -P '^D')
+  if [ $modified_staged -eq 0 ] && [ $renamed -eq 0 ] && [ $added_staged -eq 0 ] && [ $deleted_staged -eq 0 ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function git-has-not-unstaged {
+  local git_ss="$(git status -s)"
+  local modified_notstaged=$(echo "$git_ss" | grep -c -s -P '^.M')
+  local added_notstaged=$(echo "$git_ss" | grep -c -s -P '^\?\?')
+  local deleted_notstaged=$(echo "$git_ss" | grep -c -s -P '^.D')
+  if [ $modified_notstaged -eq 0 ] && [ $added_notstaged -eq 0 ] && [ $deleted_notstaged -eq 0 ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function git-has-not-changes {
+  local git_ss="$(git status -s)"
+  if [[ -z "$git_ss" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function git-recommit-smart {
+  if $(git-has-not-changes); then
+    git recommit
+  else
+    git log-last | tac && clr_reset
+    if $(git-has-not-staged); then
+      local files="$(gf)"
+      if [[ -n "$files" ]]; then
+        git add $files
+      else
+        return
+      fi
+    fi
+    git recommit
+  fi
+}
+
+function git-rebase-smart {
+  if $(git-has-not-changes); then
+    if [[ -z $1 ]]; then
+      local commit="$(gh)"
+      if [[ -n "$commit" ]]; then
+        git rebase -i "$commit^"
+      else
+        return
+      fi
+    else
+      git rebase-by $@
+    fi
+  else
+    git status
+    echo "$(clr_bg_red "cleanup project first!")"
+  fi
+}
+
+function git-commit-tmp {
+  if $(git-has-not-changes); then
+    echo "$(clr_yellow_b "nothing to do!")"
+  else
+    git log-last | tac && clr_reset
+    git add .
+    git status
+
+    local last=$(git log --format=%B -n 1 HEAD | rg '^[0-9]+$' | uncolor)
+    if [[ -n "$last" ]]; then
+      local next="$(expr $last + 1)"
+      git commit -m "$next"
+    else
+      local first="1"
+      git commit -m "$first"
+    fi
+  fi
+}
+
+function git-commit-smart {
+  if $(git-has-not-changes); then
+    echo "$(clr_yellow_b "nothing to do!")"
+  else
+    git log-last | tac && clr_reset
+
+    if $(git-has-not-staged); then
+      local files="$(gf)"
+      if [[ -n "$files" ]]; then
+        git add $files
+      else
+        return
+      fi
+    fi
+
+    git status
+
+    if [[ -z $1 ]]; then
+      git commit
+    else
+      local summ
+      for n in $@; do
+        summ="$summ $n"
+      done
+      git commit -m "$summ"
+    fi
+  fi
+}
+
+function git-unstage-smart {
+  if $(git-has-not-staged); then
+    echo "$(clr_yellow_b "nothing to do!")"
+  else
+    git log-last | tac && clr_reset
+    local files="$(gf)"
+    if [[ -n "$files" ]]; then
+      git unstage $files > /dev/null
+    else
+      return
+    fi
+    git status
+  fi
+}
+
+function git-add-smart {
+  if $(git-has-not-unstaged); then
+    echo "$(clr_yellow_b "nothing to do!")"
+  else
+    if [[ -z $1 ]]; then
+      local files="$(gf)"
+      if [[ -n "$files" ]]; then
+        git add $files
+      else
+        return
+      fi
+    else
+      git add $@
+    fi
+    git status
+  fi
+}
 
 # !ssh
 alias ssh-agent-find='set_ssh_agent_socket'

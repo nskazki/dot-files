@@ -470,12 +470,12 @@ if [[ -n "$(which thefuck)" ]]; then
   eval $(thefuck --alias)
 fi
 
-# fzf
+# fzf.bash
 if [[ -f "$HOME/.bash-tools/fzf.bash" ]]; then
   source $HOME/.bash-tools/fzf.bash
 fi
 
-# fzf-git
+# fzf.git
 if [[ -f "$HOME/.bash-tools/fzf.git" ]]; then
   source $HOME/.bash-tools/fzf.git
 fi

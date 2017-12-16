@@ -33,9 +33,12 @@
   }; f"
 
   # base
-  recommit = commit --amend
-  uncommit = reset --soft HEAD^
-  unstage = reset HEAD
+  recommit = "commit --amend"
+  uncommit = "reset --soft HEAD^"
+  unstage = "reset HEAD"
+
+  # root
+  root = "rev-parse --show-toplevel"
 
   # push-branch
   pushb       = !"git cmd-push-branch"
@@ -147,7 +150,8 @@
   # status
   cmd-status-short = "status -s"
 
-  ss           = !"git cmd-status-short"
+  ss           = !"git status"
+  s            = !"git cmd-status-short"
   status-short = !"git cmd-status-short"
 
   # branch
