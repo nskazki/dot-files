@@ -448,7 +448,8 @@ function git-commit-smart {
       for n in $@; do
         summ="$summ $n"
       done
-      git commit -m "$summ"
+      local trimmed="$(trim "$summ")"
+      git commit -m "$trimmed"
     fi
   fi
 }
@@ -598,6 +599,19 @@ alias tail1='tail -n 1'
 
 alias tailf='tail -f'
 alias wl='wc -l'
+
+function trim {
+  local trimmed="$1"
+  # Strip leading spaces.
+  while [[ $trimmed == ' '* ]]; do
+     trimmed="${trimmed## }"
+  done
+  # Strip trailing spaces.
+  while [[ $trimmed == *' ' ]]; do
+      trimmed="${trimmed%% }"
+  done
+  echo "$trimmed"
+}
 
 function mark {
   if [[ "$1" == "--help" || "$1" == "-h" ]]; then
