@@ -48,7 +48,7 @@ gt() {
 
 gh() {
   is_in_git_repo || return
-  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
+  git log --graph --color=always --date=format:"%Y-%m-%d" --abbrev-commit --format="%C(blue)%ad %C(yellow)%h%C(auto)%d %C(reset)%s %C(green)[%an]" |
   fzf-down --ansi --no-sort --reverse --multi \
     --bind 'ctrl-s:toggle-sort' \
     --bind 'ctrl-k:preview-up' \
