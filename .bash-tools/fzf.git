@@ -9,7 +9,11 @@ is_in_git_repo() {
 }
 
 fzf-down() {
-  fzf --height 50% "$@" --border
+  if [ $TERM_VIEW -eq 0 ]; then
+    fzf --height 50% "$@"
+  else
+    fzf "$@"
+  fi
 }
 
 gf() {
