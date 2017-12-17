@@ -85,7 +85,7 @@ function clr_magenta         { clr_escape "$1" $CLR_MAGENTA;         }
 function clr_cyan            { clr_escape "$1" $CLR_CYAN;            }
 function clr_white           { clr_escape "$1" $CLR_WHITE;           }
 
-function clr_black_i         { clr_escape "$1" $CLR_BLANKI;          }
+function clr_black_i         { clr_escape "$1" $CLR_BLACKI;          }
 function clr_red_i           { clr_escape "$1" $CLR_REDI;            }
 function clr_green_i         { clr_escape "$1" $CLR_GREENI;          }
 function clr_brown_i         { clr_escape "$1" $CLR_BROWNI;          }
