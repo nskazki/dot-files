@@ -29,11 +29,6 @@ alias node-perf-record='cd ~/scripts/flameGraph/tmp && ../init.sh'
 alias babel-node-h='babel-node --harmony_proxies'
 
 # !npm
-alias t='npm test'
-alias m='mocha'
-alias b='npm run build'
-alias npm-ls='ls-scripts'
-alias ns='ls-scripts'
 alias script-tslint-fix='~/.bash-tools/script-tslint-fix'
 
 function tslint-fix {
@@ -346,6 +341,7 @@ alias d='git diff'
 alias ds='git diff --staged'
 
 alias g='tig'
+alias b='tig blame'
 alias v='git show HEAD'
 alias l='git log-last'
 alias u='git-unstage-smart'
