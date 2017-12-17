@@ -211,6 +211,12 @@ prompt_command_() {
         git_file_count="\[$git_ps1_cr\][D$deleted_notstaged]\[$cr_reset\]$git_file_count"
       fi
 
+      local unmerged=$(echo "$git_ss" | grep -c -s -P '^(.U|U.)')
+      if [ $unmerged -ne 0 ]; then
+        git_ps1_cr=$cr_green_bg
+        git_file_count="\[$git_ps1_cr\][U$unmerged]\[$cr_reset\]$git_file_count"
+      fi
+
       if [ -n "$git_file_count" ]; then
         git_file_count=" $git_file_count"
       fi
