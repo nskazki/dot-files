@@ -347,7 +347,7 @@ alias l='git log-last'
 alias u='git-unstage-smart'
 alias a='git-add-smart'
 
-function git-has-not-staged {
+function git-not-has-staged {
   local git_ss="$(git status -s)"
   local modified_staged=$(echo "$git_ss" | grep -c -s -P '^M')
   local renamed=$(echo "$git_ss" | grep -c -s -P '^R')
@@ -360,19 +360,20 @@ function git-has-not-staged {
   fi
 }
 
-function git-has-not-unstaged {
+function git-not-has-unstaged {
   local git_ss="$(git status -s)"
   local modified_notstaged=$(echo "$git_ss" | grep -c -s -P '^.M')
   local added_notstaged=$(echo "$git_ss" | grep -c -s -P '^\?\?')
   local deleted_notstaged=$(echo "$git_ss" | grep -c -s -P '^.D')
-  if [ $modified_notstaged -eq 0 ] && [ $added_notstaged -eq 0 ] && [ $deleted_notstaged -eq 0 ]; then
+  local unmerged=$(echo "$git_ss" | grep -c -s -P '^(.U|U.)')
+  if [ $modified_notstaged -eq 0 ] && [ $added_notstaged -eq 0 ] && [ $deleted_notstaged -eq 0 ] && [ $unmerged -eq 0 ]; then
     return 0
   else
     return 1
   fi
 }
 
-function git-has-not-changes {
+function git-not-has-changes {
   local git_ss="$(git status -s)"
   if [[ -z "$git_ss" ]]; then
     return 0
@@ -382,11 +383,11 @@ function git-has-not-changes {
 }
 
 function git-recommit-smart {
-  if $(git-has-not-changes); then
+  if $(git-not-has-changes); then
     git recommit
   else
     git log-last | tac && clr_reset
-    if $(git-has-not-staged); then
+    if $(git-not-has-staged); then
       local files="$(gf)"
       if [[ -n "$files" ]]; then
         git add $files
@@ -399,7 +400,7 @@ function git-recommit-smart {
 }
 
 function git-rebase-smart {
-  if $(git-has-not-changes); then
+  if $(git-not-has-changes); then
     if [[ -z $1 ]]; then
       local commit="$(gh)"
       if [[ -n "$commit" ]]; then
@@ -417,10 +418,10 @@ function git-rebase-smart {
 }
 
 function git-commit-tmp {
-  if $(git-has-not-changes); then
+  if $(git-not-has-changes); then
     echo "$(clr_yellow_b "nothing to do!")"
   else
-    if $(git-has-not-staged); then
+    if $(git-not-has-staged); then
       git add .
     fi
 
@@ -441,12 +442,12 @@ function git-commit-tmp {
 }
 
 function git-commit-smart {
-  if $(git-has-not-changes); then
+  if $(git-not-has-changes); then
     echo "$(clr_yellow_b "nothing to do!")"
   else
     git log-last | tac && clr_reset
 
-    if $(git-has-not-staged); then
+    if $(git-not-has-staged); then
       local files="$(gf)"
       if [[ -n "$files" ]]; then
         git add $files
@@ -471,7 +472,7 @@ function git-commit-smart {
 }
 
 function git-unstage-smart {
-  if $(git-has-not-staged); then
+  if $(git-not-has-staged); then
     echo "$(clr_yellow_b "nothing to do!")"
   else
     git log-last | tac && clr_reset
@@ -486,7 +487,7 @@ function git-unstage-smart {
 }
 
 function git-add-smart {
-  if $(git-has-not-unstaged); then
+  if $(git-not-has-unstaged); then
     echo "$(clr_yellow_b "nothing to do!")"
   else
     if [[ -z $1 ]]; then
