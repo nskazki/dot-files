@@ -36,7 +36,7 @@ bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
 # try to fix logout issue
-sleep 1
+echo "Hello Bash!"
 
 # Alias definitions
 if [ -f "$HOME/.bash-tools/bash-aliases" ]; then
