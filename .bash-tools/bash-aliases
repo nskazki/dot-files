@@ -342,7 +342,7 @@ alias ds='git diff --staged'
 
 alias g='tig'
 alias b='tig blame'
-alias v='git show HEAD'
+alias v='(git show --color=always --stat HEAD && echo && git diff --color=always --ignore-all-space HEAD^..HEAD) | more'
 alias l='git log-last'
 alias u='git-unstage-smart'
 alias a='git-add-smart'
