@@ -233,22 +233,34 @@ function psgk {
   kill -9 $(psgl "$1" | row2)
 }
 
-function get-parent-pid {
-  ps -o ppid= -p "$1"
+function get-process-pid {
+  echo "$$"
 }
 
 function get-process-name {
-  ps -p "$1" -o comm=
+  if [ -z "$1" ]; then local pid="$$"
+  else local pid="$1"; fi
+  ps -p "$pid" -o comm=
+}
+
+function get-parent-pid {
+  if [ -z "$1" ]; then local pid="$$"
+  else local pid="$1"; fi
+  trim $(ps -o ppid= -p "$pid")
+}
+
+function get-parent-name {
+  if [ -z "$1" ]; then local pid="$(get-parent-pid)"
+  else local pid="$1"; fi
+  get-process-name "$pid"
 }
 
 function count-bash-tree {
   if [ -z "$1" ]; then local count="1"
-  else local count="$1"
-  fi
+  else local count="$1"; fi
 
   if [ -z "$2" ]; then local pid="$$"
-  else local pid="$2"
-  fi
+  else local pid="$2"; fi
 
   local ppid=$(get-parent-pid $pid)
   local pnama=$(get-process-name $ppid)

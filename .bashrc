@@ -35,6 +35,21 @@ bind 'set match-hidden-files on'
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
+# try to fix logout issue
+sleep 1
+
+# Alias definitions
+if [ -f "$HOME/.bash-tools/bash-aliases" ]; then
+  source "$HOME/.bash-tools/bash-aliases"
+fi
+
+# Detect TerminalView
+if [ -z "$TERM_VIEW" ]; then
+  if [[ "$(get-parent-name)" == "plugin_host" ]];
+  then export TERM_VIEW=1;
+  else export TERM_VIEW=0; fi
+fi
+
 # Color map
 cr_reset="\e[0m"
 
@@ -65,21 +80,24 @@ cr_magenta_bg="\e[1;45m"
 cr_cyan_bg="\e[1;46m"
 cr_white_bg="\e[1;47m"
 
-cr_black_i="\e[0;90m"
-cr_red_i="\e[0;91m"
-cr_green_i="\e[0;92m"
-cr_yellow_i="\e[0;93m"
-cr_blue_i="\e[0;94m"
-cr_magenta_i="\e[0;95m"
-cr_cyan_i="\e[0;96m"
-cr_white_i="\e[0;97m"
-
-# try to fix logout issue
-sleep 1
-
-# Alias definitions
-if [ -f "$HOME/.bash-tools/bash-aliases" ]; then
-  source "$HOME/.bash-tools/bash-aliases"
+if [ $TERM_VIEW -eq 0 ]; then
+  cr_black_i="\e[0;90m"
+  cr_red_i="\e[0;91m"
+  cr_green_i="\e[0;92m"
+  cr_yellow_i="\e[0;93m"
+  cr_blue_i="\e[0;94m"
+  cr_magenta_i="\e[0;95m"
+  cr_cyan_i="\e[0;96m"
+  cr_white_i="\e[0;97m"
+else
+  cr_black_i="\e[0;30m"
+  cr_red_i="\e[0;31m"
+  cr_green_i="\e[0;32m"
+  cr_yellow_i="\e[0;33m"
+  cr_blue_i="\e[0;34m"
+  cr_magenta_i="\e[0;35m"
+  cr_cyan_i="\e[0;36m"
+  cr_white_i="\e[0;37m"
 fi
 
 # Promt helpers
