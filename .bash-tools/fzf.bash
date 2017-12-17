@@ -20,6 +20,8 @@ export FZF_DEFAULT_COMMAND='git branch > /dev/null 2>&1 && ([ "$(git root)" == "
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 export FZF_CTRL_T_OPTS="--height 70% \
+                        --bind 'ctrl-k:preview-up' \
+                        --bind 'ctrl-j:preview-down' \
                         --preview '((echo $(basename {}) | grep .svg > /dev/null 2>&1 && rsvg {} tmp/preview.png && img2txt tmp/preview.png) \
                                      || (file --mime {} | grep image > /dev/null 2>&1 && img2txt {}) \
                                      || (file --mime {} | grep binary > /dev/null 2>&1 && echo {} is a binary file) \
