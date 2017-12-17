@@ -1,3 +1,4 @@
+#! /usr/bin/env bash
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -330,6 +331,8 @@ alias c='git-commit-tmp'
 alias m='git-commit-smart'
 
 alias d='git diff'
+alias ds='git diff --staged'
+
 alias g='tig'
 alias v='git show HEAD'
 alias l='git log-last'
