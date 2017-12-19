@@ -144,7 +144,9 @@ export prev_short_pwd
 
 prompt_command_() {
   # sync history
-  (history -a &) > /dev/null 2>&1
+  history -a
+  history -c
+  history -r
 
   # git part
   if [ -n "$(git branch 2>/dev/null)" ] && (type __git_ps1 > /dev/null);
