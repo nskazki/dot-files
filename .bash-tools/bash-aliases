@@ -387,7 +387,7 @@ function git-recommit-smart {
   if $(git-not-has-changes); then
     git recommit
   else
-    git log-last | tac && clr_reset
+    git log-last && clr_reset
     if $(git-not-has-staged); then
       local files="$(gf)"
       if [[ -n "$files" ]]; then
@@ -438,7 +438,7 @@ function git-commit-tmp {
     fi
 
     echo
-    git log-last | tac && clr_reset
+    git log-last && clr_reset
   fi
 }
 
@@ -446,7 +446,7 @@ function git-commit-smart {
   if $(git-not-has-changes); then
     echo "$(clr_yellow_b "nothing to do!")"
   else
-    git log-last | tac && clr_reset
+    git log-last && clr_reset
 
     if $(git-not-has-staged); then
       local files="$(gf)"
@@ -476,7 +476,7 @@ function git-unstage-smart {
   if $(git-not-has-staged); then
     echo "$(clr_yellow_b "nothing to do!")"
   else
-    git log-last | tac && clr_reset
+    git log-last && clr_reset
     local files="$(gf)"
     if [[ -n "$files" ]]; then
       git unstage $files > /dev/null
