@@ -321,14 +321,16 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
   }
 
   preexec_ssh_to_tab() {
-    (_preexec_ssh_to_tab &) > /dev/null 2>&1
+    (_preexec_ssh_to_tab "$1" &) > /dev/null 2>&1
   }
 
   _preexec_ssh_to_tab() {
     # ssh-host -> tab-name
-    if [ -n "$IS_GUAKE" ] && [ -n "$(echo "$1" | grep -P -s "^\s*ssh")" ]; then
+    if [ -n "$IS_GUAKE" ] && [ -n "$(echo "$1" | grep -P -s "^\s*ssh\s+")" ]; then
       local host=$(echo "$1" | sed -r -e "s/(\s|ssh|-\w+\s*\w+|--\w+=\w+)//g")
-      (guake -i "$(guake --get-tab-position=$GUAKE_TAB_INDEX)" --rename-tab="$host" &) > /dev/null 2>&1
+      if [ -n "$host" ]; then
+        (guake -i "$(guake --get-tab-position=$GUAKE_TAB_INDEX)" --rename-tab="$host" &) > /dev/null 2>&1
+      fi
     fi
   }
 
