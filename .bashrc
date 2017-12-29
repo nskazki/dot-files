@@ -257,6 +257,8 @@ export PROMPT_COMMAND=prompt_command_
 
 # Make less more friendly for non-text input files, see lesspipe(1)
 [ -x "/usr/bin/lesspipe" ] && eval "$(SHELL=/bin/sh lesspipe)"
+# Simular to git default: quit if one screen, colors, truncate lines, inline mode
+export LESS="FRSX"
 
 # Set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r "/etc/debian_chroot" ]; then
