@@ -129,8 +129,9 @@
   cmd-log-find-in-branch = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=\"$1\"; }; f"
   cmd-log-find-in-repo   = "!f() { git log --branches --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=\"$1\"; }; f"
 
-  log-hist = !"git cmd-log-hist"
+  l        = !"git cmd-log-last"
   log-last = !"git cmd-log-last"
+  log-hist = !"git cmd-log-hist"
   log-find-in-branch = !"git cmd-log-find-in-branch"
   log-find-in-repo   = !"git cmd-log-find-in-repo"
 
