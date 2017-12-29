@@ -297,6 +297,9 @@ alias m='git-commit-smart'
 alias u='git-unstage-smart'
 alias a='git-add-smart'
 alias r='git-remove-untracked-smart'
+
+alias a.='a .'
+alias u.='u .'
 alias r.='r .'
 
 function git-not-has-staged {
@@ -427,12 +430,16 @@ function git-unstage-smart {
   if $(git-not-has-staged); then
     clr_yellow_b "nothing to do!"
   else
-    git log-last && clr_reset
-    local files="$(gf)"
-    if [[ -n "$files" ]]; then
-      git unstage $files > /dev/null
+    if [[ -z "$1" ]]; then
+      git log-last && clr_reset
+      local files="$(gf)"
+      if [[ -n "$files" ]]; then
+        git unstage $files > /dev/null
+      else
+        return
+      fi
     else
-      return
+      git unstage $@
     fi
     git status
   fi
