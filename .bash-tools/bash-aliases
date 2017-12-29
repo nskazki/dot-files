@@ -172,6 +172,7 @@ alias guake-tab='guake -n $PWD'
 alias tab='guake-tab'
 
 # !ps
+alias penv='$HOME/.bash-tools/script-penv'
 alias psgl='ps aux | grep -v grep | grep -i -e'
 alias psgt='ps aux | grep -v grep | grep -i -e VSZ -e'
 function psgk {
