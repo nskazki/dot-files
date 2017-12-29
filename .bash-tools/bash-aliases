@@ -274,6 +274,11 @@ alias got='git'
 alias gut='git'
 alias get='git'
 
+function g {
+  if [[ -z $1 ]]; then tig
+  else git $@; fi
+}
+
 alias ss='git status'
 alias s='git status --short'
 
@@ -286,7 +291,7 @@ alias m='git-commit-smart'
 alias d='git diff'
 alias ds='git diff --staged'
 
-alias g='tig'
+alias t='tig'
 alias b='tig blame'
 alias y='tig stash'
 alias v='(git show --color=always --stat HEAD && echo && git diff --color=always --ignore-all-space HEAD^..HEAD) | less'
