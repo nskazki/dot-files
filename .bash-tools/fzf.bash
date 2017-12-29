@@ -26,3 +26,8 @@ export FZF_CTRL_T_OPTS="--height 70% \
                                      || (file --mime {} | grep image > /dev/null 2>&1 && img2txt {}) \
                                      || (file --mime {} | grep binary > /dev/null 2>&1 && echo {} is a binary file) \
                                      || (highlight -O ansi -l {} || coderay {} || cat {})) 2> /dev/null | head -500'"
+
+export FZF_ALT_C_OPTS="--height 70% \
+                        --bind 'ctrl-k:preview-up' \
+                        --bind 'ctrl-j:preview-down' \
+                        --preview 'ls -a --color -h --group-directories-first -1 -w $(tput cols) {} | head -500'"
