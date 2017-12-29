@@ -677,7 +677,7 @@ alias netstat-servers='sudo netstat -luntp'
 alias dates='date +%s'
 alias timer='time read'
 alias ping8='ping 8.8.8.8'
-alias online=' while true; do xdotool mousemove 500 500 && sleep 2 && xdotool mousemove 700 700; done'
+alias online='while true; do sleep 2 && xdotool mousemove 500 500 && sleep 2 && xdotool mousemove 700 700; done'
 alias toggle='amixer -q -D pulse sset Master toggle'
 alias stopwatch="ts '[%Y-%m-%d %H:%M:%.S]'"
 
