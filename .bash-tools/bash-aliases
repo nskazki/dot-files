@@ -296,6 +296,8 @@ alias c='git-commit-tmp'
 alias m='git-commit-smart'
 alias u='git-unstage-smart'
 alias a='git-add-smart'
+alias r='git-remove-untracked-smart'
+alias r.='r .'
 
 function git-not-has-staged {
   local git_ss="$(git status -s)"
@@ -351,7 +353,7 @@ function git-recommit-smart {
 
 function git-rebase-smart {
   if $(git-not-has-changes); then
-    if [[ -z $1 ]]; then
+    if [[ -z "$1" ]]; then
       local commit="$(gh)"
       if [[ -n "$commit" ]]; then
         git rebase -i "$commit^"
@@ -363,13 +365,13 @@ function git-rebase-smart {
     fi
   else
     git status
-    echo "$(clr_bg_red "cleanup project first!")"
+    clr_bg_red "cleanup project first!"
   fi
 }
 
 function git-commit-tmp {
   if $(git-not-has-changes); then
-    echo "$(clr_yellow_b "nothing to do!")"
+    clr_yellow_b "nothing to do!"
   else
     if $(git-not-has-staged); then
       git add .
@@ -393,7 +395,7 @@ function git-commit-tmp {
 
 function git-commit-smart {
   if $(git-not-has-changes); then
-    echo "$(clr_yellow_b "nothing to do!")"
+    clr_yellow_b "nothing to do!"
   else
     git log-last && clr_reset
 
@@ -408,7 +410,7 @@ function git-commit-smart {
 
     git status
 
-    if [[ -z $1 ]]; then
+    if [[ -z "$1" ]]; then
       git commit
     else
       local summ
@@ -423,7 +425,7 @@ function git-commit-smart {
 
 function git-unstage-smart {
   if $(git-not-has-staged); then
-    echo "$(clr_yellow_b "nothing to do!")"
+    clr_yellow_b "nothing to do!"
   else
     git log-last && clr_reset
     local files="$(gf)"
@@ -438,9 +440,9 @@ function git-unstage-smart {
 
 function git-add-smart {
   if $(git-not-has-unstaged); then
-    echo "$(clr_yellow_b "nothing to do!")"
+    clr_yellow_b "nothing to do!"
   else
-    if [[ -z $1 ]]; then
+    if [[ -z "$1" ]]; then
       local files="$(gf)"
       if [[ -n "$files" ]]; then
         git add $files
@@ -451,6 +453,35 @@ function git-add-smart {
       git add $@
     fi
     git status
+  fi
+}
+
+function git-remove-untracked-smart {
+  local git_ss="$(git status -s)"
+  local added_notstaged=$(echo "$git_ss" | grep -c -s -P '^\?\?')
+  if [[ "$added_notstaged" -eq 0 ]]; then
+    clr_yellow_b "nothing to do!"
+  elif [[ "$1" == '.' ]]; then
+    local all="$(git status -s | grep "??" | sed -e "s/?? //")"
+    clr_red_i "$all"
+    echo
+    echo "$all" | pipe gvfs-trash -f
+    git status
+  else
+    local all="$(git status -s | grep "??" | sed -e "s/?? //")"
+    local trash="$(echo "$all" | fzf-down --reverse --multi --ansi \
+      --bind 'ctrl-k:preview-up' \
+      --bind 'ctrl-j:preview-down' \
+      --preview '((echo $(basename {}) | grep .svg > /dev/null 2>&1 && rsvg {} tmp/preview.png && img2txt tmp/preview.png) \
+                   || (file --mime {} | grep image > /dev/null 2>&1 && img2txt {}) \
+                   || (file --mime {} | grep binary > /dev/null 2>&1 && echo {} is a binary file) \
+                   || (highlight -O ansi -l {} || coderay {} || cat {})) 2> /dev/null | head -500')"
+    if [[ -n "$trash" ]]; then
+      clr_red_i "$trash"
+      echo
+      echo "$trash" | pipe gvfs-trash -f
+      git status
+    fi
   fi
 }
 
