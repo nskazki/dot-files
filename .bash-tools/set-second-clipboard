@@ -1,2 +1,0 @@
-#! /usr/bin/env bash
-xclip -out -selection primary > $HOME/.second-clip
