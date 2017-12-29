@@ -293,12 +293,7 @@ function codepad {
 alias layout-ru='setxkbmap ru'
 alias лэйаут-ин='setxkbmap us'
 alias CAPS_DIS='xdotool key Caps_Lock'
-
-function layout-fix {
-  export DISPLAY=:0
-  setxkbmap -layout "us,ru" -option "grp:shift_caps_switch,grp_led:caps"
-  numlockx on
-}
+alias layout-fix="$HOME/.bash-tools/script-fix-layout.sh"
 
 # !random
 function rand-pass {

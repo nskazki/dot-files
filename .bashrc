@@ -364,23 +364,6 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     fi
   }
 
-  precmd_fix_layout() {
-    (_precmd_fix_layout &) > /dev/null 2>&1
-  }
-
-  _precmd_fix_layout() {
-    # fix-layout
-    if [ $HOST_IAM -eq 1 ] \
-    && [ -f "/usr/bin/setxkbmap" ] \
-    && [ -n "$XDG_DATA_DIRS" ]; then
-      if [ -z "$(setxkbmap -v 6 | grep -s shift_caps_switch)" ]; then
-        DISPLAY=:0 /usr/bin/setxkbmap -layout "us,ru" -option "grp:shift_caps_switch,grp_led:caps"
-        DISPLAY=:0 numlockx "on"
-        clr_yellow "layout-fixed"
-      fi
-    fi
-  }
-
   precmd_pwd_to_tab() {
     (_precmd_pwd_to_tab &) > /dev/null 2>&1
   }
@@ -438,16 +421,9 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
 
   precmd_functions+=(precmd_check_done_time)
   precmd_functions+=(precmd_print_exit_code)
-  precmd_functions+=(precmd_fix_layout)
   precmd_functions+=(precmd_show_popup)
   precmd_functions+=(precmd_pwd_to_tab)
   precmd_functions+=(precmd_send_talert)
-fi
-
-# fix layout
-if [[ -f "/usr/bin/setxkbmap" && "$HOST_IAM" == 1 ]]; then
-  DISPLAY=:0 /usr/bin/setxkbmap -layout "us,ru" -option "grp:shift_caps_switch,grp_led:caps"
-  DISPLAY=:0 numlockx on
 fi
 
 # bluebird config
