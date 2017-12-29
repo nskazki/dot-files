@@ -47,6 +47,8 @@
   cmd-push-branch = "!f() { \
     local branch=\"$(test \"$1\" && echo \"$1\" || echo $(git branch-name))\"; \
     local remote=\"$(test \"$2\" && echo \"$2\" || echo $(git remote | head -n 1))\"; \
+    local junk=\"$(git log origin/$branch..HEAD --pretty=format:'%s' | grep -P '^\\s*\\d+\\s*$|^\\s*tod|^\\s*tos')\"; \
+    test -n \"$junk\" && echo \"need to cleanup junk: $junk\" && return 1; \
     echo $branch '->' $remote; \
     git push -u $remote $branch --tags; \
   }; f"
