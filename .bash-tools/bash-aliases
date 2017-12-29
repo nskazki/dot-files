@@ -26,27 +26,7 @@ alias node-gc='node --nouse-idle-notification --expose-gc'
 alias node-perf-launch='node --perf-basic-prof'
 alias node-perf-record='cd ~/scripts/flameGraph/tmp && ../init.sh'
 
-alias babel-node-h='babel-node --harmony_proxies'
-
 # !npm
-alias script-tslint-fix='~/.bash-tools/script-tslint-fix'
-
-function tslint-fix {
-  tslint $(find src test app e2e -name '*.ts' 2>/dev/null) > .tslint.log
-  script-tslint-fix .tslint.log
-  rm .tslint.log
-}
-
-function e {
-  if [ -f "$(resolve $(npm root)/../.eslintrc)" ]; then
-    npm run eslint;
-  fi;
-
-  if [ -f "$(resolve $(npm root)/../tslint.json)" ]; then
-    npm run tslint;
-  fi;
-}
-
 function npm-which-strict {
   [ $(which npm-which) ] || npm i -g npm-which
 
@@ -144,21 +124,6 @@ function npm-set-versions {
     | parallel --no-notice 'cd $(dirname {}) && echo -n "$(dirname {}): " && npm --no-git-tag-version version '"$1"
 }
 
-# !pm2
-alias pm='pm2'
-alias p2m='pm2'
-
-alias list='pm2 list'
-alias logs='pm2 logs'
-alias desc='pm2 desc'
-alias restart='pm2 restart'
-alias start='pm2 start'
-alias stop='pm2 stop'
-alias delete='pm2 delete'
-alias monit='pm2 monit'
-alias dump='pm2 dump'
-alias resurrect='pm2 resurrect'
-
 # !clip
 alias clip-set='xclip -selection c'
 alias clip-get='xclip -selection clipboard -o'
@@ -171,22 +136,7 @@ alias la='ls -la'
 # !popups
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-function at-notify {
-  if [[ ("$1" == '--help') || ("$1" == '-h') || -z $1 || -z $2 ]]; then
-    echo -e "usage: at-notify [time] [msg]"
-    return
-  fi
-
-  echo notify-send "$2" | at "$1"
-}
-
 # !inotify
-function inotify-check {
-  for foo in /proc/*/fd/*;
-  do readlink -f $foo;
-  done | grep inotify | sort | uniq -c | sort -nr
-}
-
 function inotify-fix {
   echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 }
@@ -501,15 +451,6 @@ function git-add-smart {
 }
 
 # !ssh
-alias ssh-agent-find='set_ssh_agent_socket'
-alias ssh-agent-test='ssh -T git@github.com'
-alias ssh-agent-start='eval $(ssh-agent -s) && echo "ssh-agent started" || echo "ssh-agent not-started"'
-alias ssh-agent-fix-soft='ssh-agent-find && ssh-add-my-key && ssh-agent-test'
-alias ssh-agent-fix-hard='killall ssh-agent ; ssh-agent-start && ssh-agent-fix-soft'
-
-alias ssh-host-remove='ssh-keygen -R'
-alias ssh-add-my-key='ssh-add ~/.ssh/id_rsa'
-
 function ssh-hosts-list {
   cat ~/.ssh/config | grep 'Host ' | sed 's/Host //' | grep -v -E '\*|DIS_*|OLD_*'
 }
@@ -730,12 +671,10 @@ alias pwd-clip='echo -n $(pwd) | clip-set'
 alias hosts='cat /etc/hosts'
 alias netstat-servers='sudo netstat -luntp'
 alias dates='date +%s'
-alias subl-cli='slap'
 alias timer='time read'
 alias ping8='ping 8.8.8.8'
 alias online=' while true; do xdotool mousemove 500 500 && sleep 2 && xdotool mousemove 700 700; done'
 alias toggle='amixer -q -D pulse sset Master toggle'
-alias mit='license -y 2016 -n "Nikita Skazki <nskazki@gmail.com>" MIT -o LICENSE.md'
 alias stopwatch="ts '[%Y-%m-%d %H:%M:%.S]'"
 
 alias p=pipe
@@ -786,18 +725,6 @@ function history-top {
     | awk '{a[$2]++ } END{for(i in a){print a[i] " " i}}' \
     | sort -rn \
     | head -n 10
-}
-
-function get-cursor-position {
-  exec < /dev/tty
-  oldstty=$(stty -g)
-  stty raw -echo min 0
-  echo -en "\033[6n" > /dev/tty
-  IFS=';' read -r -d R -a pos
-  stty $oldstty
-  row=$((${pos[0]:2} - 1))
-  col=$((${pos[1]} - 1))
-  echo "\{\"row\":$row,\"column\":$col\}"
 }
 
 ## !
