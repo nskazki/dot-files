@@ -301,11 +301,6 @@ if [ -d "$HOME/.rbenv/" ]; then
   eval "$(rbenv init -)"
 fi
 
-# Add RVM to PATH for scripting
-if [ -f "$HOME/.rvm/bin" ]; then
-  export PATH="$PATH:$HOME/.rvm/bin"
-fi
-
 # This load z
 if [ -f "$HOME/.bash-tools/bash-z" ]; then
   source "$HOME/.bash-tools/bash-z"
@@ -442,20 +437,6 @@ if [[ -n "$(which npm)" ]]; then
   export npm_config_userconfig="$HOME/.npm_auth"
 fi
 
-# android sdk
-if [ -d "$HOME/Загрузки/android-sdk-linux" ]; then
-  export ANDROID_HOME="$HOME/Загрузки/android-sdk-linux"
-  PATH="$PATH:$ANDROID_HOME/tools"
-  PATH="$PATH:$ANDROID_HOME/platform-tools"
-  export JAVA_HOME="/home/nskazki/Загрузки/jdk1.7.0_79"
-  PATH="$JAVA_HOME/bin:$PATH"
-fi
-
-# worktools
-if [ -f "$HOME/.bash-tools/bash-worktools" ]; then
-  source "$HOME/.bash-tools/bash-worktools"
-fi
-
 # even-better-ls
 if [ -f "$HOME/.bash-tools/setup-better-ls" ]; then
   source "$HOME/.bash-tools/setup-better-ls"
@@ -470,11 +451,6 @@ fi
 # yarn-completion
 if [ -f "$HOME/.bash-tools/yarn-completion" ]; then
   source $HOME/.bash-tools/yarn-completion
-fi
-
-# fuck
-if [[ -n "$(which thefuck)" ]]; then
-  eval $(thefuck --alias)
 fi
 
 # fzf.bash
