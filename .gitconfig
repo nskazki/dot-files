@@ -143,19 +143,8 @@
 
   # rebase
   cmd-rebase-by       = "!r() { git rebase -i HEAD~$1; }; r"
-  cmd-rebase-contunue = "!git rebase --continue"
-  cmd-rebase-abort    = "!git rebase --abort"
-  cmd-rebase-skip     = "!git rebase --skip"
-
-  rb = !"git cmd-rebase-by"
-  rc = !"git cmd-rebase-contunue"
-  ra = !"git cmd-rebase-abort"
-  rs = !"git cmd-rebase-skip"
 
   rebase-by       = !"git cmd-rebase-by"
-  rebase-continue = !"git cmd-rebase-contunue"
-  rebase-abort    = !"git cmd-rebase-abort"
-  rebase-skip     = !"git cmd-rebase-skip"
 
   # gitignore [git cmd <path>]
   cmd-gitignore-reset-all = "!git rm -r --cached . && git add ."
