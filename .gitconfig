@@ -160,6 +160,13 @@
   s            = !"git cmd-status-short"
   status-short = !"git cmd-status-short"
 
+  # diff
+  cmd-diff-staged = "!git diff --staged"
+
+  d           = !"git diff"
+  ds          = !"git cmd-diff-staged"
+  diff-staged = !"git cmd-diff-staged"
+
   # branch
   cmd-branch-name   = "!git rev-parse --abbrev-ref HEAD"
   cmd-branch-rename = "!f() { \
