@@ -167,6 +167,12 @@
   ds          = !"git cmd-diff-staged"
   diff-staged = !"git cmd-diff-staged"
 
+  # view-last-commit
+  cmd-view-last-commit = "!(git show --color=always --stat HEAD && echo && git diff --color=always --ignore-all-space HEAD^..HEAD) | less"
+
+  v                = !"git cmd-view-last-commit"
+  view-last-commit = !"git cmd-view-last-commit"
+
   # branch
   cmd-branch-name   = "!git rev-parse --abbrev-ref HEAD"
   cmd-branch-rename = "!f() { \
