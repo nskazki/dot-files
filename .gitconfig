@@ -283,3 +283,4 @@
 
 [rebase]
   autostash = true
+  autosquash = true
