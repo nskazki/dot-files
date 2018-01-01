@@ -292,12 +292,14 @@ alias ds='git diff-staged'
 
 alias rb='git-rebase-smart'
 alias rc='git-recommit-smart'
+alias rt='git-squash-tmp-smart'
 alias c='git-commit-tmp'
 alias m='git-commit-smart'
 alias u='git-unstage-smart'
 alias a='git-add-smart'
 alias r='git-remove-untracked-smart'
 
+alias rt.='rt .'
 alias a.='a .'
 alias u.='u .'
 alias r.='r .'
@@ -489,6 +491,38 @@ function git-remove-untracked-smart {
       echo "$trash" | pipe gvfs-trash -f
       git status
     fi
+  fi
+}
+
+function git-find-first-tmp {
+  git log --format="%h %s" -n 100 | while read line ; do
+    if [[ -n "$(echo "$line" | grep -P '^\w+\s\d+$')" ]]; then
+      local last="$line"
+      else
+      echo "$last" | sed -r -e 's/\s+[0-9]+//'
+      break
+    fi
+  done
+}
+
+function git-squash-tmp-smart {
+  if $(git-not-has-changes); then
+    if [[ "$1" == '.' ]]; then
+      local commit="$(git-find-first-tmp)"
+      if [[ -n "$commit" ]]; then
+        GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
+        git show --color=always --stat HEAD
+      fi
+    else
+      local commit="$(gh)"
+      if [[ -n "$commit" ]]; then
+        GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
+        git show --color=always --stat HEAD
+      fi
+    fi
+  else
+    git status
+    clr_bg_red "cleanup project first!"
   fi
 }
 
