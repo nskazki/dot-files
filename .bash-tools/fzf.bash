@@ -19,15 +19,19 @@ export FZF_EXCLUDE='-E .git -E .npm -E node_modules/ -E .cache/ -E cache/ -E .tm
 export FZF_DEFAULT_COMMAND='git branch > /dev/null 2>&1 && ([ "$(git root)" == "$HOME" ] && fd -H -I -t f '"$FZF_EXCLUDE"' || fd -H -t f '"$FZF_EXCLUDE"') || fd -I -H -t f '"$FZF_EXCLUDE"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-export FZF_CTRL_T_OPTS="--height 70% \
+export FZF_CTRL_T_OPTS="--height 80% \
                         --bind 'ctrl-k:preview-up' \
                         --bind 'ctrl-j:preview-down' \
+                        --bind 'ctrl-b:preview-up+preview-up+preview-up' \
+                        --bind 'ctrl-f:preview-down+preview-down+preview-down' \
                         --preview '((echo $(basename {}) | grep .svg > /dev/null 2>&1 && rsvg {} tmp/preview.png && img2txt tmp/preview.png) \
                                      || (file --mime {} | grep image > /dev/null 2>&1 && img2txt {}) \
                                      || (file --mime {} | grep binary > /dev/null 2>&1 && echo {} is a binary file) \
                                      || (highlight -O ansi -l {} || coderay {} || cat {})) 2> /dev/null | head -500'"
 
-export FZF_ALT_C_OPTS="--height 70% \
+export FZF_ALT_C_OPTS="--height 80% \
                         --bind 'ctrl-k:preview-up' \
                         --bind 'ctrl-j:preview-down' \
+                        --bind 'ctrl-b:preview-up+preview-up+preview-up' \
+                        --bind 'ctrl-f:preview-down+preview-down+preview-down' \
                         --preview 'ls -a --color -h --group-directories-first -1 -w $(tput cols) {} | head -500'"
