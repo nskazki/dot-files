@@ -20,7 +20,7 @@ const lines = rawLines.map(rawLine => {
 })
 
 if (lines.length <= 1) {
-  console.error(`unexpected number of lines=${lines.length}]`)
+  console.error(`unexpected number of lines=${lines.length}`)
   process.exit(1)
 }
 
