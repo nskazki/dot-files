@@ -1,14 +1,8 @@
 #! /usr/bin/env bash
 
-# Setup fzf
-# ---------
-if [[ ! "$PATH" == */home/nskazki/.fzf/bin* ]]; then
-  export PATH="$PATH:/home/nskazki/.fzf/bin"
-fi
-
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source "/home/nskazki/.fzf/shell/completion.bash" 2> /dev/null
+# [[ $- == *i* ]] && source "/home/nskazki/.fzf/shell/completion.bash" 2> /dev/null
 
 # Key bindings
 # ------------

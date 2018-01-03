@@ -457,7 +457,8 @@ if [ -f "$HOME/.bash-tools/yarn-completion" ]; then
 fi
 
 # fzf stuff
-if [[ -n "$(which fzf)" ]]; then
+if [[ -d "$HOME/.fzf/bin" ]]; then
+  export PATH="$PATH:/home/nskazki/.fzf/bin"
   source $HOME/.bash-tools/fzf.bash
   source $HOME/.bash-tools/fzf.git
   source $HOME/.bash-tools/bash.git
