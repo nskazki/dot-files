@@ -1,0 +1,256 @@
+#! /usr/bin/env bash
+
+# !git-tools
+alias got='git'
+alias gut='git'
+alias get='git'
+alias gti='git'
+
+function g {
+  if [[ -z $1 ]]; then tig
+  else git $@; fi
+}
+
+alias t='tig'
+alias b='tig blame'
+alias y='tig stash'
+
+alias v='git view-last-commit'
+alias l='git log-last'
+alias s='git status-short'
+alias ss='git status'
+alias d='git diff'
+alias ds='git diff-staged'
+
+alias rb='git-rebase-smart'
+alias rc='git-recommit-smart'
+alias rt='git-squash-tmp-smart'
+alias c='git-commit-tmp'
+alias m='git-commit-smart'
+alias u='git-unstage-smart'
+alias a='git-add-smart'
+alias r='git-remove-untracked-smart'
+
+alias rt.='rt .'
+alias a.='a .'
+alias u.='u .'
+alias r.='r .'
+
+function git-not-has-staged {
+  local git_ss="$(git status -s)"
+  local modified_staged=$(echo "$git_ss" | grep -c -s -P '^M')
+  local renamed=$(echo "$git_ss" | grep -c -s -P '^R')
+  local added_staged=$(echo "$git_ss" | grep -c -s -P '^A')
+  local deleted_staged=$(echo "$git_ss" | grep -c -s -P '^D')
+  if [ $modified_staged -eq 0 ] && [ $renamed -eq 0 ] && [ $added_staged -eq 0 ] && [ $deleted_staged -eq 0 ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function git-not-has-unstaged {
+  local git_ss="$(git status -s)"
+  local modified_notstaged=$(echo "$git_ss" | grep -c -s -P '^.M')
+  local added_notstaged=$(echo "$git_ss" | grep -c -s -P '^\?\?')
+  local deleted_notstaged=$(echo "$git_ss" | grep -c -s -P '^.D')
+  local unmerged=$(echo "$git_ss" | grep -c -s -P '^(.U|U.)')
+  if [ $modified_notstaged -eq 0 ] && [ $added_notstaged -eq 0 ] && [ $deleted_notstaged -eq 0 ] && [ $unmerged -eq 0 ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function git-not-has-changes {
+  local git_ss="$(git status -s)"
+  if [[ -z "$git_ss" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+function git-recommit-smart {
+  if $(git-not-has-changes); then
+    git recommit
+    git show --stat HEAD
+  else
+    git log-last && clr_reset
+    if $(git-not-has-staged); then
+      local files="$(gf)"
+      if [[ -n "$files" ]]; then
+        git add $files
+        git recommit
+        git show --stat HEAD
+      fi
+    fi
+  fi
+}
+
+function git-rebase-smart {
+  if $(git-not-has-changes); then
+    if [[ -z "$1" ]]; then
+      local commit="$(gh)"
+      if [[ -n "$commit" ]]; then
+        git rebase -i "$commit^"
+      else
+        return
+      fi
+    else
+      git rebase-by $@
+    fi
+  else
+    git status
+    clr_bg_red "cleanup project first!"
+  fi
+}
+
+function git-commit-tmp {
+  if $(git-not-has-changes); then
+    clr_yellow_b "nothing to do!"
+  else
+    if $(git-not-has-staged); then
+      git add .
+    fi
+
+    git status
+
+    local last=$(git log --format=%B -n 1 HEAD | rg '^[0-9]+$' | uncolor)
+    if [[ -n "$last" ]]; then
+      local next="$(expr $last + 1)"
+      git commit -m "$next"
+    else
+      local first="1"
+      git commit -m "$first"
+    fi
+
+    echo
+    git log-last && clr_reset
+  fi
+}
+
+function git-commit-smart {
+  if $(git-not-has-changes); then
+    clr_yellow_b "nothing to do!"
+  else
+    if $(git-not-has-staged); then
+      local files="$(gf)"
+      if [[ -n "$files" ]]; then
+        git add $files
+      else
+        return
+      fi
+    fi
+
+    git status
+
+    if [[ -z "$1" ]]; then
+      git commit
+    else
+      local summ
+      for n in $@; do
+        summ="$summ $n"
+      done
+      local trimmed="$(trim "$summ")"
+      git commit -m "$trimmed"
+    fi
+  fi
+}
+
+function git-unstage-smart {
+  if $(git-not-has-staged); then
+    clr_yellow_b "nothing to do!"
+  else
+    if [[ -z "$1" ]]; then
+      local files="$(gf)"
+      if [[ -n "$files" ]]; then
+        git unstage $files > /dev/null
+      else
+        return
+      fi
+    else
+      git unstage $@
+    fi
+    git status
+  fi
+}
+
+function git-add-smart {
+  if $(git-not-has-unstaged); then
+    clr_yellow_b "nothing to do!"
+  else
+    if [[ -z "$1" ]]; then
+      local files="$(gf)"
+      if [[ -n "$files" ]]; then
+        git add $files
+      else
+        return
+      fi
+    else
+      git add $@
+    fi
+    git status
+  fi
+}
+
+function git-remove-untracked-smart {
+  local git_ss="$(git status -s)"
+  local added_notstaged=$(echo "$git_ss" | grep -c -s -P '^\?\?')
+  if [[ "$added_notstaged" -eq 0 ]]; then
+    clr_yellow_b "nothing to do!"
+  elif [[ "$1" == '.' ]]; then
+    local all="$(git status -s | grep "??" | sed -e "s/?? //")"
+    clr_red_i "$all"
+    echo
+    echo "$all" | pipe gvfs-trash -f
+    git status
+  else
+    local all="$(git status -s | grep "??" | sed -e "s/?? //")"
+    local trash="$(echo "$all" | fzf-down --reverse --multi --ansi --preview-window right:70% \
+      --bind 'ctrl-k:preview-up' \
+      --bind 'ctrl-j:preview-down' \
+      --preview '((echo $(basename {}) | grep .svg > /dev/null 2>&1 && rsvg {} tmp/preview.png && img2txt tmp/preview.png) \
+                   || (file --mime {} | grep image > /dev/null 2>&1 && img2txt {}) \
+                   || (file --mime {} | grep binary > /dev/null 2>&1 && echo {} is a binary file) \
+                   || (highlight -O ansi -l {} || coderay {} || cat {})) 2> /dev/null | head -500')"
+    if [[ -n "$trash" ]]; then
+      clr_red_i "$trash"
+      echo
+      echo "$trash" | pipe gvfs-trash -f
+      git status
+    fi
+  fi
+}
+
+function git-find-first-tmp {
+  git log --format="%h %s" -n 100 | while read line ; do
+    if [[ -n "$(echo "$line" | grep -P '^\w+\s\d+$')" ]]; then
+      local last="$line"
+      else
+      echo "$last" | sed -r -e 's/\s+[0-9]+//'
+      break
+    fi
+  done
+}
+
+function git-squash-tmp-smart {
+  if $(git-not-has-changes); then
+    if [[ "$1" == '.' ]]; then
+      local commit="$(git-find-first-tmp)"
+      if [[ -n "$commit" ]]; then
+        GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
+        git show --stat HEAD
+      fi
+    else
+      local commit="$(gh)"
+      if [[ -n "$commit" ]]; then
+        GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
+        git show --stat HEAD
+      fi
+    fi
+  else
+    git status
+    clr_bg_red "cleanup project first!"
+  fi
+}

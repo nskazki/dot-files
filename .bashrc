@@ -465,3 +465,8 @@ fi
 if [[ -f "$HOME/.bash-tools/fzf.git" ]]; then
   source $HOME/.bash-tools/fzf.git
 fi
+
+# bash.git
+if [[ -f "$HOME/.bash-tools/bash.git" ]]; then
+  source $HOME/.bash-tools/bash.git
+fi
