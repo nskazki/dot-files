@@ -441,7 +441,7 @@ if [[ -n "$(which npm)" ]]; then
 fi
 
 # even-better-ls
-if [ -f "$HOME/.bash-tools/setup-better-ls" ]; then
+if [ -n "$(which ls-i)" ]; then
   source "$HOME/.bash-tools/setup-better-ls"
 fi
 
@@ -456,17 +456,9 @@ if [ -f "$HOME/.bash-tools/yarn-completion" ]; then
   source $HOME/.bash-tools/yarn-completion
 fi
 
-# fzf.bash
-if [[ -f "$HOME/.bash-tools/fzf.bash" ]]; then
+# fzf stuff
+if [[ -n "$(which fzf)" ]]; then
   source $HOME/.bash-tools/fzf.bash
-fi
-
-# fzf.git
-if [[ -f "$HOME/.bash-tools/fzf.git" ]]; then
   source $HOME/.bash-tools/fzf.git
-fi
-
-# bash.git
-if [[ -f "$HOME/.bash-tools/bash.git" ]]; then
   source $HOME/.bash-tools/bash.git
 fi
