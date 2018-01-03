@@ -342,17 +342,17 @@ function git-not-has-changes {
 function git-recommit-smart {
   if $(git-not-has-changes); then
     git recommit
+    git show --stat HEAD
   else
     git log-last && clr_reset
     if $(git-not-has-staged); then
       local files="$(gf)"
       if [[ -n "$files" ]]; then
         git add $files
-      else
-        return
+        git recommit
+        git show --stat HEAD
       fi
     fi
-    git recommit
   fi
 }
 
@@ -402,8 +402,6 @@ function git-commit-smart {
   if $(git-not-has-changes); then
     clr_yellow_b "nothing to do!"
   else
-    git log-last && clr_reset
-
     if $(git-not-has-staged); then
       local files="$(gf)"
       if [[ -n "$files" ]]; then
@@ -433,7 +431,6 @@ function git-unstage-smart {
     clr_yellow_b "nothing to do!"
   else
     if [[ -z "$1" ]]; then
-      git log-last && clr_reset
       local files="$(gf)"
       if [[ -n "$files" ]]; then
         git unstage $files > /dev/null
@@ -511,13 +508,13 @@ function git-squash-tmp-smart {
       local commit="$(git-find-first-tmp)"
       if [[ -n "$commit" ]]; then
         GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
-        git show --color=always --stat HEAD
+        git show --stat HEAD
       fi
     else
       local commit="$(gh)"
       if [[ -n "$commit" ]]; then
         GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
-        git show --color=always --stat HEAD
+        git show --stat HEAD
       fi
     fi
   else
