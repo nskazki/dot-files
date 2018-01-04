@@ -35,6 +35,7 @@ alias rt.='rt .'
 alias a.='a .'
 alias u.='u .'
 alias r.='r .'
+alias c.='c .'
 
 function git-not-has-staged {
   local git_ss="$(git status -s)"
@@ -110,7 +111,7 @@ function git-commit-tmp {
   if $(git-not-has-changes); then
     clr_yellow_b "nothing to do!"
   else
-    if $(git-not-has-staged); then
+    if [[ "$1" == '.' ]] || $(git-not-has-staged); then
       git add .
     fi
 
