@@ -27,15 +27,18 @@ alias rc='git-recommit-smart'
 alias rt='git-squash-tmp-smart'
 alias c='git-commit-tmp'
 alias m='git-commit-smart'
+alias f='git-commit-fixup-smart'
 alias u='git-unstage-smart'
 alias a='git-add-smart'
 alias r='git-remove-untracked-smart'
 
 alias rt.='rt .'
 alias a.='a .'
+alias p.='a. -p'
 alias u.='u .'
 alias r.='r .'
 alias c.='c .'
+alias f.='f .'
 
 function git-not-has-staged {
   local git_ss="$(git status -s)"
@@ -77,7 +80,6 @@ function git-recommit-smart {
     git recommit
     git show --stat HEAD
   else
-    git log-last && clr_reset
     if $(git-not-has-staged); then
       local files="$(gf)"
       if [[ -n "$files" ]]; then
@@ -127,7 +129,7 @@ function git-commit-tmp {
     fi
 
     echo
-    git log-last && clr_reset
+    git log-last
   fi
 }
 
@@ -156,6 +158,41 @@ function git-commit-smart {
       local trimmed="$(trim "$summ")"
       git commit -m "$trimmed"
     fi
+  fi
+}
+
+function git-commit-fixup-smart {
+  if $(git-not-has-changes); then
+    clr_yellow_b "nothing to do!"
+  else
+    if [[ "$1" == "." ]]; then
+      git add .
+    fi
+
+    if $(git-not-has-staged); then
+      local files="$(gf)"
+      if [[ -n "$files" ]]; then
+        git add $files
+      else
+        return
+      fi
+    fi
+
+    git status
+
+    if [[ "$1" == "." ]]; then
+      git commit --fixup HEAD
+    else
+      local commit="$(gh)"
+      if [[ -n "$commit" ]]; then
+        git commit --fixup "$commit"
+      else
+        return
+      fi
+    fi
+
+    echo
+    git log-last
   fi
 }
 
