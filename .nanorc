@@ -97,7 +97,6 @@ set tabstospaces
 set historylog
 set constantshow
 set linenumbers
-set mouse
 
 bind M-M mark main
 bind ^V uncut main
@@ -105,13 +104,15 @@ bind ^C copytext main
 
 bind ^Q exit main
 bind ^S savefile main
+bind M-W searchagain main
 
 bind ^A home main
 bind ^E end main
 bind ^G gotoline main
 
-bind M-F searchagain main
-bind ^F whereis main
+bind ^F nextpage main
+bind ^B prevpage main
+
 bind ^H replace main
 
 bind ^Z undo main
