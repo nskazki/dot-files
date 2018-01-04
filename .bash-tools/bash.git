@@ -22,24 +22,69 @@ alias ss='git status'
 alias d='git diff'
 alias ds='git diff-staged'
 
-alias rb='git-rebase-smart'
-alias rc='git-recommit-smart'
-alias rt='git-squash-tmp-smart'
-alias c='git-commit-tmp'
-alias m='git-commit-smart'
-alias f='git-commit-fixup-smart'
-alias u='git-unstage-smart'
-alias a='git-add-smart'
-alias r='git-remove-untracked-smart'
+bash_setup="\
+  set -e && \
+  export PATH=$PATH:/home/nskazki/.fzf/bin && \
+  source $HOME/.bash-tools/bash.git && \
+  source $HOME/.bash-tools/bash-aliases && \
+  source $HOME/.bash-tools/bash-clr && \
+  source $HOME/.bash-tools/fzf.git && \
+  source $HOME/.bash-tools/fzf.bash "
+
+function rb {
+  bash -c "$bash_setup && git-rebase-smart $@"
+  exit $?
+}
+
+function rc {
+  bash -c "$bash_setup && git-recommit-smart $@"
+  exit $?
+}
+
+function rt {
+  bash -c "$bash_setup && git-squash-tmp-smart $@"
+  exit $?
+}
+
+function c {
+  bash -c "$bash_setup && git-commit-tmp $@"
+  exit $?
+}
+
+function m {
+  bash -c "$bash_setup && git-commit-smart $@"
+  exit $?
+}
+
+function f {
+  bash -c "$bash_setup && git-commit-fixup-smart $@"
+  exit $?
+}
+
+function u {
+  bash -c "$bash_setup && git-unstage-smart $@"
+  exit $?
+}
+
+function a {
+  bash -c "$bash_setup && git-add-smart $@"
+  exit $?
+}
+
+function r {
+  bash -c "$bash_setup && git-remove-untracked-smart $@"
+  exit $?
+}
 
 alias rt.='rt .'
 alias rc.='rc .'
-alias a.='a .'
 alias p.='a. -p'
-alias u.='u .'
-alias r.='r .'
 alias c.='c .'
+alias m.='m .'
 alias f.='f .'
+alias u.='u .'
+alias a.='a .'
+alias r.='r .'
 
 function git-not-has-staged {
   local git_ss="$(git status -s)"
@@ -76,6 +121,53 @@ function git-not-has-changes {
   fi
 }
 
+function git-find-first-tmp {
+  git log --format="%h %s" -n 100 | while read line ; do
+    if [[ -n "$(echo "$line" | grep -P '^\w+\s\d+$')" ]]; then
+      local last="$line"
+      else
+      echo "$last" | sed -r -e 's/\s+[0-9]+//'
+      break
+    fi
+  done
+}
+
+function __git-add-fzf__ {
+  local files="$(gf)"
+  if [[ -n "$files" ]]; then
+    git add $files
+  else
+    exit 130
+  fi
+}
+
+function __git-unstage-fzf__ {
+  local files="$(gf)"
+  if [[ -n "$files" ]]; then
+    git unstage $files
+  else
+    exit 130
+  fi
+}
+
+function __git-rebase-fzf__ {
+  local commit="$(gh)"
+  if [[ -n "$commit" ]]; then
+    git rebase -i "$commit^"
+  else
+    exit 130
+  fi
+}
+
+function __git-fixup-fzf__ {
+  local commit="$(gh)"
+  if [[ -n "$commit" ]]; then
+    git commit --fixup "$commit"
+  else
+    exit 130
+  fi
+}
+
 function git-recommit-smart {
   if $(git-not-has-changes); then
     git recommit
@@ -85,13 +177,9 @@ function git-recommit-smart {
       git add .
     fi
     if $(git-not-has-staged); then
-      local files="$(gf)"
-      if [[ -n "$files" ]]; then
-        git add $files
-      else
-        return
-      fi
+      __git-add-fzf__
     fi
+
     git recommit
     git show --stat HEAD
   fi
@@ -99,62 +187,58 @@ function git-recommit-smart {
 
 function git-rebase-smart {
   if $(git-not-has-changes); then
-    if [[ -z "$1" ]]; then
-      local commit="$(gh)"
-      if [[ -n "$commit" ]]; then
-        git rebase -i "$commit^"
-      else
-        return
-      fi
-    else
-      git rebase-by $@
-    fi
+    __git-rebase-fzf__
   else
     git status
     clr_bg_red "cleanup project first!"
+    exit 3
   fi
 }
 
 function git-commit-tmp {
   if $(git-not-has-changes); then
     clr_yellow_b "nothing to do!"
+    exit 2
   else
-    if [[ "$1" == '.' ]] || $(git-not-has-staged); then
+    if [[ "$1" == '.' ]]; then
+      git add .
+    fi
+    if $(git-not-has-staged); then
       git add .
     fi
 
     git status
 
-    local last=$(git log --format=%B -n 1 HEAD | rg '^[0-9]+$' | uncolor)
+    local last=$(git log --format=%B -n 1 HEAD | rg '^[0-9]+$')
     if [[ -n "$last" ]]; then
       local next="$(expr $last + 1)"
       git commit -m "$next"
+      echo && git log-last
     else
       local first="1"
       git commit -m "$first"
+      echo && git log-last
     fi
-
-    echo
-    git log-last
   fi
 }
 
 function git-commit-smart {
   if $(git-not-has-changes); then
     clr_yellow_b "nothing to do!"
+    exit 2
   else
+    if [[ "$1" == '.' ]]; then
+      git add .
+    fi
     if $(git-not-has-staged); then
-      local files="$(gf)"
-      if [[ -n "$files" ]]; then
-        git add $files
-      else
-        return
-      fi
+      __git-add-fzf__
     fi
 
     git status
 
-    if [[ -z "$1" ]]; then
+    if [[ "$1" == '.' ]]; then
+      git commit
+    elif [[ -z "$1" ]]; then
       git commit
     else
       local summ
@@ -170,79 +254,67 @@ function git-commit-smart {
 function git-commit-fixup-smart {
   if $(git-not-has-changes); then
     clr_yellow_b "nothing to do!"
+    exit 2
   else
     if [[ "$1" == "." ]]; then
       git add .
     fi
-
     if $(git-not-has-staged); then
-      local files="$(gf)"
-      if [[ -n "$files" ]]; then
-        git add $files
-      else
-        return
-      fi
+      __git-add-fzf__
     fi
 
     git status
 
     if [[ "$1" == "." ]]; then
       git commit --fixup HEAD
+      echo && git log-last
+    elif [[ -n "$1" ]]; then
+      git commit --fixup $@
+      echo && git log-last
     else
-      local commit="$(gh)"
-      if [[ -n "$commit" ]]; then
-        git commit --fixup "$commit"
-      else
-        return
-      fi
+      __git-fixup-fzf__
+      echo && git log-last
     fi
-
-    echo
-    git log-last
   fi
 }
 
 function git-unstage-smart {
   if $(git-not-has-staged); then
     clr_yellow_b "nothing to do!"
+    exit 2
   else
-    if [[ -z "$1" ]]; then
-      local files="$(gf)"
-      if [[ -n "$files" ]]; then
-        git unstage $files > /dev/null
-      else
-        return
-      fi
-    else
+    if [[ -n "$1" ]]; then
       git unstage $@
+      git status
+    else
+      __git-unstage-fzf__
+      git status
     fi
-    git status
   fi
 }
 
 function git-add-smart {
   if $(git-not-has-unstaged); then
     clr_yellow_b "nothing to do!"
+    exit 2
   else
-    if [[ -z "$1" ]]; then
-      local files="$(gf)"
-      if [[ -n "$files" ]]; then
-        git add $files
-      else
-        return
-      fi
-    else
+    if [[ -n "$1" ]]; then
       git add $@
+      git status
+    else
+      __git-add-fzf__
+      git status
     fi
-    git status
   fi
 }
 
 function git-remove-untracked-smart {
   local git_ss="$(git status -s)"
   local added_notstaged=$(echo "$git_ss" | grep -c -s -P '^\?\?')
+
   if [[ "$added_notstaged" -eq 0 ]]; then
     clr_yellow_b "nothing to do!"
+    exit 2
   elif [[ "$1" == '.' ]]; then
     local all="$(git status -s | grep "??" | sed -e "s/?? //")"
     clr_red_i "$all"
@@ -267,42 +339,30 @@ function git-remove-untracked-smart {
   fi
 }
 
-function git-find-first-tmp {
-  git log --format="%h %s" -n 100 | while read line ; do
-    if [[ -n "$(echo "$line" | grep -P '^\w+\s\d+$')" ]]; then
-      local last="$line"
-      else
-      echo "$last" | sed -r -e 's/\s+[0-9]+//'
-      break
-    fi
-  done
-}
-
 function git-squash-tmp-smart {
   if $(git-not-has-changes); then
     if [[ "$1" == '.' ]]; then
       local commit="$(git-find-first-tmp)"
       if [[ -n "$commit" ]]; then
         GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
-        if [[ "$?" == "0" ]]; then
-          git show --stat HEAD
-        else
-          return $?
-        fi
+        git show --stat HEAD
+      else
+        clr_yellow_b "nothing to do"
+        git log-last
+        exit 2
       fi
     else
       local commit="$(gh)"
       if [[ -n "$commit" ]]; then
         GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
-        if [[ "$?" == "0" ]]; then
-          git show --stat HEAD
-        else
-          return $?
-        fi
+        git show --stat HEAD
+      else
+        exit 130
       fi
     fi
   else
     git status
     clr_bg_red "cleanup project first!"
+    exit 3
   fi
 }
