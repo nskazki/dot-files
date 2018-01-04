@@ -78,7 +78,7 @@ function r {
 
 alias rt.='rt .'
 alias rc.='rc .'
-alias p.='a. -p'
+alias p.='a -p'
 alias c.='c .'
 alias m.='m .'
 alias f.='f .'
