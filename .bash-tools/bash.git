@@ -46,6 +46,11 @@ function rt {
   return $?
 }
 
+function rf {
+  bash -c "$bash_setup && git-last-tmp-to-fixup-smart $@"
+  return $?
+}
+
 function c {
   bash -c "$bash_setup && git-commit-tmp $@"
   return $?
@@ -78,6 +83,7 @@ function r {
 
 alias rt.='rt .'
 alias rc.='rc .'
+alias rf.='rf .'
 alias p.='a -p'
 alias c.='c .'
 alias m.='m .'
@@ -359,6 +365,23 @@ function git-squash-tmp-smart {
       else
         exit 130
       fi
+    fi
+  else
+    git status
+    clr_bg_red "cleanup project first!"
+    exit 3
+  fi
+}
+
+function git-last-tmp-to-fixup-smart {
+  if $(git-not-has-changes); then
+    local log="$(git log --format="%h %s" -n1)"
+    if [[ -n "$(echo "$log" | grep -P '^\w+\s\d+$')" ]]; then
+      git uncommit
+      git-commit-fixup-smart $@
+    else
+      git log-last
+      clr_bg_red "last commit is not temporary!"
     fi
   else
     git status
