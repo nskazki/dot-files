@@ -33,6 +33,7 @@ alias a='git-add-smart'
 alias r='git-remove-untracked-smart'
 
 alias rt.='rt .'
+alias rc.='rc .'
 alias a.='a .'
 alias p.='a. -p'
 alias u.='u .'
@@ -80,14 +81,19 @@ function git-recommit-smart {
     git recommit
     git show --stat HEAD
   else
+    if [[ "$1" == '.' ]]; then
+      git add .
+    fi
     if $(git-not-has-staged); then
       local files="$(gf)"
       if [[ -n "$files" ]]; then
         git add $files
-        git recommit
-        git show --stat HEAD
+      else
+        return
       fi
     fi
+    git recommit
+    git show --stat HEAD
   fi
 }
 
