@@ -33,47 +33,47 @@ bash_setup="\
 
 function rb {
   bash -c "$bash_setup && git-rebase-smart $@"
-  exit $?
+  return $?
 }
 
 function rc {
   bash -c "$bash_setup && git-recommit-smart $@"
-  exit $?
+  return $?
 }
 
 function rt {
   bash -c "$bash_setup && git-squash-tmp-smart $@"
-  exit $?
+  return $?
 }
 
 function c {
   bash -c "$bash_setup && git-commit-tmp $@"
-  exit $?
+  return $?
 }
 
 function m {
   bash -c "$bash_setup && git-commit-smart $@"
-  exit $?
+  return $?
 }
 
 function f {
   bash -c "$bash_setup && git-commit-fixup-smart $@"
-  exit $?
+  return $?
 }
 
 function u {
   bash -c "$bash_setup && git-unstage-smart $@"
-  exit $?
+  return $?
 }
 
 function a {
   bash -c "$bash_setup && git-add-smart $@"
-  exit $?
+  return $?
 }
 
 function r {
   bash -c "$bash_setup && git-remove-untracked-smart $@"
-  exit $?
+  return $?
 }
 
 alias rt.='rt .'
