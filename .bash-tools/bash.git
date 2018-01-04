@@ -278,13 +278,21 @@ function git-squash-tmp-smart {
       local commit="$(git-find-first-tmp)"
       if [[ -n "$commit" ]]; then
         GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
-        git show --stat HEAD
+        if [[ "$?" == "0" ]]; then
+          git show --stat HEAD
+        else
+          return $?
+        fi
       fi
     else
       local commit="$(gh)"
       if [[ -n "$commit" ]]; then
         GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
-        git show --stat HEAD
+        if [[ "$?" == "0" ]]; then
+          git show --stat HEAD
+        else
+          return $?
+        fi
       fi
     fi
   else
