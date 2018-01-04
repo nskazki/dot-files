@@ -92,6 +92,17 @@ alias u.='u .'
 alias a.='a .'
 alias r.='r .'
 
+alias rt,='rt .'
+alias rc,='rc .'
+alias rf,='rf .'
+alias p,='a -p'
+alias c,='c .'
+alias m,='m .'
+alias f,='f .'
+alias u,='u .'
+alias a,='a .'
+alias r,='r .'
+
 function git-not-has-staged {
   local git_ss="$(git status -s)"
   local modified_staged=$(echo "$git_ss" | grep -c -s -P '^M')
@@ -194,6 +205,7 @@ function git-recommit-smart {
 function git-rebase-smart {
   if $(git-not-has-changes); then
     __git-rebase-fzf__
+    git log-last
   else
     git status
     clr_bg_red "cleanup project first!"
