@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <gconf>
-	<entry name="switch_tab_last" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/switch_tab_last"/>
+	<entry name="switch_tab_last" mtime="1515121117" schema="/schemas/apps/guake/keybindings/local/switch_tab_last" type="string">
+		<stringvalue>disabled</stringvalue>
+	</entry>
 	<entry name="toggle_hide_on_lose_focus" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/toggle_hide_on_lose_focus" type="string">
 		<stringvalue>disabled</stringvalue>
 	</entry>
@@ -12,12 +14,20 @@
 	<entry name="toggle_transparency" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/toggle_transparency"/>
 	<entry name="decrease_transparency" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/decrease_transparency"/>
 	<entry name="increase_transparency" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/increase_transparency"/>
-	<entry name="decrease_height" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/decrease_height"/>
-	<entry name="increase_height" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/increase_height"/>
+	<entry name="decrease_height" mtime="1515121124" schema="/schemas/apps/guake/keybindings/local/decrease_height" type="string">
+		<stringvalue>disabled</stringvalue>
+	</entry>
+	<entry name="increase_height" mtime="1515121123" schema="/schemas/apps/guake/keybindings/local/increase_height" type="string">
+		<stringvalue>disabled</stringvalue>
+	</entry>
 	<entry name="zoom_out" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/zoom_out"/>
-	<entry name="zoom_in_alt" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/zoom_in_alt"/>
+	<entry name="zoom_in_alt" mtime="1515121123" schema="/schemas/apps/guake/keybindings/local/zoom_in_alt" type="string">
+		<stringvalue>disabled</stringvalue>
+	</entry>
 	<entry name="zoom_in" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/zoom_in"/>
-	<entry name="rename_current_tab" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/rename_current_tab"/>
+	<entry name="rename_current_tab" mtime="1515120759" schema="/schemas/apps/guake/keybindings/local/rename_current_tab" type="string">
+		<stringvalue>disabled</stringvalue>
+	</entry>
 	<entry name="switch_tab10" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/switch_tab10" type="string">
 		<stringvalue>disabled</stringvalue>
 	</entry>
@@ -65,8 +75,8 @@
 	</entry>
 	<entry name="close_tab" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/close_tab"/>
 	<entry name="new_tab" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/new_tab"/>
-	<entry name="quit" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/quit" type="string">
-		<stringvalue>&lt;Primary&gt;&lt;Shift&gt;q</stringvalue>
+	<entry name="quit" mtime="1515120746" schema="/schemas/apps/guake/keybindings/local/quit" type="string">
+		<stringvalue>disabled</stringvalue>
 	</entry>
 	<entry name="reset_terminal" mtime="1463396667" schema="/schemas/apps/guake/keybindings/local/reset_terminal"/>
 </gconf>
