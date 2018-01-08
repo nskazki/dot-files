@@ -43,7 +43,7 @@
 	<entry name="prompt_on_close_Tab" mtime="1463396667" schema="/schemas/apps/guake/general/prompt_on_close_tab"/>
 	<entry name="prompt_on_quit" mtime="1481651648" schema="/schemas/apps/guake/general/prompt_on_quit" type="bool" value="true"/>
 	<entry name="use_popup" mtime="1481651648" schema="/schemas/apps/guake/general/use_popup" type="bool" value="true"/>
-	<entry name="use_trayicon" mtime="1481651648" schema="/schemas/apps/guake/general/use_trayicon" type="bool" value="true"/>
+	<entry name="use_trayicon" mtime="1515376015" schema="/schemas/apps/guake/general/use_trayicon" type="bool" value="false"/>
 	<entry name="use_login_shell" mtime="1463396667" schema="/schemas/apps/guake/general/use_login_shell" type="bool" value="false"/>
 	<entry name="default_shell" mtime="1463396667" schema="/schemas/apps/guake/general/default_shell"/>
 	<entry name="display_n" mtime="1481651648" schema="/schemas/apps/guake/general/display_n" type="int" value="0"/>
