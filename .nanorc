@@ -34,7 +34,7 @@ color brightgreen "#[[:space:]]new file:"
 color brightblue  "#[[:space:]]renamed:"
 
 # Untracked filenames
-color black "^# [^/?*:;{}\\]+\.[^/?*:;{}\\]+$"
+color white "^# [^/?*:;{}\\]+\.[^/?*:;{}\\]+$"
 
 color brightmagenta "^#[[:space:]]Changes.*[:]"
 color brightred "^#[[:space:]]Your branch and '[^']+"

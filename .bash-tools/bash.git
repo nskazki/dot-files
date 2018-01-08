@@ -152,7 +152,9 @@ function git-find-first-tmp {
 function __git-add-fzf__ {
   local files="$(gf)"
   if [[ -n "$files" ]]; then
-    git add $files
+    echo "$files" | while read line ; do
+      git add "$line"
+    done
   else
     exit 130
   fi
@@ -161,7 +163,9 @@ function __git-add-fzf__ {
 function __git-unstage-fzf__ {
   local files="$(gf)"
   if [[ -n "$files" ]]; then
-    git unstage $files
+    echo "$files" | while read line ; do
+      git unstage "$line"
+    done
   else
     exit 130
   fi
@@ -337,7 +341,9 @@ function git-remove-untracked-smart {
     local all="$(git status -s | grep "??" | sed -e "s/?? //")"
     clr_red_i "$all"
     echo
-    echo "$all" | pipe gvfs-trash -f
+    echo "$all" | while read line ; do
+      gvfs-trash -f "$line"
+    done
     git status
   else
     local all="$(git status -s | grep "??" | sed -e "s/?? //")"
@@ -351,7 +357,9 @@ function git-remove-untracked-smart {
     if [[ -n "$trash" ]]; then
       clr_red_i "$trash"
       echo
-      echo "$trash" | pipe gvfs-trash -f
+      echo "$trash" | while read line ; do
+        gvfs-trash -f "$line"
+      done
       git status
     fi
   fi
