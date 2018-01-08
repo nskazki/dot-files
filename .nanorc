@@ -34,13 +34,14 @@ color brightgreen "#[[:space:]]new file:"
 color brightblue  "#[[:space:]]renamed:"
 
 # Untracked filenames
-color white "^# [^/?*:;{}\\]+\.[^/?*:;{}\\]+$"
+# color black "^# [^/?*:;{}\\]+\.[^/?*:;{}\\]+$"
 
 color brightmagenta "^#[[:space:]]Changes.*[:]"
 color brightred "^#[[:space:]]Your branch and '[^']+"
 color brightblack "^#[[:space:]]Your branch and '"
 color brightwhite "^#[[:space:]]On branch [^ ]+"
 color brightblack "^#[[:space:]]On branch"
+color brightred "^#[[:space:]]Untracked.*[:]"
 
 # Recolor hash symbols
 
