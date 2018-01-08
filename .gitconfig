@@ -45,10 +45,12 @@
   push-branch = !"git cmd-push-branch"
 
   cmd-push-branch = "!f() { \
-    local branch=\"$(test \"$1\" && echo \"$1\" || echo $(git branch-name))\"; \
-    local remote=\"$(test \"$2\" && echo \"$2\" || echo $(git remote | head -n 1))\"; \
-    local junk=\"$(git log origin/$branch..$branch --pretty=format:'%s' | grep -P '^\\s*\\d+\\s*$|^\\s*tod|^\\s*tos|^\\s*fixup')\"; \
-    test -n \"$junk\" && echo \"need to cleanup junk: $junk\" && return 1; \
+    local branch=\"$(test \"$1\" && echo \"$1\" || echo \"$(git branch-name)\")\"; \
+    local remote=\"$(test \"$2\" && echo \"$2\" || echo \"$(git remote | head -n 1)\")\"; \
+    local remote_branch_exist=\"$(git show-branch \"remotes/$remote/$branch\" 2>/dev/null)\"; \
+    local junk_cmp_branch=\"$(test \"$remote_branch_exist\" && echo \"$remote/$branch\" || echo master)\"; \
+    local junk_exist=\"$(git log \"$junk_cmp_branch..$branch\" --pretty=format:'%s' | grep -P '^\\s*\\d+\\s*$|^\\s*tod|^\\s*tos|^\\s*fixup')\"; \
+    test -n \"$junk_exist\" && echo \"cleanup junk first: $junk_exist\" && return 1; \
     echo $branch '->' $remote; \
     git push -u $remote $branch --tags; \
   }; f"
