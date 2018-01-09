@@ -33,8 +33,8 @@
   { "keys": ["ctrl+,"], "command": "append_comma" },
   { "keys": ["ctrl+shift+,"], "command": "append_comma", "args": {"enter_new_line": "true"} },
 
-  { "keys": ["ctrl+v"], "command": "paste_and_indent" },
-  { "keys": ["ctrl+shift+v"], "command": "paste" },
+  { "keys": ["ctrl+v"], "command": "paste" },
+  { "keys": ["ctrl+shift+v"], "command": "paste_and_indent" },
   { "keys": ["ctrl+shift+alt+v"], "command": "paste_from_history" },
   { "keys": ["ctrl+y"], "command": "redo" },
   { "keys": ["ctrl+t"], "command": "new_file" },
