@@ -10,6 +10,70 @@ if [ -x /usr/bin/dircolors ]; then
   alias egrep='egrep --color=auto'
 fi
 
+# !text-helpers
+alias uncolor='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
+alias unlines='sed '"'"':a;N;$!ba;s/\n/ /g'"'"
+
+alias head1='head -n 1'
+alias tail1='tail -n 1'
+
+alias tailf='tail -f'
+alias wl='wc -l'
+
+function trim {
+  local trimmed="$1"
+  # Strip leading spaces.
+  while [[ $trimmed == ' '* ]]; do
+     trimmed="${trimmed## }"
+  done
+  # Strip trailing spaces.
+  while [[ $trimmed == *' ' ]]; do
+      trimmed="${trimmed%% }"
+  done
+  echo "$trimmed"
+}
+
+function mark {
+  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "usage:  echo 123456 | mark 123 red"
+    echo "colors: $(clr_blue_b b), $(clr_cyan_b c), $(clr_green_b g)"
+    echo "        $(clr_magenta_b m), $(clr_yellow_b y), $(clr_red_b r)"
+    echo "def color: $(clr_red_b r)"
+    echo "def text:  error"
+    return
+  fi
+
+  declare -A fg_color_map
+  fg_color_map[r]=31
+  fg_color_map[g]=32
+  fg_color_map[y]=33
+  fg_color_map[b]=34
+  fg_color_map[m]=35
+  fg_color_map[c]=36
+  fg_color_map[red]=31
+  fg_color_map[green]=32
+  fg_color_map[yellow]=33
+  fg_color_map[blue]=34
+  fg_color_map[magenta]=35
+  fg_color_map[cyan]=36
+
+  if [[ -z "$1" ]]; then
+    local color="r"
+    local mark="error"
+  elif [[ -z "$2" ]]; then
+    local color="r"
+    local mark="$1"
+  else
+    local  mark="$1"
+    local color="$2"
+  fi
+
+  fg_c=$(echo -e "\e[1;${fg_color_map[$color]}m")
+  c_rs=$'\e[0m'
+  sed -r "s/$mark/$fg_c\0$c_rs/g"
+}
+## !
+
 # !cd
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -25,6 +89,16 @@ alias node-gc='node --nouse-idle-notification --expose-gc'
 
 alias node-perf-launch='node --perf-basic-prof'
 alias node-perf-record='cd ~/scripts/flameGraph/tmp && ../init.sh'
+
+# !yarn
+function yarn-upgrade {
+  local pckg="$(yarn outdated --color \
+          | tail -n +7 | head -n -1 \
+          | fzf --multi --reverse --height 50% \
+          | awk '{ print $1"@"$4 }' \
+          | unlines)"
+  yarn add $@ $pckg
+}
 
 # !npm
 function npm-which-strict {
@@ -365,70 +439,6 @@ function env-check {
     fi
   done
 }
-
-# !text-helpers
-alias uncolor='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
-alias unlines='sed '"'"':a;N;$!ba;s/\n/ /g'"'"
-
-alias head1='head -n 1'
-alias tail1='tail -n 1'
-
-alias tailf='tail -f'
-alias wl='wc -l'
-
-function trim {
-  local trimmed="$1"
-  # Strip leading spaces.
-  while [[ $trimmed == ' '* ]]; do
-     trimmed="${trimmed## }"
-  done
-  # Strip trailing spaces.
-  while [[ $trimmed == *' ' ]]; do
-      trimmed="${trimmed%% }"
-  done
-  echo "$trimmed"
-}
-
-function mark {
-  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "usage:  echo 123456 | mark 123 red"
-    echo "colors: $(clr_blue_b b), $(clr_cyan_b c), $(clr_green_b g)"
-    echo "        $(clr_magenta_b m), $(clr_yellow_b y), $(clr_red_b r)"
-    echo "def color: $(clr_red_b r)"
-    echo "def text:  error"
-    return
-  fi
-
-  declare -A fg_color_map
-  fg_color_map[r]=31
-  fg_color_map[g]=32
-  fg_color_map[y]=33
-  fg_color_map[b]=34
-  fg_color_map[m]=35
-  fg_color_map[c]=36
-  fg_color_map[red]=31
-  fg_color_map[green]=32
-  fg_color_map[yellow]=33
-  fg_color_map[blue]=34
-  fg_color_map[magenta]=35
-  fg_color_map[cyan]=36
-
-  if [[ -z "$1" ]]; then
-    local color="r"
-    local mark="error"
-  elif [[ -z "$2" ]]; then
-    local color="r"
-    local mark="$1"
-  else
-    local  mark="$1"
-    local color="$2"
-  fi
-
-  fg_c=$(echo -e "\e[1;${fg_color_map[$color]}m")
-  c_rs=$'\e[0m'
-  sed -r "s/$mark/$fg_c\0$c_rs/g"
-}
-## !
 
 # !human-readeble
 function human-interval {
