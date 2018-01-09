@@ -120,7 +120,6 @@
 
   ctrl+Enter - add new line after current one
   ctrl+shift+Enter - add new line before current one
-  shift+Enter - add new line before current one
 
   ctrl+J - join the lines
   ctrl+shift+(Up/Down) - move the line

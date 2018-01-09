@@ -39,11 +39,6 @@
   { "keys": ["ctrl+y"], "command": "redo" },
   { "keys": ["ctrl+t"], "command": "new_file" },
 
-  { "keys": ["ctrl+enter"], "command": "run_macro_file", "args": {"file": "res://Packages/Default/Add Line.sublime-macro"} },
-
-  { "keys": ["shift+enter"], "command": "run_macro_file", "args": {"file": "res://Packages/Default/Add Line Before.sublime-macro"} },
-  { "keys": ["ctrl+shift+enter"], "command": "run_macro_file", "args": {"file": "res://Packages/Default/Add Line Before.sublime-macro"} },
-
   { "keys": ["ctrl+d"], "command": "find_under_expand" },
   { "keys": ["alt+d"], "command": "find_under_expand_skip" },
 
