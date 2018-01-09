@@ -347,7 +347,7 @@ function git-remove-untracked-smart {
     git status
   else
     local all="$(git status -s | grep "??" | sed -e "s/?? //")"
-    local trash="$(echo "$all" | fzf --multi --preview-window right:70% \
+    local trash="$(echo "$all" | fzf --multi \
       --bind 'ctrl-k:preview-up' \
       --bind 'ctrl-j:preview-down' \
       --preview '((echo $(basename {}) | grep .svg > /dev/null 2>&1 && rsvg {} tmp/preview.png && img2txt tmp/preview.png) \
