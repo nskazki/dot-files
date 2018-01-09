@@ -29,3 +29,5 @@ export FZF_ALT_C_OPTS="--height 80% \
                         --bind 'ctrl-b:preview-up+preview-up+preview-up' \
                         --bind 'ctrl-f:preview-down+preview-down+preview-down' \
                         --preview 'ls -a --color -h --group-directories-first -1 -w $(tput cols) {} | head -500'"
+
+export FZF_DEFAULT_OPTS="--color=dark"
