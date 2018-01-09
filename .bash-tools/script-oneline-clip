@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+
+oneline="$(xclip -selection clipboard -o | sed ':a;N;$!ba;s/\n/ /g')"
+if [ ${#oneline} -gt 100 ]; then
+  truncated="$(echo "$oneline" | cut -c 1-100)"
+  echo "$truncated..."
+else
+  echo "$oneline"
+fi
