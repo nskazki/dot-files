@@ -122,12 +122,12 @@ else bashcount_p="\[$cr_magenta_i\]bash#$bash_count\[$cr_reset\] "; fi
 
 # host part
 if [ $HOST_IAM -eq 1 ]; then cr_host=$cr_cyan_i
-else cr_host=$cr_magenta_i; fi
+else cr_host=$cr_cyan_bg; fi
 host_p="\[$cr_host\]$HOST\[$cr_reset\] "
 
 # user part
-if [ $UID -eq 0 ]; then user_p="\[$cr_red_i\]$USER\[$cr_reset\] ";
-elif [ $USER_OTHER -eq 1 ]; then user_p="\[$cr_yellow_i\]$USER\[$cr_reset\] ";
+if [ $UID -eq 0 ]; then user_p="\[$cr_red_bg\]$USER\[$cr_reset\] ";
+elif [ $USER_OTHER -eq 1 ]; then user_p="\[$cr_red_i\]$USER\[$cr_reset\] ";
 elif [ $USER_IAM -eq 1 ]; then user_p=""; fi
 
 # exports
@@ -173,7 +173,7 @@ prompt_command_() {
 
       local modified_staged=$(echo "$git_ss" | grep -c -s -P '^M')
       if [ $modified_staged -ne 0 ]; then
-        git_ps1_cr=$cr_blue_i
+        git_ps1_cr=$cr_blue_b
         git_file_count="\[$git_ps1_cr\][M$modified_staged]\[$cr_reset\]$git_file_count"
       fi
 
@@ -203,7 +203,7 @@ prompt_command_() {
 
       local deleted_staged=$(echo "$git_ss" | grep -c -s -P '^D')
       if [ $deleted_staged -ne 0 ]; then
-        git_ps1_cr=$cr_magenta_i
+        git_ps1_cr=$cr_magenta_b
         git_file_count="\[$git_ps1_cr\][D$deleted_staged]\[$cr_reset\]$git_file_count"
       fi
 
@@ -234,8 +234,8 @@ prompt_command_() {
   if [ $last_exec_done -ne 1 ]; then
     local diff_p="\[$cr_blue_i\]--:--\[$cr_reset\] "
   else
-    if [ $last_diff_time -le 10 ]; then cr=$cr_green
-    else local cr=$cr_yellow; fi
+    if [ $last_diff_time -le 10 ]; then cr=$cr_green_i
+    else local cr=$cr_yellow_i; fi
     local diff_p="\[$cr\]$last_diff_time_human\[$cr_reset\] "
   fi
 
