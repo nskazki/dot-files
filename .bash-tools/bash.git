@@ -88,27 +88,29 @@ function r {
   return $?
 }
 
-alias rt.='rt .'
+alias rb.='rb .'
 alias rc.='rc .'
+alias rt.='rt .'
 alias rf.='rf .'
-alias p.='a -p'
 alias c.='c .'
 alias m.='m .'
 alias f.='f .'
 alias u.='u .'
 alias a.='a .'
 alias r.='r .'
+alias p.='a -p'
 
-alias rt,='rt .'
+alias rb,='rb .'
 alias rc,='rc .'
+alias rt,='rt .'
 alias rf,='rf .'
-alias p,='a -p'
 alias c,='c .'
 alias m,='m .'
 alias f,='f .'
 alias u,='u .'
 alias a,='a .'
 alias r,='r .'
+alias p,='a -p'
 
 function git-not-has-staged {
   local git_ss="$(git status -s)"
@@ -215,7 +217,23 @@ function git-recommit-smart {
 
 function git-rebase-smart {
   if $(git-not-has-changes); then
-    __git-rebase-fzf__
+    if [[ "$1" == "." ]]; then
+      while [[ -n "$(git log --format="%s" -n 100 | grep -P "^fixup\!\s")" ]]; do
+        local fu_msg="$(git log --format="%s" -n1 --grep "^fixup\!\s")"
+        local fu_hash="$(git log --format="%h" -n1 --grep "^fixup\!\s")"
+        local cm_msg="$(echo "$fu_msg" | sed -r -e 's/^(fixup! )+//')"
+        local cm_hash="$(git log --format="%h" -n1 "$fu_hash"^ --grep "^$cm_msg$")"
+        if [[ -z "$fu_msg" ]] || [[ -z "$fu_hash" ]] || [[ -z "$cm_msg" ]] || [[ -z "$cm_hash" ]]; then
+          clr_bg_red "can not recognize last fixup!"
+          exit 4
+        else
+          echo "($fu_hash) $fu_msg -> ($cm_hash) $cm_msg"
+        fi
+        GIT_SEQUENCE_EDITOR="$(which true)" git rebase -i "$cm_hash"^
+      done
+    else
+      __git-rebase-fzf__
+    fi
     git log-last
   else
     git status
