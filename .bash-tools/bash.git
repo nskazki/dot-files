@@ -7,8 +7,15 @@ alias get='git'
 alias gti='git'
 
 function g {
-  if [[ -z $1 ]]; then tig
-  else git $@; fi
+  if [[ -z $1 ]]; then
+    tig
+  elif [[ -f "$(resolve "$1")" ]]; then
+    tig $@
+  elif [[ -n "$(echo "$1" | grep -P '[\w-/]+\.{2,3}[\w-/]+')" ]]; then
+    tig $@
+  else
+    git $@
+  fi
 }
 
 alias t='tig'
