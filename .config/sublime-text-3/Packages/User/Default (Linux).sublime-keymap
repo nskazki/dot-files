@@ -42,6 +42,9 @@
   { "keys": ["ctrl+d"], "command": "find_under_expand" },
   { "keys": ["alt+d"], "command": "find_under_expand_skip" },
 
+  { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
+
+  { "keys": ["ctrl+k", "ctrl+b"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+d"], "command": "null" },
   { "keys": ["pageup"], "command": "null" },
   { "keys": ["pagedown"], "command": "null" },
@@ -50,7 +53,6 @@
   { "keys": ["ctrl+q"], "command": "null" },
   { "keys": ["ctrl+shift+s"], "command": "null" },
   { "keys": ["ctrl+f4"], "command": "null" },
-  { "keys": ["ctrl+k", "ctrl+b"], "command": "null" },
   { "keys": ["f11"], "command": "null" },
   { "keys": ["ctrl+u"], "command": "null" },
   { "keys": ["ctrl+shift+u"], "command": "null" },
