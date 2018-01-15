@@ -13,6 +13,8 @@ fi
 # !text-helpers
 alias uncolor='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
 alias unlines='sed '"'"':a;N;$!ba;s/\n/ /g'"'"
+alias better-truncate='~/.bash-tools/script-truncate'
+alias side-by-side='~/.bash-tools/script-side-by-side'
 
 alias head1='head -n 1'
 alias tail1='tail -n 1'
@@ -31,6 +33,36 @@ function trim {
       trimmed="${trimmed%% }"
   done
   echo "$trimmed"
+}
+
+function truncate {
+  if [[ -z "$1" ]]; then
+    echo -e "usage: truncate 80 'some long multiline text'"
+    return
+  fi
+
+  local clmn="$1"
+  local text="$2"
+
+  if [[ -z "$text" ]]; then
+    text="$clmn"
+    clmn="80"
+  fi
+
+  if [[ "$clmn" -le 3 ]]; then
+    echo -e "[clmn=$clmn] should be gt 3!"
+    return 1
+  fi
+
+  echo "$text" | while read line; do
+    if [ "${#line}" -gt "$clmn" ]; then
+      local limit="$(expr $clmn - 3)"
+      local truncated="$(echo "$line" | cut -c 1-$limit)"
+      echo "$truncated..."
+    else
+      echo "$line"
+    fi
+  done
 }
 
 function mark {
