@@ -128,7 +128,7 @@
   }; f"
 
   # logs
-  cmd-log-hist = "log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --abbrev-commit --format='%C(blue)%ad %C(yellow)%h%C(auto)%d %C(reset)%s %C(green)[%an]'"
+  cmd-log-hist = "log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --abbrev-commit --format='%C(blue)%ad %C(yellow)%h%C(auto)%d %C(reset)%s %C(green)[%an]%C(reset)'"
   cmd-log-last = "!git cmd-log-hist -n 10"
   cmd-log-find-in-branch = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=\"$1\"; }; f"
   cmd-log-find-in-repo   = "!f() { git log --branches --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=\"$1\"; }; f"
