@@ -29,98 +29,16 @@ alias ss='git status'
 alias d='git diff'
 alias ds='git diff-staged'
 
-bash_setup="\
-  set -e && \
-  export PATH=$PATH:/home/nskazki/.fzf/bin && \
-  source $HOME/.bash-tools/bash.git && \
-  source $HOME/.bash-tools/bash-aliases && \
-  source $HOME/.bash-tools/bash-clr && \
-  source $HOME/.bash-tools/fzf.git && \
-  source $HOME/.bash-tools/fzf.bash "
-
-function __args-test__ {
-  local args=""
-  for (( i = 0; i < $#; i++ )); do
-    args="$args \"${!i}\""
-  done
-  echo "$args"
-}
-
-function __args-test-2__ {
-  for i ; do
-    echo "'$i'"
-  done
-}
-
-function __args-test-3__ {
-  printf "%q"" " "$@"
-  echo
-}
-
-function __args-test-4__ {
-  printf '"%s" ' "$@"
-  echo
-}
-
-function rb {
-  local args="$(printf '"%s" ' "$@")"
-  bash -c "$bash_setup && git-rebase-smart $args"
-  return $?
-}
-
-function rc {
-  local args="$(printf '"%s" ' "$@")"
-  bash -c "$bash_setup && git-recommit-smart $args"
-  return $?
-}
-
-function rt {
-  local args="$(printf '"%s" ' "$@")"
-  bash -c "$bash_setup && git-squash-tmp-smart $args"
-  return $?
-}
-
-function rf {
-  local args="$(printf '"%s" ' "$@")"
-  bash -c "$bash_setup && git-last-tmp-to-fixup-smart $args"
-  return $?
-}
-
-function c {
-  local args="$(printf '"%s" ' "$@")"
-  bash -c "$bash_setup && git-commit-tmp $args"
-  return $?
-}
-
-function m {
-  local args="$(printf '"%s" ' "$@")"
-  bash -c "$bash_setup && git-commit-smart $args"
-  return $?
-}
-
-function f {
-  local args="$(printf '"%s" ' "$@")"
-  bash -c "$bash_setup && git-commit-fixup-smart $args"
-  return $?
-}
-
-function u {
-  local args="$(printf '"%s" ' "$@")"
-  bash -c "$bash_setup && git-unstage-smart $args"
-  return $?
-}
-
-function a {
-  local args="$(printf '"%s" ' "$@")"
-  bash -c "$bash_setup && git-add-smart $args"
-  return $?
-}
-
-function r {
-  local args="$(printf '"%s" ' "$@")"
-  bash -c "$bash_setup && git-remove-untracked-smart $args"
-  return $?
-}
+alias rb='git-rebase-smart'
+alias rc='git-recommit-smart'
+alias rt='git-squash-tmp-smart'
+alias rf='git-last-tmp-to-fixup-smart'
+alias c='git-commit-tmp'
+alias m='git-commit-smart'
+alias f='git-commit-fixup-smart'
+alias u='git-unstage-smart'
+alias a='git-add-smart'
+alias r='git-remove-untracked-smart'
 
 alias rb.='rb .'
 alias rc.='rc .'
@@ -407,7 +325,7 @@ function git-recommit-smart {
 
     if [[ -z "$paths" ]]; then
       clr_bg_blue "paths is not defined!"
-      exit 100
+      return 100
     fi
 
     __git-add__ "$paths"
@@ -428,14 +346,14 @@ function git-rebase-smart {
   if $(git-has-changes); then
     git status
     clr_bg_red "cleanup project first!"
-    exit 3
+    return 3
   fi
 
   if [[ "$1" == "." ]]; then
     if [[ -z "$(git log --format="%s" -n 100 | grep -P "^fixup\!\s")" ]]; then
       git log-last
       clr_yellow "nothing to do!"
-      exit 2
+      return 2
     fi
 
     local before="$(__git-log__)"
@@ -465,7 +383,7 @@ function git-rebase-smart {
       echo
     else
       clr_bg_blue "input was interrupted!"
-      exit 130
+      return 130
     fi
     __git-log__
   fi
@@ -475,7 +393,7 @@ function git-commit-tmp {
   if $(git-not-has-changes); then
     __git-status__
     clr_yellow "nothing to do!"
-    exit 2
+    return 2
   fi
 
   if [[ "$1" == '.' ]] || $(git-not-has-staged); then
@@ -484,7 +402,7 @@ function git-commit-tmp {
 
   if $(git-not-has-staged) && [[ -z "$paths" ]]; then
     clr_bg_blue "has not staged and paths is not defined!"
-    exit 100
+    return 100
   fi
 
   local before="$(
@@ -510,7 +428,7 @@ function git-commit-smart {
   if $(git-not-has-changes); then
     __git-status__
     clr_yellow "nothing to do!"
-    exit 2
+    return 2
   fi
 
   if [[ "$1" == '.' ]]; then
@@ -521,7 +439,7 @@ function git-commit-smart {
 
   if $(git-not-has-staged) && [[ -z "$paths" ]]; then
     clr_bg_blue "has not staged and paths is not defined!"
-    exit 100
+    return 100
   fi
 
   if ([[ "$1" == '.' ]] && [[ -z "$2" ]]) || [[ -z "$1" ]]; then
@@ -559,7 +477,7 @@ function git-commit-fixup-smart {
   if $(git-not-has-changes); then
     __git-status__
     clr_yellow "nothing to do!"
-    exit 2
+    return 2
   fi
 
   if [[ "$1" == '.' ]]; then
@@ -570,7 +488,7 @@ function git-commit-fixup-smart {
 
   if $(git-not-has-staged) && [[ -z "$paths" ]]; then
     clr_bg_blue "has not staged and paths is not defined!"
-    exit 100
+    return 100
   fi
 
   if [[ "$1" == "." ]]; then
@@ -583,7 +501,7 @@ function git-commit-fixup-smart {
 
   if [[ -z "$commit" ]]; then
     clr_bg_blue "commit is not defined!"
-    exit 100
+    return 100
   fi
 
   local before="$(
@@ -604,7 +522,7 @@ function git-unstage-smart {
   if $(git-not-has-staged); then
     __git-status__
     clr_yellow "nothing to do!"
-    exit 2
+    return 2
   fi
 
   if [[ "$1" == "." ]]; then
@@ -617,7 +535,7 @@ function git-unstage-smart {
 
   if [[ -z "$paths" ]]; then
     clr_bg_blue "paths is not defined!"
-    exit 100
+    return 100
   fi
 
   local before="$(__git-status__)"
@@ -631,7 +549,7 @@ function git-add-smart {
   if $(git-not-has-unstaged); then
     __git-status__
     clr_yellow "nothing to do!"
-    exit 2
+    return 2
   fi
 
   if [[ "$1" == "." ]]; then
@@ -644,7 +562,7 @@ function git-add-smart {
 
   if [[ -z "$paths" ]]; then
     clr_bg_blue "paths is not defined!"
-    exit 100
+    return 100
   fi
 
   local before="$(__git-status__)"
@@ -661,7 +579,7 @@ function git-remove-untracked-smart {
   if [[ "$added_notstaged" -eq 0 ]]; then
     __git-status__
     clr_yellow "nothing to do!"
-    exit 2
+    return 2
   fi
 
   local all="$(git status -s | grep "??" | sed -e "s/?? //")"
@@ -679,7 +597,7 @@ function git-remove-untracked-smart {
 
   if [[ -z "$trash" ]]; then
     clr_bg_blue "trash is not defined!"
-    exit 100
+    return 100
   fi
 
   local before="$(__git-status__)"
@@ -693,7 +611,7 @@ function git-squash-tmp-smart {
   if $(git-has-changes); then
     __git-status__
     clr_bg_red "cleanup project first!"
-    exit 3
+    return 3
   fi
 
   if [[ "$1" == '.' ]]; then
@@ -705,14 +623,14 @@ function git-squash-tmp-smart {
   if [[ -z "$commit" ]]; then
     __git-log__
     clr_yellow "nothing to do!"
-    exit 2
+    return 2
   fi
 
   local last="$(git-find-last-tmp)"
   if [[ "$commit" == "$last" ]]; then
     __git-log__
     clr_yellow "nothing to do!"
-    exit 2
+    return 2
   fi
 
   local before="$(__git-log__)"
@@ -726,13 +644,13 @@ function git-last-tmp-to-fixup-smart {
   if $(git-has-changes); then
     __git-status__
     clr_bg_red "cleanup project first!"
-    exit 3
+    return 3
   fi
 
   if [[ -z "$(git log --format="%h %s" -n1 | grep -P '^\w+\s\d+$')" ]]; then
     __git-log__
     clr_bg_red "last commit is not temporary!"
-    exit 4
+    return 4
   fi
 
   if [[ "$1" == "." ]]; then
@@ -745,7 +663,7 @@ function git-last-tmp-to-fixup-smart {
 
   if [[ -z "$commit" ]]; then
     clr_bg_blue "commit is not defined!"
-    exit 100
+    return 100
   fi
 
   local before="$(__git-log__)"
