@@ -10,6 +10,8 @@ if (!isString(process.argv[7])) {
   process.exit(0)
 }
 
+process.env.FORCE_COLOR = 1
+
 const chalk = require('chalk')
 const AnsiRE = require('ansi-regex')
 const cliBoxes = require('cli-boxes').single
