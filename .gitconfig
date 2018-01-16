@@ -173,7 +173,9 @@
   diff-staged = !"git cmd-diff-staged"
 
   # view-last-commit
-  cmd-view-last-commit = "!(git show --color=always --stat HEAD && echo && git diff --color=always --ignore-all-space HEAD^..HEAD) | less"
+  cmd-view-last-commit = "!f() {\
+    (git show --color=always --stat="$(tput cols)" HEAD && echo && git diff --color=always --ignore-all-space HEAD^..HEAD) | less; \
+  }; f"
 
   v                = !"git cmd-view-last-commit"
   view-last-commit = !"git cmd-view-last-commit"
