@@ -43,6 +43,7 @@
   { "keys": ["alt+d"], "command": "find_under_expand_skip" },
 
   { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
+  { "keys": ["ctrl+m"], "command": "toggle_minimap" },
 
   { "keys": ["ctrl+k", "ctrl+b"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+d"], "command": "null" },

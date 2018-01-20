@@ -57,6 +57,9 @@
 
 - sublime
 
+  ctrl+M - show\hide minimap
+  ctrl+B - show\hide bar
+
   ctrl+Plus - zoom in
   ctrl+Minus - zoom out
 
@@ -102,7 +105,6 @@
   Home - move to start of line
   ctrl+R - go to function
   ctrl+G - go to line
-  ctrl+M - go to bracket
   ctrl+(Up/Down) - scroll
   ctrl+(Left/Right) - move by words
 
