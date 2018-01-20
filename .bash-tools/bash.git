@@ -378,7 +378,7 @@ function git-rebase-smart {
       while [[ -n "$(git log --format="%s" -n 100 | grep -P "^fixup\!\s")" ]]; do
         local fu_msg="$(git log --format="%s" -n1 --grep "^fixup\!\s")"
         local fu_hash="$(git log --format="%h" -n1 --grep "^fixup\!\s")"
-        local cm_msg="$(echo "$fu_msg" | sed -r -e 's/^(fixup! )+//')"
+        local cm_msg="$(echo "$fu_msg" | sed -r -e 's/^(fixup! )+//' | sed -r -e 's/\\/\\\\/g')"
         local cm_hash="$(git log --format="%h" -n1 "$fu_hash"^ --grep "^$cm_msg$")"
         if [[ -z "$fu_msg" ]] || [[ -z "$fu_hash" ]] || [[ -z "$cm_msg" ]] || [[ -z "$cm_hash" ]]; then
           clr_bg_red "can not found a base of last fixup!"
