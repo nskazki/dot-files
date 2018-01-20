@@ -17,7 +17,7 @@ const AnsiRE = require('ansi-regex')
 const column = isString(process.argv[3]) ? parseInt(process.argv[2]) : 80
 const input = isString(process.argv[3]) ? process.argv[3].trim() : process.argv[2].trim()
 
-const lines = input.split(/\r?\n\r?/g)
+const lines = input.replace(/\t/g, '    ').split(/\r?\n\r?/g)
 const output = lines.map(line => truncateLine(column, line)).join('\n')
 console.log(output)
 

@@ -159,6 +159,7 @@ function __git-add__ {
     echo "$paths" | while read line ; do
       echo "$(clr_black_i $) git add $(clr_yellow \""$line"\")"
       git add "$line"
+      __print-non-zero__
     done
     echo
   fi
@@ -174,7 +175,7 @@ function __git-unstage__ {
       if [[ "$last" -ne "0" ]]; then
         echo
         echo "$__unstage_output__"
-        clr_bg_red "$last"
+        clr_bg_red "return $last"
       fi
     done
     echo
@@ -187,6 +188,7 @@ function __move-to-trash__ {
     echo "$trash" | while read line ; do
       echo "$(clr_black_i $) gvfs-trash -f \"$(clr_red_i "$line")\""
       gvfs-trash -f "$line"
+      __print-non-zero__
     done
     echo
   fi
@@ -230,9 +232,7 @@ function __git-rebase-fixup__ {
   return $last
 }
 
-function __git-verbose__ {
-  __git-status-unexpected__
-
+function __git-verbose-box__ {
   local lw="$(expr "$(tput cols)" \* 4 / 9)"
   local rw="$(expr "$(tput cols)" \* 5 / 9)"
 
@@ -241,42 +241,28 @@ function __git-verbose__ {
   local git_log="$(git log-last)"
 
   __side_by-side__ "$lw" "magenta" "$git_show" "$rw" "cyan" "$git_log"
-}
-
-function __git-show__ {
-  __git-status-unexpected__
-  git show HEAD --stat --color=always
-  echo
-}
-
-function __git-log__ {
-  __git-status-unexpected__
-  git log-last
-  echo
+  __git-status-unexpected-box__
 }
 
 function __git-log-box__ {
-  __git-status-unexpected__
   git log-last | boxen --border-color magenta
-}
-
-function __git-status__ {
-  git -c color.status=always status | sed -e 's/\t/    /g'
-  echo
+  __git-status-unexpected-box__
 }
 
 function __git-status-box__ {
-  if $(git-has-changes); then
-    git -c color.status=always status | sed -e 's/\t/    /g' | boxen --border-color magenta
-  else
-    clr_yellow "nothing to commit, working tree clean" | boxen --border-color magenta --padding 2
-  fi
+  git -c color.status=always status | sed -e 's/\t/    /g' | boxen --border-color magenta
 }
 
-function __git-status-unexpected__ {
+function __git-status-unexpected-box__ {
   if $(git-has-changes); then
     git -c color.status=always status | sed -e 's/\t/    /g' | boxen --border-color red
   fi
+}
+
+function __git-show__ {
+  git show HEAD --stat --color=always
+  echo
+  __git-status-unexpected__
 }
 
 function __git-status-short__ {
@@ -286,6 +272,46 @@ function __git-status-short__ {
   else
     clr_yellow "nothing to commit, working tree clean"
     echo
+  fi
+}
+
+function __git-verbose__ {
+  echo
+  local num="$(git show HEAD --stat | tail -n1 | r1)"
+  git show --stat HEAD --color=always | head -n -1 | tail -n "$num"
+  echo
+  git log-last
+  echo
+  __git-status-unexpected__
+}
+
+function __git-log__ {
+  git log-last
+  echo
+  __git-status-unexpected__
+}
+
+function __git-status__ {
+  git -c color.status=always status
+  echo
+}
+
+function __git-status-unexpected__ {
+  if $(git-has-changes); then
+    clr_black "$(clr_bg_yellow "Changes:")"
+    local asterisk="$(clr_black "$(clr_bg_yellow "*")")"
+    git -c color.status=always status -s | while read line ; do
+      echo "       $asterisk   $line"
+    done
+    echo
+  fi
+}
+
+function __print-non-zero__ {
+  local last="$?"
+  if [[ "$last" -ne "0" ]]; then
+    echo
+    clr_bg_red "return $last"
   fi
 }
 
@@ -310,24 +336,24 @@ function git-recommit-smart {
       echo "$(clr_black_i $) git recommit"
       echo
       git recommit
+      __print-non-zero__
       echo
 
       __after__
       __git-show__
   else
-    __start__
-
     if [[ "$1" == '.' ]]; then
       local paths="$(__git-unstaged-list__)"
     elif $(git-not-has-staged); then
       local paths="$(gf)"
     fi
 
-    if [[ -z "$paths" ]]; then
+    if $(git-not-has-staged) && [[ -z "$paths" ]]; then
       clr_bg_blue "paths is not defined!"
       return 100
     fi
 
+    __start__
     __git-add__ "$paths"
     __git-status-short__
     __before__
@@ -335,6 +361,7 @@ function git-recommit-smart {
     echo "$(clr_black_i $) git recommit"
     echo
     git recommit
+    __print-non-zero__
     echo
 
     __after__
@@ -343,12 +370,6 @@ function git-recommit-smart {
 }
 
 function git-rebase-smart {
-  if $(git-has-changes); then
-    git status
-    clr_bg_red "cleanup project first!"
-    return 3
-  fi
-
   if [[ "$1" == "." ]]; then
     if [[ -z "$(git log --format="%s" -n 100 | grep -P "^fixup\!\s")" ]]; then
       git log-last
@@ -365,7 +386,7 @@ function git-rebase-smart {
         local cm_hash="$(git log --format="%h" -n1 "$fu_hash"^ --grep "^$cm_msg$")"
         if [[ -z "$fu_msg" ]] || [[ -z "$fu_hash" ]] || [[ -z "$cm_msg" ]] || [[ -z "$cm_hash" ]]; then
           clr_bg_red "can not found a base of last fixup!"
-          echo "fu_msg: $fu_msg, fu_hash: $fu_hash, cm_msg: $cm_msg, cm_hash: $cm_hash"
+          echo -e "fu_msg: $fu_msg \nfu_hash: $fu_hash \ncm_msg: $cm_msg \ncm_hash: $cm_hash"
           break
         fi
 
@@ -377,15 +398,22 @@ function git-rebase-smart {
   else
     local commit="$(gh)"
     if [[ -n "$commit" ]]; then
+      __start__
+      __git-log__
+      __before__
+
       echo "$(clr_black_i $) git rebase -i $(clr_cyan "$commit")^"
       echo
       git rebase -i "$commit^"
+      __print-non-zero__
       echo
+
+      __after__
+      __git-log__
     else
       clr_bg_blue "input was interrupted!"
       return 130
     fi
-    __git-log__
   fi
 }
 
@@ -418,10 +446,11 @@ function git-commit-tmp {
     echo "$(clr_black_i $) git commit -m $(clr_cyan "$next")"
     echo
     git commit -m "$next"
+    __print-non-zero__
   )"
 
   __side_by-side__ "$before" "$output"
-  __git-verbose__
+  __git-verbose-box__
 }
 
 function git-commit-smart {
@@ -449,9 +478,10 @@ function git-commit-smart {
     __before__
     echo "$(clr_black_i $) git commit"
     git commit
+    __print-non-zero__
     echo
     __after__
-    __git-verbose__
+    __git-verbose-box__
   else
     local before="$(
       __git-add__ "$paths"
@@ -467,9 +497,10 @@ function git-commit-smart {
       echo "$(clr_black_i $) git commit -m \"$(clr_cyan "$undoted")\""
       echo
       git commit -m "$undoted"
+      __print-non-zero__
     )"
     __side_by-side__ "$before" "$output"
-    __git-verbose__
+    __git-verbose-box__
   fi
 }
 
@@ -512,10 +543,11 @@ function git-commit-fixup-smart {
     echo "$(clr_black_i $) git commit --fixup $(clr_cyan "$commit")"
     echo
     git commit --fixup $commit
+    __print-non-zero__
   )"
 
   __side_by-side__ "$before" "$output"
-  __git-verbose__
+  __git-verbose-box__
 }
 
 function git-unstage-smart {
@@ -608,12 +640,6 @@ function git-remove-untracked-smart {
 }
 
 function git-squash-tmp-smart {
-  if $(git-has-changes); then
-    __git-status__
-    clr_bg_red "cleanup project first!"
-    return 3
-  fi
-
   if [[ "$1" == '.' ]]; then
     local commit="$(git-find-first-tmp)"
   else
@@ -637,7 +663,7 @@ function git-squash-tmp-smart {
   local output="$(__git-rebase-squash-tmp__ "$commit")"
 
   __side_by-side__ "$before" "$output"
-  __git-verbose__
+  __git-verbose-box__
 }
 
 function git-last-tmp-to-fixup-smart {
@@ -672,9 +698,11 @@ function git-last-tmp-to-fixup-smart {
     echo "$(clr_black_i $) git commit --fixup $(clr_cyan "$commit")"
     echo
     git uncommit
+    __print-non-zero__
     git commit --fixup $commit
+    __print-non-zero__
   )"
 
   __side_by-side__ "$before" "$output"
-  __git-verbose__
+  __git-verbose-box__
 }

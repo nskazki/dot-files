@@ -26,8 +26,8 @@ const colsB = parseInt(process.argv[5]) - 2
 const colorA = chalk[process.argv[3].trim()]
 const colorB = chalk[process.argv[6].trim()]
 
-const sideA = process.argv[4].trim().replace(/\r?\n\r?/g, '\n')
-const sideB = process.argv[7].trim().replace(/\r?\n\r?/g, '\n')
+const sideA = process.argv[4].trim().replace(/\r?\n\r?/g, '\n').replace(/\t/g, '    ')
+const sideB = process.argv[7].trim().replace(/\r?\n\r?/g, '\n').replace(/\t/g, '    ')
 
 const linesA = sideA.split(/\n/g)
 const linesB = sideB.split(/\n/g)
