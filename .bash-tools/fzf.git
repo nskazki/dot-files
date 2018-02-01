@@ -47,10 +47,23 @@ gh() {
   grep -o "[a-f0-9]\{7,\}"
 }
 
+gr() {
+  local branch="$(git branch-name)"
+  local remote="$(git remote | head -n 1)"
+  local remote_branch="$(git show-branch "remotes/$remote/$branch" 2>/dev/null)"
+  local base_branch="$(test "$remote_branch" && echo "$remote/$branch" || echo master)"
+  local last_commit="$(git log --format="%h" $base_branch..HEAD | tail -n1)"
+
+  git diff --name-only HEAD..$last_commit |
+  last_commit="$last_commit" fzf --multi --preview 'git diff --color=always HEAD..$last_commit -- {}' |
+  sed 's/\s/\\ /g'
+}
+
 if [ -n "$PS1" ]; then
   bind '"\er": redraw-current-line'
   bind '"\C-g\C-f": "$(gf)\e\C-e\er"'
   bind '"\C-g\C-b": "$(gb)\e\C-e\er"'
   bind '"\C-g\C-t": "$(gt)\e\C-e\er"'
   bind '"\C-g\C-h": "$(gh)\e\C-e\er"'
+  bind '"\C-g\C-r": "$(gr)\e\C-e\er"'
 fi
