@@ -22,7 +22,7 @@ alias t='tig'
 alias b='tig blame'
 alias y='tig stash'
 
-alias v='git view-last-commit'
+alias v='git view-commit'
 alias l='git log-last'
 alias s='git status-short'
 alias ss='git status'

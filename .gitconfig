@@ -172,13 +172,14 @@
   ds          = !"git cmd-diff-staged"
   diff-staged = !"git cmd-diff-staged"
 
-  # view-last-commit
-  cmd-view-last-commit = "!f() {\
-    (git show --color=always --stat="$(tput cols)" HEAD && echo && git diff --color=always --ignore-all-space HEAD^..HEAD) | less; \
+  # view-commit
+  cmd-view-commit = "!f() {\
+    local commit=\"$(test \"$1\" && echo \"$1\" || echo \"HEAD\")\"; \
+    (git show --color=always --stat="$(tput cols)" --pretty=fuller $commit && echo && git diff --color=always $commit^..$commit) | less; \
   }; f"
 
-  v                = !"git cmd-view-last-commit"
-  view-last-commit = !"git cmd-view-last-commit"
+  v           = !"git cmd-view-commit"
+  view-commit = !"git cmd-view-commit"
 
   # branch
   cmd-branch-name   = "!git rev-parse --abbrev-ref HEAD"
