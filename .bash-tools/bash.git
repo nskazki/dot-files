@@ -240,7 +240,7 @@ function __git-verbose-box__ {
   local rw="$(expr "$(tput cols)" \* 5 / 9)"
 
   local git_show_width="$(expr "$lw" - 2)"
-  local git_show="$(git show --stat="$git_show_width" HEAD --color=always)"
+  local git_show="$(git show --pretty=fuller --stat="$git_show_width" HEAD --color=always)"
   local git_log="$(git log-last)"
 
   __side_by-side__ "$lw" "magenta" "$git_show" "$rw" "cyan" "$git_log"
@@ -263,7 +263,7 @@ function __git-status-unexpected-box__ {
 }
 
 function __git-show__ {
-  git show HEAD --stat --color=always
+  git show --pretty=fuller HEAD --stat --color=always
   echo
   __git-status-unexpected__
 }
@@ -281,7 +281,7 @@ function __git-status-short__ {
 function __git-verbose__ {
   echo
   local num="$(git show HEAD --stat | tail -n1 | r1)"
-  git show --stat HEAD --color=always | head -n -1 | tail -n "$num"
+  git show --pretty=fuller --stat HEAD --color=always | head -n -1 | tail -n "$num"
   echo
   git log-last
   echo
