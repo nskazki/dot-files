@@ -128,16 +128,12 @@
   }; f"
 
   # logs
-  cmd-log-hist = "log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --abbrev-commit --format='%C(blue)%ad %C(yellow)%h%C(auto)%d %C(reset)%s %C(green)[%an]%C(reset)'"
+  cmd-log-hist = "log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --abbrev-commit --format='%C(magenta)%h %C(blue)%ad %C(green)%an %C(reset)%s%C(auto)%d%C(reset)'"
   cmd-log-last = "!git cmd-log-hist -n 10"
-  cmd-log-find-in-branch = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=\"$1\"; }; f"
-  cmd-log-find-in-repo   = "!f() { git log --branches --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=\"$1\"; }; f"
 
   l        = !"git cmd-log-last"
   log-last = !"git cmd-log-last"
   log-hist = !"git cmd-log-hist"
-  log-find-in-branch = !"git cmd-log-find-in-branch"
-  log-find-in-repo   = !"git cmd-log-find-in-repo"
 
   # Show verbose output about tags, branches or remotes
   cmd-branch-verbose = "branch -av"
