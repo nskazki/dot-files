@@ -383,7 +383,7 @@ function git-recommit-smart {
 function git-rebase-smart {
   if [[ "$1" == "." ]]; then
     if [[ -z "$(git log --format="%s" -n 100 | grep -P "^fixup\!\s")" ]]; then
-      git log-last
+      __git-log__
       clr_yellow "nothing to do!"
       return 2
     fi
@@ -737,7 +737,11 @@ function git-squash-tmp-smart {
     __memoize-error__
   )"
 
-  if [[ $(__git-smart-get-error__) -ne 0 ]]; then
+  if [[ $(__git-smart-get-error__) -ne 0 ]] && [[ "$output" =~ "nothing to do" ]]; then
+    __git-log__
+    clr_yellow "nothing to do (due to script output)!"
+    return 2
+  elif [[ $(__git-smart-get-error__) -ne 0 ]]; then
     echo "$output"
     return $(__git-smart-get-error__)
   else
@@ -792,14 +796,14 @@ function git-last-tmp-to-fixup-smart {
 }
 
 function git-hoist-smart {
-  if [[ "$1" == "." ]] && [[ -z "$(git log --format="%h" --grep "^[0-9][0-9]*$")" ]]; then
-    git log-last
+  if [[ "$1" == "." ]] && [[ -z "$(git log --format="%h %s" -n 100 | grep -P '^\w+\s\d+$')" ]]; then
+    __git-log__
     clr_yellow "nothing to do!"
     return 2
   fi
 
   if [[ "$1" == "." ]]; then
-    local commits="$(git log --format="%h" --grep "^[0-9][0-9]*$")"
+    local commits="$(git log --format="%h %s" -n 100 | grep -P '^\w+\s\d+$' | grep -P -o '^\w+')"
   else
     local commits="$(gh)"
   fi
@@ -817,8 +821,8 @@ function git-hoist-smart {
   )"
 
   if [[ $(__git-smart-get-error__) -ne 0 ]] && [[ "$output" =~ "nothing to do" ]]; then
-    git log-last
-    clr_yellow "nothing to do!"
+    __git-log__
+    clr_yellow "nothing to do (due to script output)!"
     return 2
   elif [[ $(__git-smart-get-error__) -ne 0 ]]; then
     echo "$output"

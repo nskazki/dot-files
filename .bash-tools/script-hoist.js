@@ -21,7 +21,8 @@ const lines = rawLines.map(rawLine => {
 
 if (lines.length <= 1) {
   console.error(`unexpected number of lines=${lines.length}`)
-  process.exit(1)
+  console.error('nothing to do!')
+  process.exit(2)
 }
 
 lines.forEach(({ cmd, hash, msg, raw }) => {
@@ -49,6 +50,7 @@ const output = [
 
 const sameOutput = output.every(({ hash }, index) => hashes.indexOf(hash) === index)
 if (sameOutput) {
+  console.error('output equal to input')
   console.error('nothing to do!')
   process.exit(2)
 }
