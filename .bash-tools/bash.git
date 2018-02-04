@@ -33,6 +33,7 @@ alias rb='git-rebase-smart'
 alias rc='git-recommit-smart'
 alias rt='git-squash-tmp-smart'
 alias rf='git-last-tmp-to-fixup-smart'
+alias rh='git-hoist-smart'
 alias c='git-commit-tmp'
 alias m='git-commit-smart'
 alias f='git-commit-fixup-smart'
@@ -44,6 +45,7 @@ alias rb.='rb .'
 alias rc.='rc .'
 alias rt.='rt .'
 alias rf.='rf .'
+alias rh.='rh .'
 alias c.='c .'
 alias m.='m .'
 alias f.='f .'
@@ -56,6 +58,7 @@ alias rb,='rb .'
 alias rc,='rc .'
 alias rt,='rt .'
 alias rf,='rf .'
+alias rh,='rh .'
 alias c,='c .'
 alias m,='m .'
 alias f,='f .'
@@ -232,6 +235,19 @@ function __git-rebase-fixup__ {
   __fixup_rebase_output__="$(GIT_SEQUENCE_EDITOR="$(which true)" git rebase -i "$cm_hash"^ 2>&1)"
   local last="$?"
   echo "$__fixup_rebase_output__" | sed -e 's/\s/ /g'
+  return $last
+}
+
+function __git-rebase-hoist__ {
+  local last_commit="${!#}"
+  local commits="$@"
+
+  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/script-hoist.js") git rebase -i $(clr_cyan "$last_commit")^"
+  echo
+
+  __raise_rebase_output__="$(COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-hoist.js" git rebase -i "$last_commit"^ 2>&1)"
+  local last="$?"
+  echo "$__raise_rebase_output__" | sed -e 's/\s/ /g'
   return $last
 }
 
@@ -771,5 +787,43 @@ function git-last-tmp-to-fixup-smart {
   else
     __side_by-side__ "$before" "$output"
     __git-verbose-box__
+  fi
+}
+
+function git-hoist-smart {
+  if [[ "$1" == "." ]] && [[ -z "$(git log --format="%h" --grep "^[0-9][0-9]*$")" ]]; then
+    git log-last
+    clr_yellow "nothing to do!"
+    return 2
+  fi
+
+  if [[ "$1" == "." ]]; then
+    local commits="$(git log --format="%h" --grep "^[0-9][0-9]*$")"
+  else
+    local commits="$(gh)"
+  fi
+
+  if [[ -z "$commits" ]]; then
+    clr_bg_blue "input was interrupted!"
+    return 130
+  fi
+
+  local before="$(__git-log__)"
+  local output="$(
+    __git-smart-del-error__
+    __git-rebase-hoist__ $commits
+    __memoize-error__
+  )"
+
+  if [[ $(__git-smart-get-error__) -ne 0 ]] && [[ "$output" =~ "nothing to do" ]]; then
+    git log-last
+    clr_yellow "nothing to do!"
+    return 2
+  elif [[ $(__git-smart-get-error__) -ne 0 ]]; then
+    echo "$output"
+    return $(__git-smart-get-error__)
+  else
+    __side_by-side__ "$before" "$output"
+    __git-log-box__
   fi
 }
