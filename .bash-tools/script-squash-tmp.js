@@ -34,7 +34,7 @@ lines.forEach(({ cmd, hash, msg, raw }) => {
   }
 })
 
-const output = [lines[0], ...lines.slice(1).map(({ hash, msg }) => ({ cmd: 'fixup', hash, msg }))]
+const output = [lines[0], ...lines.slice(1).map(({ hash, msg }) => ({ cmd: 'f', hash, msg }))]
 const rawOutput = output.map(({ cmd, hash, msg }) => `${cmd} ${hash} ${msg}`).join('\n')
 console.log(rawOutput)
 writeFileSync(filePath, rawOutput)

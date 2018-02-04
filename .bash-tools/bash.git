@@ -388,7 +388,6 @@ function git-rebase-smart {
       return 2
     fi
 
-    __git-smart-del-error__
     local before="$(__git-log__)"
     local output="$(
       while [[ -n "$(git log --format="%s" -n 100 | grep -P "^fixup\!\s")" ]]; do
@@ -402,6 +401,7 @@ function git-rebase-smart {
           __git-smart-set-error__ && break
         fi
 
+        __git-smart-del-error__
         __git-rebase-fixup__ "$cm_hash" "($fu_hash) $fu_msg -> ($cm_hash) $cm_msg"
         __memoize-error__ && break
       done
@@ -415,23 +415,24 @@ function git-rebase-smart {
     fi
   else
     local commit="$(gh)"
-    if [[ -n "$commit" ]]; then
-      __start__
-      __git-log__
-      __before__
 
-      echo "$(clr_black_i $) git rebase -i $(clr_cyan "$commit")^"
-      echo
-      git rebase -i "$commit^"
-      __exit-on-error__
-      echo
-
-      __after__
-      __git-log__
-    else
+    if [[ -z "$commit" ]]; then
       clr_bg_blue "input was interrupted!"
       return 130
     fi
+
+    __start__
+    __git-log__
+    __before__
+
+    echo "$(clr_black_i $) git rebase -i $(clr_cyan "$commit")^"
+    echo
+    git rebase -i "$commit^"
+    __exit-on-error__
+    echo
+
+    __after__
+    __git-log__
   fi
 }
 
@@ -451,7 +452,6 @@ function git-commit-tmp {
     return 100
   fi
 
-  __git-smart-del-error__
   local before="$(
     __git-add__ "$paths"
     __git-status__
@@ -464,6 +464,7 @@ function git-commit-tmp {
     fi
     echo "$(clr_black_i $) git commit -m $(clr_cyan "$next")"
     echo
+    __git-smart-del-error__
     git commit -m "$next" 2>&1
     __memoize-error__
   )"
@@ -509,7 +510,6 @@ function git-commit-smart {
     __after__
     __git-verbose-box__
   else
-    __git-smart-del-error__
     local before="$(
       __git-add__ "$paths"
       __git-status__
@@ -523,6 +523,7 @@ function git-commit-smart {
       local undoted="$(echo "$trimmed" | sed -r -e 's/^\.\s+//')"
       echo "$(clr_black_i $) git commit -m \"$(clr_cyan "$undoted")\""
       echo
+      __git-smart-del-error__
       git commit -m "$undoted" 2>&1
       __memoize-error__
     )"
@@ -570,7 +571,6 @@ function git-commit-fixup-smart {
     return 100
   fi
 
-  __git-smart-del-error__
   local before="$(
     __git-add__ "$paths"
     __git-status__
@@ -578,6 +578,7 @@ function git-commit-fixup-smart {
   local output="$(
     echo "$(clr_black_i $) git commit --fixup $(clr_cyan "$commit")"
     echo
+    __git-smart-del-error__
     git commit --fixup $commit 2>&1
     __memoize-error__
   )"
@@ -613,9 +614,9 @@ function git-unstage-smart {
     return 100
   fi
 
-  __git-smart-del-error__
   local before="$(__git-status__)"
   local output="$(
+    __git-smart-del-error__
     __git-unstage__ "$paths"
     __memoize-error__
   )"
@@ -649,9 +650,9 @@ function git-add-smart {
     return 100
   fi
 
-  __git-smart-del-error__
   local before="$(__git-status__)"
   local output="$(
+    __git-smart-del-error__
     __git-add__ "$paths"
     __memoize-error__
   )"
@@ -693,9 +694,9 @@ function git-remove-untracked-smart {
     return 100
   fi
 
-  __git-smart-del-error__
   local before="$(__git-status__)"
   local output="$(
+    __git-smart-del-error__
     __move-to-trash__ "$trash"
     __memoize-error__
   )"
@@ -729,9 +730,9 @@ function git-squash-tmp-smart {
     return 2
   fi
 
-  __git-smart-del-error__
   local before="$(__git-log__)"
   local output="$(
+    __git-smart-del-error__
     __git-rebase-squash-tmp__ "$commit"
     __memoize-error__
   )"
@@ -771,12 +772,12 @@ function git-last-tmp-to-fixup-smart {
     return 100
   fi
 
-  __git-smart-del-error__
   local before="$(__git-log__)"
   local output="$(
     echo "$(clr_black_i $) git uncommit"
     echo "$(clr_black_i $) git commit --fixup $(clr_cyan "$commit")"
     echo
+    __git-smart-del-error__
     git uncommit 2>&1 && git commit --fixup $commit 2>&1
     __memoize-error__
   )"
