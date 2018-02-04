@@ -40,7 +40,7 @@ gt() {
 
 gh() {
   is_in_git_repo || return
-  git log-hist |
+  git log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --abbrev-commit --format='%C(magenta)%h %C(blue)%ad %C(green)%an%C(auto)%d %C(reset)%s%C(reset)' |
   fzf --no-sort --multi \
     --header 'Press CTRL-S to toggle sort' \
     --preview 'export COMMIT="$(echo {} | grep -E -ho " [a-z0-9]+ " | head -n 1 | sed "s/ //g")" && [[ -n "$COMMIT" ]] && git view-commit $COMMIT' |
