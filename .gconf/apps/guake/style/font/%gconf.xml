@@ -10,7 +10,7 @@
 	<entry name="color" mtime="1515469170" schema="/schemas/apps/guake/style/font/color" type="string">
 		<stringvalue>#f3f3fffffefe</stringvalue>
 	</entry>
-	<entry name="style" mtime="1515462257" schema="/schemas/apps/guake/style/font/style" type="string">
-		<stringvalue>Hack 12</stringvalue>
+	<entry name="style" mtime="1517853020" schema="/schemas/apps/guake/style/font/style" type="string">
+		<stringvalue>Hack 14</stringvalue>
 	</entry>
 </gconf>
