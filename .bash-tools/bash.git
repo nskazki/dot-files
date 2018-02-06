@@ -681,8 +681,6 @@ function git-remove-untracked-smart {
     local trash="$all"
   else
     local trash="$(echo "$all" | fzf --multi \
-      --bind 'ctrl-k:preview-up' \
-      --bind 'ctrl-j:preview-down' \
       --preview '((echo $(basename {}) | grep .svg > /dev/null 2>&1 && rsvg {} tmp/preview.png && img2txt tmp/preview.png) \
                    || (file --mime {} | grep image > /dev/null 2>&1 && img2txt {}) \
                    || (file --mime {} | grep binary > /dev/null 2>&1 && echo {} is a binary file) \
@@ -831,4 +829,53 @@ function git-hoist-smart {
     __side_by-side__ "$before" "$output"
     __git-log-box__
   fi
+}
+
+function git-redate {
+  local commit="$(gh)"
+
+  if [[ -z "$commit" ]]; then
+    clr_bg_blue "input was interrupted!"
+    return 130
+  fi
+
+  local format="$(echo -e "author date\ncommit date" | fzf --preview "\
+                  ([[ {1} == 'author' ]] \
+                    && git log --format="%ad" --date=format:'%Y-%m-%d %H:%M' $commit^..HEAD \
+                    || git log --format="%cd" --date=format:'%Y-%m-%d %H:%M' $commit^..HEAD) | sort -r")"
+
+  if [[ -z "$format" ]]; then
+    clr_bg_blue "input was interrupted!"
+    return 130
+  fi
+
+  local commits="$(git log --format="%H" $commit^..HEAD)"
+  local dates="$([[ "$format" == "author date" ]] \
+                  && git log --format="%ad" --date=format:'%Y-%m-%d %H:%M' $commit^..HEAD | sort -r \
+                  || git log --format="%cd" --date=format:'%Y-%m-%d %H:%M' $commit^..HEAD | sort -r)"
+
+  local filter="$(node -e '
+    const dateList = process.argv[1].split("\n")
+    const commitList = process.argv[2].split("\n")
+
+    let filter = ""
+    for (let index = 0; index !== commitList.length; index++) {
+      const date = dateList[index]
+      const commit = commitList[index]
+      filter += `
+        ${index === 0 ? "if" : "elif"} [ $GIT_COMMIT = ${commit} ]; then
+          GIT_AUTHOR_DATE="${date}"
+          GIT_COMMITTER_DATE="${date}"
+          git commit-tree "$@"`
+    }
+    filter += `
+        else
+          git commit-tree "$@"
+        fi`
+    console.info(filter)
+  ' "$dates" "$commits")"
+
+  echo "$filter"
+
+  git filter-branch -f --commit-filter "$filter" $commit^..HEAD
 }
