@@ -578,6 +578,8 @@ alias du='du -h'
 alias uptime='uptime -p'
 alias mkdir='mkdir -pv'
 alias parallel='parallel --no-notice'
+alias git-cola='git-cola&'
+alias cola='git-cola'
 
 # !bash
 alias bash-really-reload='source ~/.bashrc'
