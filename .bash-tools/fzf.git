@@ -15,10 +15,9 @@ gf() {
     --preview 'export NOT_STAGED="$(git diff --color=always -- {2..-1} | sed 1,4d;)" && [[ -n "$NOT_STAGED" ]] && echo -e "\e[1;44m    NOT STAGED    \e[0m    \e[0m" && echo "$NOT_STAGED"; \
                export STAGED="$(git diff --staged --color=always -- {2..-1} | sed 1,4d;)" && [[ -n "$STAGED" ]] && echo -e "\e[0;94m\e[1;107m    STAGED    \e[0m" && echo "$STAGED"; \
                [[ -z "$NOT_STAGED" ]] && [[ -z "$STAGED" ]] && echo -e "\e[1;41m    FILE    \e[0m" && \
-                ((echo $(basename {2..-1}) | grep .svg > /dev/null 2>&1 && rsvg {2..-1} tmp/preview.png && img2txt tmp/preview.png) \
-                  || (file --mime {2..-1} | grep image > /dev/null 2>&1 && img2txt {2..-1}) \
-                  || (file --mime {2..-1} | grep binary > /dev/null 2>&1 && echo {2..-1} is a binary file) \
-                  || (highlight -O ansi -l {} || coderay {2..-1} || cat {2..-1})) 2> /dev/null | head -n 500' |
+                  ((file --mime {2..-1} | grep directory > /dev/null 2>&1 && ls --color=always --group-directories-first -1 -lah {2..-1}) \
+                || (file --mime {2..-1} | grep binary > /dev/null 2>&1 && echo {2..-1} is a binary file) \
+                || (highlight -O ansi -l {} || coderay {2..-1} || cat {2..-1})) 2> /dev/null | head -n 500' |
   cut -c4- | sed 's/.* -> //' | sed 's/\s/\\ /g'
 }
 
