@@ -9,7 +9,7 @@ alias gti='git'
 function g {
   if [[ -z $1 ]]; then
     tig
-  elif [[ -f "$(resolve "$1")" ]]; then
+  elif [[ -f "$(resolve "$1")" ]] || [[ -d "$(resolve "$1")" ]]; then
     tig $@
   elif [[ -n "$(echo "$1" | grep -P '[\w-/]+\.{2,3}[\w-/]+')" ]]; then
     tig $@
