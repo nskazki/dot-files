@@ -30,6 +30,7 @@ alias d='git diff'
 alias ds='git diff-staged'
 
 alias rb='git-rebase-smart'
+alias rr='git-recombine-smart'
 alias rc='git-recommit-smart'
 alias rt='git-squash-tmp-smart'
 alias rf='git-last-tmp-to-fixup-smart'
@@ -562,6 +563,26 @@ function git-rename-smart {
   echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-rename.js") git rebase -i $(clr_cyan "$last_commit")^"
   echo
   COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-rename.js" git rebase -i "$last_commit"^
+  __exit-on-error__
+
+  echo
+  __git-log__
+}
+
+function git-recombine-smart {
+  local commits="$(gh)"
+
+  if [[ -z "$commits" ]]; then
+    clr_bg_blue "input was interrupted!"
+    return 130
+  fi
+
+  local last_commit="$(echo "$commits" | tail -n1)"
+
+  echo
+  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-recombine.js") git rebase -i $(clr_cyan "$last_commit")^"
+  echo
+  COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-recombine.js" git rebase -i "$last_commit"^
   __exit-on-error__
 
   echo
