@@ -451,9 +451,9 @@ function git-squash-tmp-smart {
   fi
 
   echo
-  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/script-squash-tmp.js") git rebase -i $(clr_cyan "$commit")^"
+  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-squash-tmp.js") git rebase -i $(clr_cyan "$commit")^"
   echo
-  GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-squash-tmp.js" git rebase -i "$commit"^
+  GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-squash-tmp.js" git rebase -i "$commit"^
   __exit-on-error__
 
   echo
@@ -517,9 +517,9 @@ function git-hoist-smart {
   local last_commit="$(echo "$commits" | tail -n1)"
 
   echo
-  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/script-hoist.js") git rebase -i $(clr_cyan "$last_commit")^"
+  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-hoist.js") git rebase -i $(clr_cyan "$last_commit")^"
   echo
-  COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-hoist.js" git rebase -i "$last_commit"^
+  COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-hoist.js" git rebase -i "$last_commit"^
   __exit-on-error__
 
   echo
@@ -539,9 +539,9 @@ function git-drop-smart {
   echo
   __git-log__
 
-  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/script-drop.js") git rebase -i $(clr_cyan "$last_commit")^"
+  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-drop.js") git rebase -i $(clr_cyan "$last_commit")^"
   echo
-  COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-drop.js" git rebase -i "$last_commit"^
+  COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-drop.js" git rebase -i "$last_commit"^
   __exit-on-error__
 
   echo
@@ -559,9 +559,9 @@ function git-rename-smart {
   local last_commit="$(echo "$commits" | tail -n1)"
 
   echo
-  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/script-rename.js") git rebase -i $(clr_cyan "$last_commit")^"
+  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-rename.js") git rebase -i $(clr_cyan "$last_commit")^"
   echo
-  COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/script-rename.js" git rebase -i "$last_commit"^
+  COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-rename.js" git rebase -i "$last_commit"^
   __exit-on-error__
 
   echo
