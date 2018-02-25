@@ -9,10 +9,12 @@ alias gti='git'
 function g {
   if [[ -z $1 ]]; then
     tig
+  elif [[ -f "$(resolve "$1")" ]] && [[ -n "$(echo "$2" | grep -P '^\+\d+$')" ]]; then
+    tig blame "$1" "$2"
   elif [[ -f "$(resolve "$1")" ]] || [[ -d "$(resolve "$1")" ]]; then
-    tig $@
-  elif [[ -n "$(echo "$1" | grep -P '[\w-/]+\.{2,3}[\w-/]+')" ]]; then
-    tig $@
+    tig "$1"
+  elif [[ -n "$(echo "$1" | grep -P '^[\w-/]+\.{2,3}[\w-/]+$')" ]]; then
+    tig "$1"
   else
     git $@
   fi
@@ -22,8 +24,9 @@ alias t='tig'
 alias b='tig blame'
 alias y='tig stash'
 
-alias v='git view-commit'
-alias l='git log-last'
+alias v='git view-commit-head'
+alias vv='git view-commit'
+alias l='echo && git log-last && echo'
 alias s='git status-short'
 alias ss='git status'
 alias d='git diff'
@@ -142,13 +145,11 @@ function __git-staged-list__ {
 
 function __git-show__ {
   git show --pretty=fuller HEAD --stat --color=always
-  __git-status-unexpected__
   echo
 }
 
 function __git-log__ {
   git log-last
-  __git-status-unexpected__
   echo
 }
 
@@ -164,17 +165,6 @@ function __git-status-short__ {
   else
     clr_yellow "nothing to commit, working tree clean"
     echo
-  fi
-}
-
-function __git-status-unexpected__ {
-  if $(git-has-changes); then
-    echo
-    clr_black "$(clr_bg_yellow "Changes:")"
-    local asterisk="$(clr_black "$(clr_bg_yellow "*")")"
-    git -c color.status=always status -s | while read line ; do
-      echo "       $asterisk   $line"
-    done
   fi
 }
 
@@ -196,14 +186,12 @@ function git-recommit-smart {
   echo
   git commit --amend --quiet
   __exit-on-error__
-
   __git-show__
 }
 
 function git-rebase-smart {
   if [[ "$1" == "." ]]; then
     if [[ -z "$(git log --format="%s" -n 100 | grep -P "^fixup\!\s")" ]]; then
-      __git-log__
       clr_yellow "nothing to do!"
       return 2
     fi
@@ -227,9 +215,7 @@ function git-rebase-smart {
       GIT_SEQUENCE_EDITOR="$(which true)" git rebase -i "$cm_hash"^
       __exit-on-error__
     done
-
     echo
-    __git-log__
   else
     local commit="$(gh)"
 
@@ -243,15 +229,12 @@ function git-rebase-smart {
     echo
     git rebase -i "$commit^"
     __exit-on-error__
-
     echo
-    __git-log__
   fi
 }
 
 function git-commit-tmp {
   if $(git-not-has-changes); then
-    __git-status__
     clr_yellow "nothing to do!"
     return 2
   fi
@@ -267,7 +250,7 @@ function git-commit-tmp {
     fi
   done
 
-  local last=$(git log --format=%B -n 1 HEAD | rg '^[0-9]+$')
+  local last=$(git log --format=%B -n 1 HEAD | head -n1 | rg '^[0-9]+$' -m1)
   local next="1"
   if [[ -n "$last" ]]; then
     next="$(expr $last + 1)"
@@ -277,14 +260,11 @@ function git-commit-tmp {
   echo
   git commit -m "$next" --quiet
   __exit-on-error__
-
   __git-show__
-  __git-log__
 }
 
 function git-commit-fixup-smart {
   if $(git-not-has-changes); then
-    __git-status__
     clr_yellow "nothing to do!"
     return 2
   fi
@@ -326,14 +306,11 @@ function git-commit-fixup-smart {
   echo
   git commit --quiet --fixup $commit
   __exit-on-error__
-
   __git-show__
-  __git-log__
 }
 
 function git-unstage-smart {
   if $(git-not-has-staged); then
-    __git-status__
     clr_yellow "nothing to do!"
     return 2
   fi
@@ -359,12 +336,11 @@ function git-unstage-smart {
   done
 
   echo
-  __git-status-short__
+  __git-status__
 }
 
 function git-add-smart {
   if $(git-not-has-unstaged); then
-    __git-status__
     clr_yellow "nothing to do!"
     return 2
   fi
@@ -392,7 +368,7 @@ function git-add-smart {
   done
 
   echo
-  __git-status-short__
+  __git-status__
 }
 
 function git-remove-untracked-smart {
@@ -400,7 +376,6 @@ function git-remove-untracked-smart {
   local added_notstaged=$(echo "$git_ss" | grep -c -s -P '^\?\?')
 
   if [[ "$added_notstaged" -eq 0 ]]; then
-    __git-status__
     clr_yellow "nothing to do!"
     return 2
   fi
@@ -428,7 +403,7 @@ function git-remove-untracked-smart {
   done
 
   echo
-  __git-status-short__
+  __git-status__
 }
 
 function git-squash-tmp-smart {
@@ -439,14 +414,12 @@ function git-squash-tmp-smart {
   fi
 
   if [[ -z "$commit" ]]; then
-    __git-log__
     clr_yellow "nothing to do!"
     return 2
   fi
 
   local last="$(git-find-last-tmp)"
   if [[ "$commit" == "$last" ]]; then
-    __git-log__
     clr_yellow "nothing to do!"
     return 2
   fi
@@ -458,7 +431,7 @@ function git-squash-tmp-smart {
   __exit-on-error__
 
   echo
-  __git-log__
+  __git-show__
 }
 
 function git-last-tmp-to-fixup-smart {
@@ -493,13 +466,11 @@ function git-last-tmp-to-fixup-smart {
   echo
   git uncommit && git commit --quiet --fixup "$commit"
   __exit-on-error__
-
-  __git-log__
+  __git-show__
 }
 
 function git-hoist-smart {
   if [[ "$1" == "." ]] && [[ -z "$(git log --format="%h %s" -n 100 | grep -P '^\w+\s\d+$')" ]]; then
-    __git-log__
     clr_yellow "nothing to do!"
     return 2
   fi
@@ -522,9 +493,7 @@ function git-hoist-smart {
   echo
   COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-hoist.js" git rebase -i "$last_commit"^
   __exit-on-error__
-
   echo
-  __git-log__
 }
 
 function git-drop-smart {
@@ -538,15 +507,11 @@ function git-drop-smart {
   local last_commit="$(echo "$commits" | tail -n1)"
 
   echo
-  __git-log__
-
   echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-drop.js") git rebase -i $(clr_cyan "$last_commit")^"
   echo
   COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-drop.js" git rebase -i "$last_commit"^
   __exit-on-error__
-
   echo
-  __git-log__
 }
 
 function git-rename-smart {
@@ -564,9 +529,7 @@ function git-rename-smart {
   echo
   COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-rename.js" git rebase -i "$last_commit"^
   __exit-on-error__
-
   echo
-  __git-log__
 }
 
 function git-recombine-smart {
@@ -584,9 +547,7 @@ function git-recombine-smart {
   echo
   COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-recombine.js" git rebase -i "$last_commit"^
   __exit-on-error__
-
   echo
-  __git-log__
 }
 
 function git-redate {

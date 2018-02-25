@@ -40,6 +40,9 @@
   # root
   root = "rev-parse --show-toplevel"
 
+  # git-dir
+  git-dir = "rev-parse --git-dir"
+
   # push-branch
   pushb       = !"git cmd-push-branch"
   push-branch = !"git cmd-push-branch"
@@ -174,8 +177,17 @@
     (git show --color=always --stat="$(tput cols)" --pretty=fuller $commit && echo && git diff --color=always $commit^..$commit) | less; \
   }; f"
 
-  v           = !"git cmd-view-commit"
+  vv          = !"git cmd-view-commit"
   view-commit = !"git cmd-view-commit"
+
+  # view-commit-head
+  cmd-view-commit-head = "!f() {\
+    local commit=\"$(test \"$1\" && echo \"$1\" || echo \"HEAD\")\"; \
+    git show --color=always --stat="$(tput cols)" --pretty=fuller $commit; \
+  }; f"
+
+  v                = !"git cmd-view-commit-head"
+  view-commit-head = !"git cmd-view-commit-head"
 
   # branch
   cmd-branch-name   = "!git rev-parse --abbrev-ref HEAD"
