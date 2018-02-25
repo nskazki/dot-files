@@ -1,0 +1,31 @@
+#!/bin/bash
+
+git_dir="$(git git-dir)"
+uncommit_msg_path="$git_dir/.uncommit_msg"
+
+if [[ -f "$uncommit_msg_path" ]] && [[ -z "$2" ]]; then
+  msg_path="$1"
+  msg_text="$(cat "$msg_path")"
+  uncommit_msg_text="$(cat "$uncommit_msg_path")"
+  uncommit_cnt_path="$git_dir/.uncommit_cnt"
+
+  if [[ -f "$uncommit_cnt_path" ]]; then
+    uncommmit_cnt_text="$(expr $(cat "$uncommit_cnt_path") - 1)"
+  else
+    uncommmit_cnt_text="2"
+  fi
+
+  if [[ "$uncommmit_cnt_text" -eq "0" ]]; then
+    rm -f "$uncommit_cnt_path"
+    rm -f "$uncommit_msg_path"
+  else
+    echo "$uncommmit_cnt_text" > "$uncommit_cnt_path"
+  fi
+
+  echo > "$msg_path"
+  echo "$uncommit_msg_text" | while read line ; do
+    echo "# $line" >> "$msg_path"
+  done
+  echo "# leave: $uncommmit_cnt_text" >> "$msg_path"
+  echo "$msg_text" >> "$msg_path"
+fi

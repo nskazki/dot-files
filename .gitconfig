@@ -33,8 +33,14 @@
   }; f"
 
   # base
+  cmd-uncommit = "!f() { \
+    rm -f \"$(git git-dir)/.uncommit_cnt\"; \
+    git log -1 --pretty=%B > \"$(git git-dir)/.uncommit_msg\"; \
+    git reset --soft HEAD^; \
+  }; f"
+
+  uncommit = !"git cmd-uncommit"
   recommit = "commit --amend"
-  uncommit = "reset --soft HEAD^"
   unstage = "reset HEAD"
 
   # root
