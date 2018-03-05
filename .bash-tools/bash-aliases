@@ -502,7 +502,7 @@ function du-dir {
 }
 
 alias file-mod='stat -c "%a %n"'
-alias file-stat='stat --printf="%s"'
+alias file-size='du -b'
 
 function resolve {
   node -e "console.log(require('path').resolve('$1'))"
