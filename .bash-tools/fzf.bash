@@ -20,7 +20,8 @@ export FZF_CTRL_T_OPTS="--preview '((echo $(basename {}) | grep .svg > /dev/null
 
 export FZF_ALT_C_OPTS=" --preview 'ls -a --color -h --group-directories-first -1 -w $(tput cols) {} | head -500'"
 
-export FZF_DEFAULT_OPTS="--color=dark --height 40% --ansi --reverse --preview-window right:60% \
+export FZF_DEFAULT_OPTS="--color=dark --height 50% --ansi --reverse --no-sort --multi --preview-window right:40% \
+                         --bind 'ctrl-s:toggle-sort' \
                          --bind 'ctrl-k:preview-up' \
                          --bind 'ctrl-j:preview-down' \
                          --bind 'ctrl-y:preview-up' \
