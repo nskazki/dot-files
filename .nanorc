@@ -72,6 +72,7 @@ color cyan "[0-9a-f]{7,40}"
 
 # https://www.geoffreybrown.com/blog/nano-keystroke-configuration/
 
+set nonewlines
 set morespace
 set multibuffer
 set quickblank
