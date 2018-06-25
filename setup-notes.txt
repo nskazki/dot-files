@@ -4,8 +4,8 @@ echo "nskazki ALL=(ALL) NOPASSWD: ALL" | xclip -sel clip
 sudo visudo
 
 # APT-GET
-sudo apt-get install xdotool tmux numlockx htop ncdu pydf parallel atool tree colordiff -y
-sudo apt-get install unity-tweak-tool -y
+sudo apt-get install xdotool tmux numlockx htop ncdu pydf parallel atool tree colordiff byzanz -y
+sudo apt-get install unity-tweak-tool gimp -y
 
 # CHROME
 # https://www.google.ru/intl/en/chrome/
@@ -32,6 +32,17 @@ sudo apt-get install unity-tweak-tool -y
 # http://guake.readthedocs.io/en/latest/user/installing.html#install-from-source
 # https://github.com/source-foundry/Hack
 # https://imgur.com/Y6fceTn
+
+# CLI
+https://github.com/junegunn/fzf
+https://github.com/BurntSushi/ripgrep
+https://github.com/sharkdp/fd
+http://git.savannah.gnu.org/cgit/nano.git/tree/README.GIT
+
+# GIFS
+https://launchpad.net/~mc3man/+archive/ubuntu/trusty-media
+https://github.com/ImageOptim/gifski (ppa:jonathonf/ffmpeg-3)
+https://github.com/kornelski/giflossy
 
 # THEME
 # https://github.com/anmoljagetia/Flatabulous

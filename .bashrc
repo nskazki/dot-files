@@ -80,7 +80,7 @@ cr_magenta_bg="\e[1;45m"
 cr_cyan_bg="\e[1;46m"
 cr_white_bg="\e[1;47m"
 
-if [ $TERM_VIEW -eq 0 ]; then
+if [ "$TERM_VIEW" -eq 0 ]; then
   cr_black_i="\e[0;90m"
   cr_red_i="\e[0;91m"
   cr_green_i="\e[0;92m"
@@ -270,16 +270,16 @@ if [ -f "/etc/bash_completion" ] && ! shopt -oq posix; then
   source "/etc/bash_completion"
 fi
 
-# Enable npm completion
-if [ -n "$(which npm)" ]; then
-  source <(npm completion)
-fi
-
 # This load nvm
 if [ -d "$HOME/.nvm" ]; then
   export NVM_DIR="$HOME/.nvm"
   source "$NVM_DIR/nvm.sh"
   source "$NVM_DIR/bash_completion"
+fi
+
+# Enable npm completion
+if [ -n "$(which npm)" ]; then
+  source <(npm completion)
 fi
 
 # Crome support
@@ -322,12 +322,13 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     (_preexec_ssh_to_tab "$1" &) > /dev/null 2>&1
   }
 
+
   _preexec_ssh_to_tab() {
     # ssh-host -> tab-name
-    if [ -n "$IS_GUAKE" ] && [ -n "$(echo "$1" | grep -P -s "^\s*ssh\s+")" ]; then
+    if [ -n "$GUAKE_TAB_UUID" ] && [ -n "$(echo "$1" | grep -P -s "^\s*ssh\s+")" ]; then
       local host=$(echo "$1" | sed -r -e "s/(\s|ssh|-\w+\s*\w+|--\w+=\w+)//g")
       if [ -n "$host" ]; then
-        (guake -i "$(guake --get-tab-position=$GUAKE_TAB_INDEX)" --rename-tab="$host" &) > /dev/null 2>&1
+        (guake --rename-tab="$host" --tab-index="$GUAKE_TAB_UUID" &) > /dev/null 2>&1
       fi
     fi
   }
@@ -372,11 +373,11 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     # store
     #   curr_short_pwd
     #   prev_short_pwd
-    if [ -n "$IS_GUAKE" ]; then
+    if [ -n "$GUAKE_TAB_UUID" ]; then
       export prev_short_pwd="$curr_short_pwd"
       export curr_short_pwd="$(short-pwd)"
       if [ "$prev_short_pwd" != "$curr_short_pwd" ]; then
-        (guake -i "$(guake --get-tab-position=$GUAKE_TAB_INDEX)" --rename-tab="$curr_short_pwd" &) > /dev/null 2>&1
+        (guake --rename-tab="$curr_short_pwd" --tab-index="$GUAKE_TAB_UUID" &) > /dev/null 2>&1
       fi
     fi
   }
@@ -389,13 +390,15 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     # exit cmd popup
     local result="$?"
     local gs_path="$HOME/.guake-state"
-    if [ -n "$IS_GUAKE" ] \
-    && [ $last_exec_done -eq 1 ] \
-    && [ -f "$gs_path" ] \
-    && [ "$(cat "$gs_path")" ==  "hide" ]; then
+
+    if [ -n "$GUAKE_TAB_UUID" ] &&
+       [ $last_exec_done -eq 1 ] &&
+       [ -f "$gs_path" ] &&
+       [ "$(cat "$gs_path")" ==  "hide" ];
+    then
       notify-send \
         --urgency=low \
-        -t 10000 \
+        -t 1000 \
         -i "$([ $result = 0 ] && echo terminal || echo error)" \
         "$(history | tail -n1 | sed -r 's/^\s*[0-9]+\s*//g')"
     fi
@@ -406,10 +409,11 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
   }
 
   _precmd_send_talert() {
-    if [ $HOST_OTHER -eq 1 ] \
-    && [ $last_exec_done -eq 1 ] \
-    && [ $last_diff_time -ge 10 ] \
-    && (type talert > /dev/null 2>&1); then
+    if [ $HOST_OTHER -eq 1 ] &&
+       [ $last_exec_done -eq 1 ] &&
+       [ $last_diff_time -ge 10 ] &&
+       (type talert > /dev/null 2>&1);
+    then
       talert
     fi
   }
@@ -435,6 +439,11 @@ if [[ "$HOST_IAM" == 1 ]]; then
   export PATH="node_modules/.bin:$PATH"
 fi
 
+# yarn global bin
+if [[ -n "$(which yarn)" ]]; then
+  export PATH="/home/nskazki/.yarn/bin:$PATH"
+fi
+
 # npm auth
 if [[ -n "$(which npm)" ]]; then
   export npm_config_userconfig="$HOME/.npm_auth"
@@ -457,8 +466,8 @@ if [ -f "$HOME/.bash-tools/yarn-completion" ]; then
 fi
 
 # fzf stuff
-if [[ -d "$HOME/.fzf/bin" ]]; then
-  export PATH="$PATH:/home/nskazki/.fzf/bin"
+if [[ -d "$HOME/.app/fzf/bin" ]]; then
+  export PATH="$PATH:/home/nskazki/.app/fzf/bin"
   source $HOME/.bash-tools/fzf.bash
   source $HOME/.bash-tools/fzf.git
   source $HOME/.bash-tools/bash.git
