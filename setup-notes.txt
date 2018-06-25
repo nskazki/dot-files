@@ -4,7 +4,7 @@ echo "nskazki ALL=(ALL) NOPASSWD: ALL" | xclip -sel clip
 sudo visudo
 
 # APT-GET
-sudo apt-get install xdotool tmux tig numlockx htop ncdu pydf parallel atool tree colordiff -y
+sudo apt-get install xdotool tmux numlockx htop ncdu pydf parallel atool tree colordiff -y
 sudo apt-get install unity-tweak-tool -y
 
 # CHROME
@@ -21,11 +21,16 @@ sudo apt-get install unity-tweak-tool -y
 # https://github.com/rbenv/rbenv
 # https://github.com/rbenv/ruby-build
 
+# GIT
+# https://git-scm.com/download/linux
+# https://github.com/jonas/tig/blob/master/INSTALL.adoc (libncursesw5-dev)
+
 # TELEGRAM
 # https://telegram.org/
 
 # GUAKE
 # http://guake.readthedocs.io/en/latest/user/installing.html#install-from-source
+# https://github.com/source-foundry/Hack
 # https://imgur.com/Y6fceTn
 
 # THEME
