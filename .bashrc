@@ -328,7 +328,7 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     if [ -n "$GUAKE_TAB_UUID" ] && [ -n "$(echo "$1" | grep -P -s "^\s*ssh\s+")" ]; then
       local host=$(echo "$1" | sed -r -e "s/(\s|ssh|-\w+\s*\w+|--\w+=\w+)//g")
       if [ -n "$host" ]; then
-        (guake --rename-tab="$host" --tab-index="$GUAKE_TAB_UUID" &) > /dev/null 2>&1
+        guake --rename-tab="$host" --tab-index="$GUAKE_TAB_UUID"
       fi
     fi
   }
@@ -377,7 +377,7 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
       export prev_short_pwd="$curr_short_pwd"
       export curr_short_pwd="$(short-pwd)"
       if [ "$prev_short_pwd" != "$curr_short_pwd" ]; then
-        (guake --rename-tab="$curr_short_pwd" --tab-index="$GUAKE_TAB_UUID" &) > /dev/null 2>&1
+        guake --rename-tab="$curr_short_pwd" --tab-index="$GUAKE_TAB_UUID"
       fi
     fi
   }
