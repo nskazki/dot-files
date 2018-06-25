@@ -16,7 +16,7 @@ function fix-layout {
 if [ "$1" == "-l" ]; then
   while true; do
     fix-layout
-    sleep 0.5
+    sleep 10
   done
 else
   fix-layout
