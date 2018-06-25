@@ -3,116 +3,36 @@ sudo apt-get install xclip -y
 echo "nskazki ALL=(ALL) NOPASSWD: ALL" | xclip -sel clip
 sudo visudo
 
-# SETTINGS
+# APT-GET
+sudo apt-get install xdotool tmux tig numlockx htop ncdu pydf parallel atool tree colordiff -y
 sudo apt-get install unity-tweak-tool -y
-# unity-control-center
-# unity-tweak-tool
 
 # CHROME
-wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-sudo apt-get update
-sudo apt-get install google-chrome-stable -y
+# https://www.google.ru/intl/en/chrome/
 
 # SUBLIME
-sudo apt-add-repository ppa:webupd8team/sublime-text-3
-sudo apt-get update
-sudo apt-get install sublime-text-installer -y
-
-# VSCODE
-mkdir -p ~/.tmp
-cd ~/.tmp
-wget https://go.microsoft.com/fwlink/?LinkID=760868 -O vscode.deb
-sudo apt-get install git -y
-sudo dpkg -i vscode.deb
-# restore wallabyjs
-# cd <backup-path>
-# cp -R .vscode/extensions/WallabyJs.wallaby-vscode-1.0.12/ ~/.vscode/extensions/
-
+# https://www.sublimetext.com/docs/3/linux_repositories.html
 
 # NODE
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
-source ~/.bashrc
-nvm i v6.0.0
-npm i -g babel-cli battery-level bower cordova depcheck eslint ghmd2pdf gulp http-server imgur-uploader ionic jsonlint npm-ls-scripts natan npm-which protractor record-desktop speed-test tsc tslint ts-node typings wifi-password typescript slap imgur-uploader-cli parallelshell localtunnel np
-sudo ln -s $(npm-which node) /usr/bin/node
-sudo ln -s $(npm-which node) /usr/bin/nodejs
-sudo ln -s $(npm-which npm) /usr/bin/npm
-sudo ln -s $(npm-which tsc) /usr/bin/tsc
-sudo ln -s $(npm-which typings) /usr/bin/typings
-sudo ln -s $(npm-which babel) /usr/bin/babel
-sudo ln -s $(npm-which ts-node) /usr/bin/ts-node
-sudo ln -s $(npm-which http-server) /usr/bin/http-server
-sudo ln -s $(npm-which slap) /usr/bin/slap
-sudo ln -s $(npm-which wifi-password) /usr/bin/wifi-password
-sudo ln -s $(npm-which imgur-uploader) /usr/bin/imgur-uploader
-sudo ln -s $(npm-which parallelshell) /usr/bin/parallelshell
-sudo ln -s $(npm-which lt) /usr/bin/lt
+# https://github.com/creationix/nvm
+# https://yarnpkg.com/en/docs/install#debian-stable (--no-install-recommends)
+
+# RUBY
+# https://github.com/rbenv/rbenv
+# https://github.com/rbenv/ruby-build
 
 # TELEGRAM
-cd ~/.tmp
-wget https://tdesktop.com/linux -O tsetup.tar.xz
-mkdir -p ~/.apps
-tar xf tsetup.tar.xz -C ~/.apps
-~/.apps/Telegram/Telegram
-
-# OTHER
-sudo apt-get install xdotool tmux tig numlockx htop ncdu pydf parallel atool tree colordiff -y
+# https://telegram.org/
 
 # GUAKE
-sudo apt-get install build-essential python autoconf gnome-common gtk-doc-tools libglib2.0-dev libgtk2.0-dev python-gtk2 python-gtk2-dev python-vte glade python-glade2 libgconf2-dev python-appindicator python-vte python-gconf python-keybinder notify-osd libutempter0 python-notify -y
-sudo apt-get install python-dbus
-git config --global user.email "nskazki@gmail.com"
-git config --global user.name  "nskazki"
-git clone git@github.com:nskazki/guake.git ~/.apps/guake
-cd ~/.apps/guake
-git remote add upstream git@github.com:Guake/guake.git
-git checkout master
-git pull upstream master
-git checkout status-file
-git rebase $(git tag | grep -P '^\d+\.\d+\.\d+$' | tail -n1)
-./dev.sh --install
-# echo "/usr/local/bin/guake" | xclip -sel clip
-# gnome-session-properties
-
-# RECORD-DESKTOP
-sudo add-apt-repository ppa:nilarimogard/webupd8
-sudo apt-get update
-sudo apt-get install slop imagemagick byzanz -y
-npm install record-desktop -g
-sudo ln -s $(npm-which record-desktop) /usr/bin/record-desktop
-# echo "/usr/bin/record-desktop" | xclip -sel clip
-# gnome-session-properties
+# http://guake.readthedocs.io/en/latest/user/installing.html#install-from-source
+# https://imgur.com/Y6fceTn
 
 # THEME
-sudo add-apt-repository ppa:noobslab/icons
-sudo apt-get update
-sudo apt-get install ultra-flat-icons ultra-flat-icons-green ultra-flat-icons-orange -y
-sudo add-apt-repository ppa:numix/ppa
-sudo apt-get update
-sudo apt-get install numix-gtk-theme numix-icon-theme numix-icon-theme-circle -y
-cd ~/.tmp
-wget https://github.com/anmoljagetia/Flatabulous/archive/master.zip
-unzip master.zip
-mkdir -p ~/.themes
-cp -R Flatabulous-master/ ~/.themes
-# unity-tweak-tool
+# https://github.com/anmoljagetia/Flatabulous
 
 # PSSH
-cd ~/.apps 
-git clone https://github.com/robinbowes/pssh
-wget 'http://peak.telecommunity.com/dist/ez_setup.py'
-sudo python ez_setup.py
-cd ~/.apps/pssh 
-sudo python setup.py install
-
-# PERF (0x)
-sudo apt-get install linux-tools-4.4.0-22 linux-tools-4.4.0-22-generic -y
-echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
-
-# TALERT
-# restore from secret gist
-# wget <url> -O ~/.bash-tools/bash-talert
+# https://github.com/robinbowes/pssh
 
 # SSH
 # restore from backup
