@@ -22,7 +22,7 @@ while true; do
       gif_file=""
     else
       gif_file="$gif_dir/record-desktop-$(date +'%Y-%m-%d_%H-%M-%S').gif"
-      byzanz-record --exec="cat '$gif_pipe'" -- "$gif_file" &
+      byzanz-record --cursor --exec="cat '$gif_pipe'" -- "$gif_file" &
       notify-send -u "normal" -i "info" "byzanz-record" "Started $gif_file"
       echo "Started $gif_file"
     fi
