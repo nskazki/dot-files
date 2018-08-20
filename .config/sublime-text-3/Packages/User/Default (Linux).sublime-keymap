@@ -23,6 +23,9 @@
   { "keys": ["ctrl+shift+k"], "command": "to_kebab_case_from_select" },
   { "keys": ["ctrl+alt+shift+k"], "command": "to_kebab_case_from_clip" },
 
+  { "keys": ["ctrl+shift+u"], "command": "to_upper_case_from_select" },
+  { "keys": ["ctrl+alt+shift+u"], "command": "to_upper_case_from_clip" },
+
   { "keys": ["ctrl+alt+shift+t"], "command": "terminal_view_open", "args": {"cmd": "/bin/bash -l"}},
   { "keys": ["ctrl+up"], "command": "terminal_view_scroll", "args": {"forward": false}, "context": [{"key": "setting.terminal_view"}] },
   { "keys": ["ctrl+down"], "command": "terminal_view_scroll", "args": {"forward": true}, "context": [{"key": "setting.terminal_view"}] },
@@ -58,7 +61,6 @@
   { "keys": ["ctrl+f4"], "command": "null" },
   { "keys": ["f11"], "command": "null" },
   { "keys": ["ctrl+u"], "command": "null" },
-  { "keys": ["ctrl+shift+u"], "command": "null" },
   { "keys": ["ctrl+shift+space"], "command": "null" },
   { "keys": ["ctrl+shift+j"], "command": "null" },
   { "keys": ["alt+."], "command": "null" },

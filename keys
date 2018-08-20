@@ -64,7 +64,6 @@
   ctrl+Minus - zoom out
 
   shift+F11 - fancy fullscreen
-  ctrl+shift+alt+T - terminal
 
   ctrl+P - file overlay
   ctrl+shift+P - cmd overlay
@@ -153,6 +152,9 @@
 
   ctrl+shift+M - select to camel case
   ctrl+shift+alt+M - buffer to camel case
+
+  ctrl+shift+U - select to upper case
+  ctrl+shift+alt+U - buffer to upper case
 
   ctrl+; - add ';' to the end of line
   ctrl+shift+; - add ';\n' to the end of line
