@@ -53,8 +53,7 @@
 
   { "keys": ["ctrl+k", "ctrl+b"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+d"], "command": "null" },
-  { "keys": ["pageup"], "command": "null" },
-  { "keys": ["pagedown"], "command": "null" },
+  { "keys": ["insert"], "command": "null" },
   { "keys": ["ctrl+alt+,"], "command": "null" },
   { "keys": ["ctrl+alt+shift+,"], "command": "null" },
   { "keys": ["ctrl+shift+s"], "command": "null" },
