@@ -74,8 +74,6 @@
   { "keys": ["ctrl+shift+e"], "command": "null" },
   { "keys": ["ctrl+home"], "command": "null" },
   { "keys": ["ctrl+end"], "command": "null" },
-  { "keys": ["shift+pageup"], "command": "null" },
-  { "keys": ["shift+pagedown"], "command": "null" },
   { "keys": ["ctrl+k"], "command": "null" },
   { "keys": ["ctrl+alt+j"], "command": "null" },
   { "keys": ["ctrl+shift+w"], "command": "null" },
