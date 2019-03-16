@@ -267,10 +267,14 @@
   conflictstyle = diff3
 
 [merge]
-  tool = meld_diff3
+  tool = smerge
 
 [mergetool "meld_diff3"]
-  cmd = "meld $LOCAL $BASE & sleep 0.5 && meld $BASE $REMOTE & sleep 0.5 && meld $LOCAL $MERGED $REMOTE &"
+  cmd = 'meld "$LOCAL" "$BASE" & sleep 0.5 && meld "$BASE" "$REMOTE" & sleep 0.5 && meld "$LOCAL" "$MERGED" "$REMOTE" &'
+
+[mergetool "smerge"]
+  cmd = 'smerge mergetool "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"'
+  trustExitCode = true
 
 [push]
   # Use the Git 1.x.x default to avoid errors on machines with old Git
