@@ -102,10 +102,10 @@ fi
 
 # Promt helpers
 export HOST="$HOSTNAME"
-export HIAM="xyn"
+export HIAM="(xyn|eevee)"
 export UIAM="nskazki"
 
-if [[ -n "$(echo "$HOST" | grep -s "$HIAM")" ]];
+if [[ -n "$(echo "$HOST" | grep --perl-regexp "$HIAM")" ]];
 then export HOST_IAM=1 && export HOST_OTHER=0;
 else export HOST_OTHER=1 && export HOST_IAM=0; fi
 
