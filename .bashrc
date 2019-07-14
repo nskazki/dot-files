@@ -35,9 +35,6 @@ bind 'set match-hidden-files on'
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
-# try to fix logout issue
-echo "Hello Bash!"
-
 # Alias definitions
 if [ -f "$HOME/.bash-tools/bash-aliases" ]; then
   source "$HOME/.bash-tools/bash-aliases"
@@ -266,25 +263,12 @@ if [ -z "$debian_chroot" ] && [ -r "/etc/debian_chroot" ]; then
 fi
 
 # Enable programmable completion features
-if [ -f "/etc/bash_completion" ] && ! shopt -oq posix; then
-  source "/etc/bash_completion"
-fi
-
-# This load nvm
-if [ -d "$HOME/.nvm" ]; then
-  export NVM_DIR="$HOME/.nvm"
-  source "$NVM_DIR/nvm.sh"
-  source "$NVM_DIR/bash_completion"
-fi
-
-# Enable npm completion
-if [ -n "$(which npm)" ]; then
-  source <(npm completion)
-fi
-
-# Crome support
-if [ -f "/usr/bin/google-chrome" ]; then
-  export CHROME_BIN="/usr/bin/google-chrome"
+if ! shopt -oq posix; then
+  if [ -f "/usr/share/bash-completion/bash_completion" ]; then
+    source "/usr/share/bash-completion/bash_completion"
+  elif [ -f "/etc/bash_completion" ]; then
+    source "/etc/bash_completion"
+  fi
 fi
 
 # Find ssh agent
@@ -293,23 +277,30 @@ if [ -f "$HOME/.bash-tools/bash-ssh-find-agent" ]; then
   ssh-find-agent -a || eval $(ssh-agent)
 fi
 
-# This load clr_%%name%% functions
+# clr
 if [ -f "$HOME/.bash-tools/bash-clr" ]; then
   source "$HOME/.bash-tools/bash-clr"
 fi
 
-# This load rbenv
-if [ -d "$HOME/.rbenv/" ]; then
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
-fi
-
-# This load z
+# z
 if [ -f "$HOME/.bash-tools/bash-z" ]; then
   source "$HOME/.bash-tools/bash-z"
 fi
 
-# This load bash-preexec
+# even-better-ls
+if [ -n "$(which ls-i)" ]; then
+  source "$HOME/.bash-tools/setup-better-ls"
+fi
+
+# fzf
+if [[ -d "$HOME/.app/fzf/bin" ]]; then
+  export PATH="$PATH:/home/nskazki/.app/fzf/bin"
+  source $HOME/.bash-tools/fzf.bash
+  source $HOME/.bash-tools/fzf.git
+  source $HOME/.bash-tools/bash.git
+fi
+
+# bash-preexec
 if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
   source "$HOME/.bash-tools/bash-preexec"
 
@@ -428,47 +419,32 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
   precmd_functions+=(precmd_send_talert)
 fi
 
-# bluebird config
-if [[ "$HOST_IAM" == 1 ]]; then
-  export BLUEBIRD_LONG_STACK_TRACES=1
-  # export BLUEBIRD_WARNINGS=1
-fi
-
-# node_modules helper
+# node_modules
 if [[ "$HOST_IAM" == 1 ]]; then
   export PATH="node_modules/.bin:$PATH"
 fi
 
-# yarn global bin
-if [[ -n "$(which yarn)" ]]; then
-  export PATH="/home/nskazki/.yarn/bin:$PATH"
-fi
-
-# npm auth
-if [[ -n "$(which npm)" ]]; then
-  export npm_config_userconfig="$HOME/.npm_auth"
-fi
-
-# even-better-ls
-if [ -n "$(which ls-i)" ]; then
-  source "$HOME/.bash-tools/setup-better-ls"
-fi
-
-# rust
-if [ -d "$HOME/.cargo/bin" ]; then
-  PATH="$PATH:$HOME/.cargo/bin"
-  source $HOME/.cargo/env
-fi
-
-# yarn-completion
-if [ -f "$HOME/.bash-tools/yarn-completion" ]; then
+# yarn
+if [[ -d "$HOME/.yarn/bin" ]]; then
+  export PATH="$HOME/.yarn/bin:$PATH"
   source $HOME/.bash-tools/yarn-completion
 fi
 
-# fzf stuff
-if [[ -d "$HOME/.app/fzf/bin" ]]; then
-  export PATH="$PATH:/home/nskazki/.app/fzf/bin"
-  source $HOME/.bash-tools/fzf.bash
-  source $HOME/.bash-tools/fzf.git
-  source $HOME/.bash-tools/bash.git
+# npm
+if [[ -n "$(which npm)" ]]; then
+  export npm_config_userconfig="$HOME/.npm_auth"
+  source <(npm completion)
+fi
+
+# rbenv
+if [ -d "$HOME/.rbenv/" ]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+fi
+
+# nvm
+if [ -d "$HOME/.nvm" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  source "$NVM_DIR/nvm.sh"
+  source "$NVM_DIR/bash_completion"
 fi
