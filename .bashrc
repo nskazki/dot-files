@@ -291,6 +291,13 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     printf "\033]0;%s\007" "$1"
   }
 
+  lost_focus() {
+    echo -ne '\e[?1004h\e[?1004l'
+    read -s -N 3 -t 0.5
+    [[ -n "$(echo "$REPLY" | grep "O")" ]]
+    return $?
+  }
+
   preexec_store_call_time() {
     # store last_call_time
     export last_call_time=$(date +%s)
@@ -351,22 +358,11 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
   }
 
   precmd_show_popup() {
-    (_precmd_show_popup &) > /dev/null 2>&1
-  }
-
-  _precmd_show_popup() {
-    # exit cmd popup
-    local result="$?"
-    local gs_path="$HOME/.guake-state"
-
-    if [ -n "$GUAKE_TAB_UUID" ] &&
-       [ $last_exec_done -eq 1 ] &&
-       [ -f "$gs_path" ] &&
-       [ "$(cat "$gs_path")" ==  "hide" ];
-    then
+    # cmd -> popout
+    local result=$?
+    if [ $COOL_TERM -eq 1 ] && [ $last_exec_done -eq 1 ] && lost_focus; then
       notify-send \
         --urgency=low \
-        -t 1000 \
         -i "$([ $result = 0 ] && echo terminal || echo error)" \
         "$(history | tail -n1 | sed -r 's/^\s*[0-9]+\s*//g')"
     fi
