@@ -396,7 +396,6 @@ files=(
   "$HOME/.bashrc"
   "$HOME/.npmrc"
   "$HOME/.gitconfig"
-  "$HOME/.tmux.conf"
   "$HOME/.ssh/config"
   # bash-tools
   "$HOME/.bash-tools/bash.git"
