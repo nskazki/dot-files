@@ -95,9 +95,8 @@ else export USER_OTHER=1 && export USER_IAM=0; fi
 # Promt
 
 # bash_count part
-bash_count=$(count-bash-tree)
-if [ $bash_count -eq 1 ]; then bashcount_p=""
-else bashcount_p="\[$cr_magenta_i\]bash#$bash_count\[$cr_reset\] "; fi
+if [ $SHLVL -eq 1 ]; then bashcount_p=""
+else bashcount_p="\[$cr_magenta_i\]bash#$SHLVL\[$cr_reset\] "; fi
 
 # host part
 if [ $HOST_IAM -eq 1 ]; then cr_host=$cr_cyan_i
