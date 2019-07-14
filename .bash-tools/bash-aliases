@@ -320,7 +320,7 @@ function short-pwd {
   local base="$(basename "$PWD")"
   echo "$PWD" \
     | sed "s:${HOME}:~:" \
-    | sed "s:/\(.\)[^/]*:/\1:g" \
+    | sed "s:\([^/.]\)[^/]*/:\1/:g" \
     | sed "s:/[^/]*$:/$base:" \
     | sed "s:/\+:/:"
 }
