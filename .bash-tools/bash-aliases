@@ -102,7 +102,6 @@ function mark {
   c_rs=$'\e[0m'
   sed -r "s/$mark/$fg_c\0$c_rs/g"
 }
-## !
 
 # !cd
 alias ..='cd ..'
@@ -233,12 +232,6 @@ function mysql-client {
   mysql -u $user -p$pass -h $host -P $port -D $path
 }
 
-# !guake
-alias guake-rename='guake --rename-current-tab'
-alias guake-pwd='guake-rename $(short-pwd)'
-alias guake-tab='guake -n $PWD'
-alias tab='guake-tab'
-
 # !ps
 alias psgl='ps aux | grep -v grep | grep -i -e'
 alias psgt='ps aux | grep -v grep | grep -i -e VSZ -e'
@@ -255,40 +248,6 @@ function get-process-name {
   else local pid="$1"; fi
   ps -p "$pid" -o comm=
 }
-
-function get-parent-pid {
-  if [ -z "$1" ]; then local pid="$$"
-  else local pid="$1"; fi
-  trim $(ps -o ppid= -p "$pid")
-}
-
-function get-parent-name {
-  if [ -z "$1" ]; then local pid="$(get-parent-pid)"
-  else local pid="$1"; fi
-  get-process-name "$pid"
-}
-
-function count-bash-tree {
-  if [ -z "$1" ]; then local count="1"
-  else local count="$1"; fi
-
-  if [ -z "$2" ]; then local pid="$$"
-  else local pid="$2"; fi
-
-  local ppid=$(get-parent-pid $pid)
-  local pnama=$(get-process-name $ppid)
-
-  if [[ "$pnama" == "bash" ]]; then
-    count-bash-tree "$((count + 1))" "$ppid"
-  else
-    echo "$count"
-  fi
-}
-
-# !archives
-alias a-unpack='aunpack'
-alias a-pack='apack'
-alias a-ls='als'
 
 # !codepad
 function codepad {
@@ -336,11 +295,6 @@ function rand-port {
     | awk '{array [$1] = $1} END {i=32768; again=1; while (again == 1) {if (array[i] == i) {i=i+1} else {print i; again=0}}}')
 }
 
-# !ssh
-function ssh-hosts-list {
-  cat ~/.ssh/config | grep 'Host ' | sed 's/Host //' | grep -v -E '\*|DIS_*|OLD_*'
-}
-
 # !ip
 alias ip-white='dig +short myip.opendns.com @resolver1.opendns.com'
 
@@ -352,76 +306,6 @@ function ip-grey {
        [ "${_ip#127.0.0.1}" ] && _myip=$_ip
     done< <(LANG=C /sbin/ifconfig)
   printf ${1+-v} $1 "%s${_nl:0:$[${#1}>0?0:1]}" $_myip
-}
-
-# !env
-files=(
-  # configs
-  "$HOME/.bashrc"
-  "$HOME/.npmrc"
-  "$HOME/.gitconfig"
-  "$HOME/.ssh/config"
-  # bash-tools
-  "$HOME/.bash-tools/bash.git"
-  "$HOME/.bash-tools/bash-aliases"
-  "$HOME/.bash-tools/bash-clr"
-  "$HOME/.bash-tools/bash-preexec"
-  "$HOME/.bash-tools/bash-z"
-  "$HOME/.bash-tools/fzf.bash"
-  "$HOME/.bash-tools/fzf.git"
-  "$HOME/.bash-tools/script-alias-list"
-  "$HOME/.bash-tools/script-rename-node"
-  "$HOME/.bash-tools/script-squash-tmp.js"
-  "$HOME/.bash-tools/script-git-server")
-
-function env-send {
-  if [[ ("$1" == '--help') || ("$1" == '-h') || -z $1 ]]; then
-    echo -e "usage: env-send [remote-host]"
-    return
-  fi
-
-  for ix in ${!files[*]}
-  do
-    echo "${files[$ix]}"
-    local basedir="$(dirname "${files[$ix]}")"
-    ssh "$1" "[ -d '$basedir' ] || mkdir '$basedir'"
-    pscp -H "$1" "${files[$ix]}" "${files[$ix]}"
-  done
-}
-
-function env-send-ssh {
-  local ssh=$(ssh-hosts-list | unlines)
-  echo "$ssh"
-  env-send "$ssh"
-}
-
-function env-check {
-  if [[ ("$1" == '--help') || ("$1" == '-h') || -z $1 ]]; then
-    echo -e "usage: env-check [remote-host]"
-    return
-  fi
-
-  echo "local:  " $(hostname)
-  echo "remote: " $(ssh $1 hostname)
-  echo
-
-  for ix in ${!files[*]}
-  do
-    local remote=$(ssh $1 'md5sum '${files[$ix]})
-    local current=$(md5sum ${files[$ix]})
-
-    if [[ "$current" != "$remote" ]]; then
-      echo "========================"
-      echo "file:   " "${files[$ix]}"
-      echo "local:  " $(stat ${files[$ix]} | l6)
-      echo "remote: " $(ssh $1 'stat '${files[$ix]}' | head -n 6 | tail -n 1')
-      echo "diff:"
-      ssh $1 "cat ${files[$ix]}" | diff -u - ${files[$ix]} | tail -n +4 | colordiff
-      echo "------------------------"
-      echo "------------------------"
-      echo
-    fi
-  done
 }
 
 # !human-readeble
@@ -440,10 +324,9 @@ function short-pwd {
     | sed "s:/[^/]*$:/$base:" \
     | sed "s:/\+:/:"
 }
-## !
 
 # !fs-helpers
-alias rename-node='~/.bash-tools/script-rename-node'
+alias rename-batch='~/.bash-tools/script-rename-node'
 
 alias df-i='pydf'
 alias du-i='ncdu'
@@ -455,10 +338,6 @@ function du-dir {
 
 alias file-mod='stat -c "%a %n"'
 alias file-size='du -b'
-
-function resolve {
-  node -e "console.log(require('path').resolve('$1'))"
-}
 
 function file-path {
   if [[ -z "$1" || "$1" == "--help" || "$1" == "-h" ]]; then
@@ -490,7 +369,6 @@ alias dates='date +%s'
 alias timer='time read'
 alias ping8='ping 8.8.8.8'
 alias online='while true; do sleep 2 && xdotool mousemove 500 500 && sleep 2 && xdotool mousemove 700 700; done'
-alias toggle='amixer -q -D pulse sset Master toggle'
 alias stopwatch="ts '[%Y-%m-%d %H:%M:%.S]'"
 
 alias p=pipe
@@ -507,7 +385,6 @@ function pipe {
   xargs -i bash -c "$import_aliases && $user_input $placeholder"
 }
 
-alias psshp='pssh -i -P'
 function rscp {
   if [[ "$1" == "--help" || "$1" == "-h" || -z "$1" || -z "$2" ]]; then
     echo "usage: rscp xyn.lan:$PWD/node.js $PWD/"
@@ -515,7 +392,7 @@ function rscp {
     echo "usage: rscp $PWD/node.js xyn.lan:$PWD/"
     return 1
   fi
-  rsync --exclude node_modules -avW -e ssh "$1" "$2"
+  rsync -avW -e ssh "$1" "$2"
 }
 
 function curl-code {
@@ -523,29 +400,13 @@ function curl-code {
 }
 
 # !dump-replacers
-alias subl='subl -n'
 alias tree='tree --dirsfirst'
 alias df='df -h'
 alias du='du -h'
 alias uptime='uptime -p'
 alias mkdir='mkdir -pv'
-alias parallel='parallel --no-notice'
 alias git-cola='git-cola&'
 alias cola='git-cola'
-
-# !bash
-alias bash-really-reload='source ~/.bashrc'
-alias bash-reload='bash'
-alias bash-alias-list='~/.bash-tools/script-alias-list'
-
-function history-top {
-  history \
-    | awk '{a[$2]++ } END{for(i in a){print a[i] " " i}}' \
-    | sort -rn \
-    | head -n 10
-}
-
-## !
 
 ##########################################
 # row
