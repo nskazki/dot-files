@@ -70,18 +70,6 @@
     git pull $remote $branch; \
   }; f"
 
-  # pull-all
-  pull-all = !"git cmd-pull-all"
-  cmd-pull-all = "!f() { \
-    git branch -r | grep -v '\\->' | while read remote; do git branch --track \"${remote#origin/}\" \"$remote\"; done; \
-    git fetch --all; \
-    git pull --all; \
-  }; f"
-
-  # recursive
-  cmd-clone-recursive = "clone --recursive"
-  clone-recursive = !"git cmd-clone-recursive"
-
   # tag-delete
   tag-delete = !"git cmd-tag-delete"
   cmd-tag-delete = "!f() { \
@@ -152,7 +140,7 @@
 
   # gitignore [git cmd <path>]
   cmd-gitignore-reset-all = "!git rm -r --cached . && git add ."
-  cmd-gitignore-print-all = "!f() { git ls-files --other --ignored --exclude-standard $@ | grep -v node_modules; }; f"
+  cmd-gitignore-print-all = "!f() { git ls-files --other --ignored --exclude-standard $@ }; f"
 
   gitignore-reset = !"git cmd-gitignore-reset-all"
   gitignore-print = !"git cmd-gitignore-print-all"
