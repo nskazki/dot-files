@@ -220,9 +220,16 @@ prompt_command_() {
 
   # NODE_ENV part
   if [ -n "$NODE_ENV" ]; then
-    local nodeenv_p="\[$cr_blue_bg\]$NODE_ENV\[$cr_reset\] "
+    local nodeenv_p="\[$cr_blue\]\[$cr_yellow_bg\]N:$NODE_ENV\[$cr_reset\] "
   else
     local nodeenv_p=""
+  fi
+
+  # RAILS_ENV part
+  if [ -n "$RAILS_ENV" ]; then
+    local railsenv_p="\[$cr_blue\]\[$cr_yellow_bg\]R:$RAILS_ENV\[$cr_reset\] "
+  else
+    local railsenv_p=""
   fi
 
   # other parts
@@ -230,7 +237,7 @@ prompt_command_() {
   local time_p="\[$cr_black_i\]$(date +%H:%M:%S)\[$cr_reset\] "
 
   # summ
-  export PS1="$bashcount_p$diff_p$time_p$host_p$user_p$path_p$git_p$nodeenv_p"
+  export PS1="$bashcount_p$diff_p$time_p$host_p$user_p$path_p$git_p$nodeenv_p$railsenv_p"
 }
 export PROMPT_COMMAND=prompt_command_
 
