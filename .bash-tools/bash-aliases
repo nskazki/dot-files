@@ -403,7 +403,6 @@ files=(
   "$HOME/.bash-tools/bash-aliases"
   "$HOME/.bash-tools/bash-clr"
   "$HOME/.bash-tools/bash-preexec"
-  "$HOME/.bash-tools/bash-ssh-find-agent"
   "$HOME/.bash-tools/bash-z"
   "$HOME/.bash-tools/fzf.bash"
   "$HOME/.bash-tools/fzf.git"

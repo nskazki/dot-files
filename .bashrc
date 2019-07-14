@@ -253,12 +253,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# Find ssh agent
-if [ -f "$HOME/.bash-tools/bash-ssh-find-agent" ]; then
-  source "$HOME/.bash-tools/bash-ssh-find-agent"
-  ssh-find-agent -a || eval $(ssh-agent)
-fi
-
 # clr
 if [ -f "$HOME/.bash-tools/bash-clr" ]; then
   source "$HOME/.bash-tools/bash-clr"
