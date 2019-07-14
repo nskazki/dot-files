@@ -6,7 +6,7 @@
 [ -z "$PS1" ] && return
 
 # http://habrahabr.ru/post/198482/
-export HISTCONTROL='ignoreboth:ignoredups:ignorespace:erasedups'
+HISTCONTROL=ignoreboth
 # Append to the history file, don't overwrite it
 shopt -s histappend
 # Setting history length
@@ -78,6 +78,12 @@ cr_blue_i="\e[0;94m"
 cr_magenta_i="\e[0;95m"
 cr_cyan_i="\e[0;96m"
 cr_white_i="\e[0;97m"
+
+# helpers
+case "$TERM"
+in xterm*|rxvt*) export COOL_TERM=1 ;;
+*) export COOL_TERM=0 ;;
+esac
 
 # Promt helpers
 export HOST="$HOSTNAME"
@@ -281,22 +287,21 @@ fi
 if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
   source "$HOME/.bash-tools/bash-preexec"
 
+  set_title() {
+    printf "\033]0;%s\007" "$1"
+  }
+
   preexec_store_call_time() {
     # store last_call_time
     export last_call_time=$(date +%s)
   }
 
   preexec_ssh_to_tab() {
-    (_preexec_ssh_to_tab "$1" &) > /dev/null 2>&1
-  }
-
-
-  _preexec_ssh_to_tab() {
-    # ssh-host -> tab-name
-    if [ -n "$GUAKE_TAB_UUID" ] && [ -n "$(echo "$1" | grep -P -s "^\s*ssh\s+")" ]; then
+    # ssh -> tab
+    if [ $COOL_TERM -eq 1 ] && [ -n "$(echo "$1" | grep -P -s "^\s*ssh\s+")" ]; then
       local host=$(echo "$1" | sed -r -e "s/(\s|ssh|-\w+\s*\w+|--\w+=\w+)//g")
       if [ -n "$host" ]; then
-        guake --rename-tab="$host" --tab-index="$GUAKE_TAB_UUID"
+        set_title "$host"
       fi
     fi
   }
@@ -320,7 +325,7 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
   }
 
   precmd_print_exit_code() {
-    # exit code print
+    # print exit code
     # store last_result
     local test_last_result=$?
     if [ $last_exec_done -eq 1 ]; then
@@ -332,20 +337,15 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
   }
 
   precmd_pwd_to_tab() {
-    (_precmd_pwd_to_tab &) > /dev/null 2>&1
-  }
-
-  _precmd_pwd_to_tab() {
-    # quake tab name
     # pwd -> tab-name
     # store
     #   curr_short_pwd
     #   prev_short_pwd
-    if [ -n "$GUAKE_TAB_UUID" ]; then
+    if [ $COOL_TERM -eq 1 ]; then
       export prev_short_pwd="$curr_short_pwd"
       export curr_short_pwd="$(short-pwd)"
       if [ "$prev_short_pwd" != "$curr_short_pwd" ]; then
-        guake --rename-tab="$curr_short_pwd" --tab-index="$GUAKE_TAB_UUID"
+        set_title "$curr_short_pwd"
       fi
     fi
   }
