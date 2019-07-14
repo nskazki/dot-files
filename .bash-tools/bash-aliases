@@ -112,14 +112,6 @@ alias .....='cd ../../../..'
 alias ~='cd ~'
 alias -- -='cd - > /dev/null'
 
-# !node
-alias node-h='node --harmony --harmony-proxies'
-alias node-brk='node --inspect --debug-brk'
-alias node-gc='node --nouse-idle-notification --expose-gc'
-
-alias node-perf-launch='node --perf-basic-prof'
-alias node-perf-record='cd ~/scripts/flameGraph/tmp && ../init.sh'
-
 # !yarn
 function yarn-upgrade {
   local pckg="$(yarn outdated --color \
@@ -198,34 +190,6 @@ function npmignore-test {
   cd "$dir"
   npm pack "$dir" && tar -tvf *.tgz && rm *.tgz
   cd -
-}
-
-function npm-set-versions {
-  if [[ ("$1" == '--help') || ("$1" == '-h') || -z $1 ]]; then
-    echo -e 'update version of packages'
-    echo -e 'example tree:
-    .
-    ├── a-project
-    │   └── package.json
-    ├── b-project
-    │   └── package.json
-    ├── c-project
-    │   └── package.json
-    └── package.json'
-    echo -e 'example usage: npm-set-versions 1.2.3'
-    echo -e 'example result:
-    .: v1.2.3
-    ./b-project: v1.2.3
-    ./c-project: v1.2.3
-    ./a-project: v1.2.3'
-    return
-  fi
-
-  find . \
-    -not -path '*/node_modules/*' \
-    -not -path '*/bower_components/*' \
-    -name 'package.json' \
-    | parallel --no-notice 'cd $(dirname {}) && echo -n "$(dirname {}): " && npm --no-git-tag-version version '"$1"
 }
 
 # !clip
