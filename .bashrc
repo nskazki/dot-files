@@ -269,11 +269,6 @@ if [ -f "$HOME/.bash-tools/bash-z" ]; then
   source "$HOME/.bash-tools/bash-z"
 fi
 
-# even-better-ls
-if [ -n "$(which ls-i)" ]; then
-  source "$HOME/.bash-tools/setup-better-ls"
-fi
-
 # fzf
 if [[ -d "$HOME/.app/fzf/bin" ]]; then
   export PATH="$PATH:/home/nskazki/.app/fzf/bin"

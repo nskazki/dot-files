@@ -13,8 +13,6 @@ fi
 # !text-helpers
 alias uncolor='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
 alias unlines='sed '"'"':a;N;$!ba;s/\n/ /g'"'"
-alias better-truncate='~/.bash-tools/script-truncate'
-alias side-by-side='~/.bash-tools/script-side-by-side'
 
 alias head1='head -n 1'
 alias tail1='tail -n 1'
@@ -278,7 +276,6 @@ alias guake-tab='guake -n $PWD'
 alias tab='guake-tab'
 
 # !ps
-alias penv='$HOME/.bash-tools/script-penv'
 alias psgl='ps aux | grep -v grep | grep -i -e'
 alias psgt='ps aux | grep -v grep | grep -i -e VSZ -e'
 function psgk {
@@ -411,10 +408,8 @@ files=(
   "$HOME/.bash-tools/fzf.bash"
   "$HOME/.bash-tools/fzf.git"
   "$HOME/.bash-tools/script-alias-list"
-  "$HOME/.bash-tools/script-penv"
   "$HOME/.bash-tools/script-rename-node"
   "$HOME/.bash-tools/script-squash-tmp.js"
-  "$HOME/.bash-tools/script-timeout"
   # git-tools
   "$HOME/.git-tools/git-contributors-debug"
   "$HOME/.git-tools/git-server"
