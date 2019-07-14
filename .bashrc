@@ -377,20 +377,6 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     fi
   }
 
-  precmd_send_talert() {
-    (_precmd_send_talert &) > /dev/null 2>&1
-  }
-
-  _precmd_send_talert() {
-    if [ $HOST_OTHER -eq 1 ] &&
-       [ $last_exec_done -eq 1 ] &&
-       [ $last_diff_time -ge 10 ] &&
-       (type talert > /dev/null 2>&1);
-    then
-      talert
-    fi
-  }
-
   preexec_functions+=(preexec_store_call_time)
   preexec_functions+=(preexec_ssh_to_tab)
 
@@ -398,7 +384,6 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
   precmd_functions+=(precmd_print_exit_code)
   precmd_functions+=(precmd_show_popup)
   precmd_functions+=(precmd_pwd_to_tab)
-  precmd_functions+=(precmd_send_talert)
 fi
 
 # node_modules
