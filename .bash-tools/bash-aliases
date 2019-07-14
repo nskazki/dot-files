@@ -410,11 +410,7 @@ files=(
   "$HOME/.bash-tools/script-alias-list"
   "$HOME/.bash-tools/script-rename-node"
   "$HOME/.bash-tools/script-squash-tmp.js"
-  # git-tools
-  "$HOME/.git-tools/git-contributors-debug"
-  "$HOME/.git-tools/git-server"
-  "$HOME/.git-tools/git-show-merges"
-  "$HOME/.git-tools/git-wtf")
+  "$HOME/.bash-tools/script-git-server")
 
 function env-send {
   if [[ ("$1" == '--help') || ("$1" == '-h') || -z $1 ]]; then

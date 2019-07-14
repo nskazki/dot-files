@@ -20,12 +20,6 @@
   type = cat-file -t
   dump = cat-file -p
 
-  # external-scripts
-  script-wtf         = "!~/.git-tools/git-wtf"
-  script-show-merges = "!~/.git-tools/git-show-merges"
-  script-server      = "!~/.git-tools/git-server"
-  script-contributors-debug = "!~/.git-tools/git-contributors-debug"
-
   # notes
   note-reset = "!f() { \
     echo 'git reflog';\
