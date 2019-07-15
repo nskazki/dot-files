@@ -122,6 +122,7 @@ export last_diff_time=0
 export last_diff_time_human=""
 export last_exec_done=0
 export last_result=0
+export last_cmd=""
 export curr_short_pwd
 export prev_short_pwd
 
@@ -315,6 +316,11 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     fi
   }
 
+  preexec_store_cmd() {
+    # store last_cmd
+    export last_cmd="$1"
+  }
+
   precmd_check_done_time() {
     # store
     #  last_done_time
@@ -366,12 +372,13 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
       notify-send \
         --urgency=low \
         -i "$([ $result = 0 ] && echo terminal || echo error)" \
-        "$(history | tail -n1 | sed -r 's/^\s*[0-9]+\s*//g')"
+        "$last_cmd"
     fi
   }
 
   preexec_functions+=(preexec_store_call_time)
   preexec_functions+=(preexec_ssh_to_tab)
+  preexec_functions+=(preexec_store_cmd)
 
   precmd_functions+=(precmd_check_done_time)
   precmd_functions+=(precmd_print_exit_code)
