@@ -28,6 +28,8 @@
   { "keys": ["ctrl+q"], "command": "set_mark" },
   { "keys": ["ctrl+shift+q"], "command": "swap_with_mark" },
 
+  { "keys": ["ctrl+shift+["], "command": "null" },
+  { "keys": ["ctrl+shift+]"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+b"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+d"], "command": "null" },
   { "keys": ["insert"], "command": "null" },
