@@ -4,13 +4,12 @@ echo "nskazki ALL=(ALL) NOPASSWD: ALL" | xclip -sel clip
 sudo visudo
 
 # APT-GET
-sudo apt-get install xdotool tmux numlockx htop ncdu pydf parallel atool tree colordiff byzanz -y
-sudo apt-get install unity-tweak-tool gimp -y
+sudo apt-get install xdotool htop ncdu pydf atool tree colordiff byzanz recordmydesktop -y
 
 # CHROME
 https://www.google.ru/intl/en/chrome/
 
-# SUBLIME
+# SUBLIME & SMERGE
 https://www.sublimetext.com/docs/3/linux_repositories.html
 
 # NODE
@@ -18,12 +17,12 @@ https://github.com/creationix/nvm
 https://yarnpkg.com/en/docs/install#debian-stable (--no-install-recommends)
 
 # RUBY
-https://github.com/rbenv/rbenv
-https://github.com/rbenv/ruby-build
+https://github.com/rbenv/rbenv-installer
 
 # GIT
 https://git-scm.com/download/linux
 https://github.com/jonas/tig/blob/master/INSTALL.adoc (libncursesw5-dev)
+https://github.com/git-cola/git-cola (python3-pyqt5)
 
 # TELEGRAM
 https://telegram.org/
@@ -39,16 +38,9 @@ https://github.com/BurntSushi/ripgrep
 https://github.com/sharkdp/fd
 http://git.savannah.gnu.org/cgit/nano.git/tree/README.GIT
 
-# GIFS
-https://launchpad.net/~mc3man/+archive/ubuntu/trusty-media
-https://github.com/ImageOptim/gifski (ppa:jonathonf/ffmpeg-3)
+# GIFS & VIDEOS
+https://github.com/ImageOptim/gifski (ppa:jonathonf/ffmpeg-4)
 https://github.com/kornelski/giflossy
-
-# THEME
-https://github.com/anmoljagetia/Flatabulous
-
-# PSSH
-https://github.com/robinbowes/pssh
 
 # SSH
 cp .ssh/* ~/.ssh
