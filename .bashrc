@@ -294,10 +294,8 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     printf "\033]0;%s\007" "$1"
   }
 
-  lost_focus() {
-    echo -ne '\e[?1004h\e[?1004l'
-    read -s -N 3 -t 0.5
-    [[ -n "$(echo "$REPLY" | grep "O")" ]]
+  has_focus() {
+    [[ "$(xdotool getwindowfocus)" == "$(xdotool search --name 'Guake!')" ]]
     return $?
   }
 
@@ -368,7 +366,7 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
   precmd_show_popup() {
     # cmd -> popout
     local result=$?
-    if [ $COOL_TERM -eq 1 ] && [ $last_exec_done -eq 1 ] && lost_focus; then
+    if [ $COOL_TERM -eq 1 ] && [ $last_exec_done -eq 1 ] && ! has_focus; then
       notify-send \
         --urgency=low \
         -i "$([ $result = 0 ] && echo terminal || echo error)" \
