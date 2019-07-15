@@ -278,6 +278,8 @@ fi
 # fzf
 if [[ -d "$HOME/.app/fzf/bin" ]]; then
   export PATH="$PATH:/home/nskazki/.app/fzf/bin"
+  source "/home/nskazki/.app/fzf/shell/completion.bash"
+  source "/home/nskazki/.app/fzf/shell/key-bindings.bash"
   source $HOME/.bash-tools/fzf.bash
   source $HOME/.bash-tools/fzf.git
   source $HOME/.bash-tools/bash.git
