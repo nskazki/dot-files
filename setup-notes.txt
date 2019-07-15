@@ -8,30 +8,30 @@ sudo apt-get install xdotool tmux numlockx htop ncdu pydf parallel atool tree co
 sudo apt-get install unity-tweak-tool gimp -y
 
 # CHROME
-# https://www.google.ru/intl/en/chrome/
+https://www.google.ru/intl/en/chrome/
 
 # SUBLIME
-# https://www.sublimetext.com/docs/3/linux_repositories.html
+https://www.sublimetext.com/docs/3/linux_repositories.html
 
 # NODE
-# https://github.com/creationix/nvm
-# https://yarnpkg.com/en/docs/install#debian-stable (--no-install-recommends)
+https://github.com/creationix/nvm
+https://yarnpkg.com/en/docs/install#debian-stable (--no-install-recommends)
 
 # RUBY
-# https://github.com/rbenv/rbenv
-# https://github.com/rbenv/ruby-build
+https://github.com/rbenv/rbenv
+https://github.com/rbenv/ruby-build
 
 # GIT
-# https://git-scm.com/download/linux
-# https://github.com/jonas/tig/blob/master/INSTALL.adoc (libncursesw5-dev)
+https://git-scm.com/download/linux
+https://github.com/jonas/tig/blob/master/INSTALL.adoc (libncursesw5-dev)
 
 # TELEGRAM
-# https://telegram.org/
+https://telegram.org/
 
 # GUAKE
-# http://guake.readthedocs.io/en/latest/user/installing.html#install-from-source
-# https://github.com/source-foundry/Hack
-# https://imgur.com/Y6fceTn
+http://guake.readthedocs.io/en/latest/user/installing.html#install-from-source
+https://github.com/source-foundry/Hack
+https://imgur.com/Y6fceTn
 
 # CLI
 https://github.com/junegunn/fzf
@@ -45,16 +45,14 @@ https://github.com/ImageOptim/gifski (ppa:jonathonf/ffmpeg-3)
 https://github.com/kornelski/giflossy
 
 # THEME
-# https://github.com/anmoljagetia/Flatabulous
+https://github.com/anmoljagetia/Flatabulous
 
 # PSSH
-# https://github.com/robinbowes/pssh
+https://github.com/robinbowes/pssh
 
 # SSH
-# restore from backup
-# cd <backup-path>
-# cp .ssh/* ~/.ssh
-# chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
+cp .ssh/* ~/.ssh
+chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
 
 # OTHER
-# restore from https://github.com/nskazki/dot-files
+https://github.com/nskazki/dot-files
