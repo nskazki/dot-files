@@ -6,7 +6,7 @@
 [ -z "$PS1" ] && return
 
 # http://habrahabr.ru/post/198482/
-HISTCONTROL=ignoreboth
+export HISTCONTROL=ignoreboth
 # Append to the history file, don't overwrite it
 shopt -s histappend
 # Setting history length
@@ -80,39 +80,7 @@ cr_cyan_i="\e[0;96m"
 cr_white_i="\e[0;97m"
 
 # helpers
-case "$TERM"
-in xterm*|rxvt*) export COOL_TERM=1 ;;
-*) export COOL_TERM=0 ;;
-esac
-
-# Promt helpers
-export HOST="$HOSTNAME"
-export HIAM="(xyn|eevee)"
-export UIAM="nskazki"
-
-if [[ -n "$(echo "$HOST" | grep --perl-regexp "$HIAM")" ]];
-then export HOST_IAM=1 && export HOST_OTHER=0;
-else export HOST_OTHER=1 && export HOST_IAM=0; fi
-
-if [[ -n "$(echo "$USER" | grep -s "$UIAM")" ]];
-then export USER_IAM=1 && export USER_OTHER=0;
-else export USER_OTHER=1 && export USER_IAM=0; fi
-
-# Promt
-
-# bash_count part
-if [ $SHLVL -eq 1 ]; then bashcount_p=""
-else bashcount_p="\[$cr_magenta_i\]bash#$SHLVL\[$cr_reset\] "; fi
-
-# host part
-if [ $HOST_IAM -eq 1 ]; then cr_host=$cr_cyan_i
-else cr_host=$cr_cyan_bg; fi
-host_p="\[$cr_host\]$HOST\[$cr_reset\] "
-
-# user part
-if [ $UID -eq 0 ]; then user_p="\[$cr_red_bg\]$USER\[$cr_reset\] ";
-elif [ $USER_OTHER -eq 1 ]; then user_p="\[$cr_red_i\]$USER\[$cr_reset\] ";
-elif [ $USER_IAM -eq 1 ]; then user_p=""; fi
+[[ "$TERM" == xterm* ]] && export COOL_TERM=1
 
 # exports
 export check_know_call_time=0
@@ -120,12 +88,27 @@ export last_call_time=0
 export last_done_time=0
 export last_diff_time=0
 export last_diff_time_human=""
-export last_exec_done=0
-export last_result=0
+export last_cmd_done=0
+export last_cmd_code=0
 export last_cmd=""
 export curr_short_pwd
 export prev_short_pwd
 
+# Promt
+
+# bash_count part
+if [[ "$SHLVL" -eq 1 ]]; then bashcount_p=""
+else bashcount_p="\[$cr_magenta_i\]bash#$SHLVL\[$cr_reset\] "; fi
+
+# host part
+if [[ "$HOSTNAME" =~ (xyn|eevee) ]]; then cr_host="$cr_cyan_i"
+else cr_host="$cr_cyan_bg"; fi
+host_p="\[$cr_host\]$HOSTNAME\[$cr_reset\] "
+
+# user part
+if [[ "$USER" == "root" ]]; then user_p="\[$cr_red_bg\]$USER\[$cr_reset\] ";
+elif [[ "$USER" != "nskazki" ]]; then user_p="\[$cr_red_i\]$USER\[$cr_reset\] ";
+else user_p=""; fi
 
 prompt_command_() {
   # sync history
@@ -134,77 +117,73 @@ prompt_command_() {
   history -r
 
   # git part
-  if [ -n "$(git branch 2>/dev/null)" ] && (type __git_ps1 > /dev/null);
-  then local repo=1;
-  else local repo=0; fi
-
-  if [ $repo -eq 1 ]; then
+  if (git rev-parse --abbrev-ref HEAD >/dev/null 2>&1) && (type -t __git_ps1 > /dev/null); then
     local git_ps1="$(__git_ps1 '%s')"
     local git_ps1_cr="$cr_green_i"
     local git_file_count=""
     local git_stash=""
 
-    if [ "$(basename "$PWD")" == ".git" ]; then git_ps1_cr="$cr_yellow_bg";
-    elif [ "$(git rev-parse --is-bare-repository)" == "true" ]; then git_ps1_cr="$cr_green_bg"
+    if [[ "$(basename "$PWD")" == ".git" ]]; then git_ps1_cr="$cr_yellow_bg";
+    elif [[ "$(git rev-parse --is-bare-repository)" == "true" ]]; then git_ps1_cr="$cr_green_bg"
     else
       # git_stash
       local git_sl="$(git stash list | wc -l)"
-      if [ $git_sl -ne 0 ]; then
+      if [[ "$git_sl" -ne 0 ]]; then
         git_stash="\[$cr_yellow_i\]stash[$git_sl]\[$cr_reset\] "
       fi
 
       # git_ps1_cr & git_file_count
       local git_ss="$(git status -s)"
 
-      local modified_staged=$(echo "$git_ss" | grep -c -s -P '^M')
-      if [ $modified_staged -ne 0 ]; then
-        git_ps1_cr=$cr_blue_b
+      local modified_staged="$(grep -c -s -P '^M' <<< "$git_ss")"
+      if [[ "$modified_staged" -ne 0 ]]; then
+        git_ps1_cr="$cr_blue_b"
         git_file_count="\[$git_ps1_cr\][M$modified_staged]\[$cr_reset\]$git_file_count"
       fi
 
-      local modified_notstaged=$(echo "$git_ss" | grep -c -s -P '^.M')
-      if [ $modified_notstaged -ne 0 ]; then
-        git_ps1_cr=$cr_blue_bg
+      local modified_notstaged="$(grep -c -s -P '^.M' <<< "$git_ss")"
+      if [[ "$modified_notstaged" -ne 0 ]]; then
+        git_ps1_cr="$cr_blue_bg"
         git_file_count="\[$git_ps1_cr\][M$modified_notstaged]\[$cr_reset\]$git_file_count"
       fi
 
-      local renamed=$(echo "$git_ss" | grep -c -s -P '^R')
-      if [ $renamed -ne 0 ]; then
-        git_ps1_cr=$cr_cyan_i
+      local renamed="$(grep -c -s -P '^R' <<< "$git_ss")"
+      if [[ "$renamed" -ne 0 ]]; then
+        git_ps1_cr="$cr_cyan_i"
         git_file_count="\[$git_ps1_cr\][R$renamed]\[$cr_reset\]$git_file_count"
       fi
 
-      local added_staged=$(echo "$git_ss" | grep -c -s -P '^A')
-      if [ $added_staged -ne 0 ]; then
-        git_ps1_cr=$cr_red_i
+      local added_staged="$(grep -c -s -P '^A' <<< "$git_ss")"
+      if [[ "$added_staged" -ne 0 ]]; then
+        git_ps1_cr="$cr_red_i"
         git_file_count="\[$git_ps1_cr\][A$added_staged]\[$cr_reset\]$git_file_count"
       fi
 
-      local added_notstaged=$(echo "$git_ss" | grep -c -s -P '^\?\?')
-      if [ $added_notstaged -ne 0 ]; then
-        git_ps1_cr=$cr_red_bg
+      local added_notstaged="$(grep -c -s -P '^\?\?' <<< "$git_ss")"
+      if [[ "$added_notstaged" -ne 0 ]]; then
+        git_ps1_cr="$cr_red_bg"
         git_file_count="\[$git_ps1_cr\][A$added_notstaged]\[$cr_reset\]$git_file_count"
       fi
 
-      local deleted_staged=$(echo "$git_ss" | grep -c -s -P '^D')
-      if [ $deleted_staged -ne 0 ]; then
-        git_ps1_cr=$cr_magenta_b
+      local deleted_staged="$(grep -c -s -P '^D' <<< "$git_ss")"
+      if [[ "$deleted_staged" -ne 0 ]]; then
+        git_ps1_cr="$cr_magenta_b"
         git_file_count="\[$git_ps1_cr\][D$deleted_staged]\[$cr_reset\]$git_file_count"
       fi
 
-      local deleted_notstaged=$(echo "$git_ss" | grep -c -s -P '^.D')
-      if [ $deleted_notstaged -ne 0 ]; then
+      local deleted_notstaged="$(grep -c -s -P '^.D' <<< "$git_ss")"
+      if [[ "$deleted_notstaged" -ne 0 ]]; then
         git_ps1_cr="$cr_magenta_bg"
         git_file_count="\[$git_ps1_cr\][D$deleted_notstaged]\[$cr_reset\]$git_file_count"
       fi
 
-      local unmerged=$(echo "$git_ss" | grep -c -s -P '^(.U|U.)')
-      if [ $unmerged -ne 0 ]; then
-        git_ps1_cr=$cr_green_bg
+      local unmerged="$(grep -c -s -P '^(.U|U.)' <<< "$git_ss")"
+      if [[ "$unmerged" -ne 0 ]]; then
+        git_ps1_cr="$cr_green_bg"
         git_file_count="\[$git_ps1_cr\][U$unmerged]\[$cr_reset\]$git_file_count"
       fi
 
-      if [ -n "$git_file_count" ]; then
+      if [[ -n "$git_file_count" ]]; then
         git_file_count=" $git_file_count"
       fi
     fi
@@ -216,23 +195,23 @@ prompt_command_() {
   fi;
 
   # diff part
-  if [ $last_exec_done -ne 1 ]; then
+  if [[ "$last_cmd_done" -ne 1 ]]; then
     local diff_p="\[$cr_blue_i\]--:--\[$cr_reset\] "
   else
-    if [ $last_diff_time -le 10 ]; then cr=$cr_green_i
+    if [[ "$last_diff_time" -le 10 ]]; then cr=$cr_green_i
     else local cr=$cr_yellow_i; fi
     local diff_p="\[$cr\]$last_diff_time_human\[$cr_reset\] "
   fi
 
   # NODE_ENV part
-  if [ -n "$NODE_ENV" ]; then
+  if [[ -v NODE_ENV ]]; then
     local nodeenv_p="\[$cr_blue\]\[$cr_yellow_bg\]N:$NODE_ENV\[$cr_reset\] "
   else
     local nodeenv_p=""
   fi
 
   # RAILS_ENV part
-  if [ -n "$RAILS_ENV" ]; then
+  if [[ -v RAILS_ENV ]]; then
     local railsenv_p="\[$cr_blue\]\[$cr_yellow_bg\]R:$RAILS_ENV\[$cr_reset\] "
   else
     local railsenv_p=""
@@ -248,31 +227,26 @@ prompt_command_() {
 export PROMPT_COMMAND=prompt_command_
 
 # Make less more friendly for non-text input files, see lesspipe(1)
-[ -x "/usr/bin/lesspipe" ] && eval "$(SHELL=/bin/sh lesspipe)"
+[[ -x "/usr/bin/lesspipe" ]] && eval "$(SHELL=/bin/sh lesspipe)"
 # Simular to git default: quit if one screen, colors, truncate lines, inline mode
 export LESS="FRSX"
 
-# Set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r "/etc/debian_chroot" ]; then
-  export debian_chroot="$(cat /etc/debian_chroot)"
-fi
-
 # Enable programmable completion features
 if ! shopt -oq posix; then
-  if [ -f "/usr/share/bash-completion/bash_completion" ]; then
+  if [[ -f "/usr/share/bash-completion/bash_completion" ]]; then
     source "/usr/share/bash-completion/bash_completion"
-  elif [ -f "/etc/bash_completion" ]; then
+  elif [[ -f "/etc/bash_completion" ]]; then
     source "/etc/bash_completion"
   fi
 fi
 
 # clr
-if [ -f "$HOME/.bash-tools/bash-clr" ]; then
+if [[ -f "$HOME/.bash-tools/bash-clr" ]]; then
   source "$HOME/.bash-tools/bash-clr"
 fi
 
 # z
-if [ -f "$HOME/.bash-tools/bash-z" ]; then
+if [[ -f "$HOME/.bash-tools/bash-z" ]]; then
   source "$HOME/.bash-tools/bash-z"
 fi
 
@@ -287,7 +261,7 @@ if [[ -d "$HOME/.app/fzf/bin" ]]; then
 fi
 
 # bash-preexec
-if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
+if [[ -f "$HOME/.bash-tools/bash-preexec" ]]; then
   source "$HOME/.bash-tools/bash-preexec"
 
   set_title() {
@@ -299,6 +273,11 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     return $?
   }
 
+  preexec_store_cmd() {
+    # store last_cmd
+    export last_cmd="$1"
+  }
+
   preexec_store_call_time() {
     # store last_call_time
     export last_call_time=$(date +%s)
@@ -306,17 +285,12 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
 
   preexec_ssh_to_tab() {
     # ssh -> tab
-    if [ $COOL_TERM -eq 1 ] && [ -n "$(echo "$1" | grep -P -s "^\s*ssh\s+")" ]; then
-      local host=$(echo "$1" | sed -r -e "s/(\s|ssh|-\w+\s*\w+|--\w+=\w+)//g")
-      if [ -n "$host" ]; then
+    if [[ -v COOL_TERM && "$last_cmd" =~ ^[[:space:]]*ssh[[:space:]]+ ]]; then
+      local host="$(sed -r -e "s/(\s|ssh|-\w+\s*\w+|--\w+=\w+)//g" <<< "$last_cmd")"
+      if [[ -n "$host" ]]; then
         set_title "$host"
       fi
     fi
-  }
-
-  preexec_store_cmd() {
-    # store last_cmd
-    export last_cmd="$1"
   }
 
   precmd_check_done_time() {
@@ -324,28 +298,26 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     #  last_done_time
     #  last_diff_time
     #  last_diff_time_human
-    #  last_exec_done
+    #  last_cmd_done
+    #  last_cmd_code
     #  check_know_call_time
-    if [ $check_know_call_time -ne $last_call_time ]; then
-      export check_know_call_time=$last_call_time
-      export last_done_time=$(date +%s)
-      export last_diff_time=$((last_done_time - last_call_time))
+    local tmp_cmd_code=$?
+    if [[ "$check_know_call_time" -ne "$last_call_time" ]]; then
+      export check_know_call_time="$last_call_time"
+      export last_done_time="$(date +%s)"
+      export last_diff_time="$((last_done_time - last_call_time))"
       export last_diff_time_human="$(human-interval $last_diff_time | sed -r -e 's/^00://')"
-      export last_exec_done=1
+      export last_cmd_done=1
+      export last_cmd_code="$tmp_cmd_code"
     else
-      export last_exec_done=0
+      export last_cmd_done=0
     fi
   }
 
   precmd_print_exit_code() {
     # print exit code
-    # store last_result
-    local test_last_result=$?
-    if [ $last_exec_done -eq 1 ]; then
-      export last_result=$test_last_result
-      if [ $last_result -ne 0 ]; then
-        echo -e "${cr_red_b}return: $last_result${cr_reset}"
-      fi
+    if [[ "$last_cmd_code" -ne 0 ]]; then
+      echo -e "${cr_red_b}return: $last_cmd_code${cr_reset}"
     fi
   }
 
@@ -354,10 +326,10 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
     # store
     #   curr_short_pwd
     #   prev_short_pwd
-    if [ $COOL_TERM -eq 1 ]; then
+    if [[ -v COOL_TERM ]]; then
       export prev_short_pwd="$curr_short_pwd"
       export curr_short_pwd="$(short-pwd)"
-      if [ "$prev_short_pwd" != "$curr_short_pwd" ]; then
+      if [[ "$prev_short_pwd" != "$curr_short_pwd" ]]; then
         set_title "$curr_short_pwd"
       fi
     fi
@@ -365,29 +337,26 @@ if [ -f "$HOME/.bash-tools/bash-preexec" ]; then
 
   precmd_show_popup() {
     # cmd -> popout
-    local result=$?
-    if [ $COOL_TERM -eq 1 ] && [ $last_exec_done -eq 1 ] && ! has_focus; then
+    if [[ -v COOL_TERM && "$last_cmd_done" -eq 1 ]] && ! has_focus; then
       notify-send \
         --urgency=low \
-        -i "$([ $result = 0 ] && echo terminal || echo error)" \
+        -i "$([[ "$last_cmd_code" = 0 ]] && echo terminal || echo error)" \
         "$last_cmd"
     fi
   }
 
+  preexec_functions+=(preexec_store_cmd)
   preexec_functions+=(preexec_store_call_time)
   preexec_functions+=(preexec_ssh_to_tab)
-  preexec_functions+=(preexec_store_cmd)
 
   precmd_functions+=(precmd_check_done_time)
   precmd_functions+=(precmd_print_exit_code)
-  precmd_functions+=(precmd_show_popup)
   precmd_functions+=(precmd_pwd_to_tab)
+  precmd_functions+=(precmd_show_popup)
 fi
 
 # node_modules
-if [[ "$HOST_IAM" == 1 ]]; then
-  export PATH="node_modules/.bin:$PATH"
-fi
+export PATH="node_modules/.bin:$PATH"
 
 # yarn
 if [[ -d "$HOME/.yarn/bin" ]]; then
@@ -402,13 +371,13 @@ if [[ -n "$(which npm)" ]]; then
 fi
 
 # rbenv
-if [ -d "$HOME/.rbenv/" ]; then
+if [[ -d "$HOME/.rbenv/" ]]; then
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
 fi
 
 # nvm
-if [ -d "$HOME/.nvm" ]; then
+if [[ -d "$HOME/.nvm" ]]; then
   export NVM_DIR="$HOME/.nvm"
   source "$NVM_DIR/nvm.sh"
   source "$NVM_DIR/bash_completion"
