@@ -2,33 +2,10 @@
   { "keys": ["f5"], "command": "refresh_folder_list" },
   { "keys": ["ctrl+shift+a"], "command": "save_all" },
   { "keys": ["ctrl+shift+o"], "command": "prompt_open_folder" },
-  {
-    "keys": ["ctrl+alt+i"],
-    "command": "run_multiple_commands",
-    "args": {
-      "commands": [
-        {"command": "unexpand_tabs", "args": { "set_translate_tabs": false }},
-        {"command": "set_setting", "args": {"setting": "tab_size", "value": 2}},
-        {"command": "expand_tabs", "args": { "set_translate_tabs": true }}
-      ]
-    }
-  },
+
   { "keys": ["ctrl+alt+c"], "command": "file_path_to_clipboard" },
   { "keys": ["ctrl+alt+shift+c"], "command": "dir_path_to_clipboard" },
   { "keys": ["alt+shift+c"], "command": "file_name_to_clipboard" },
-
-  { "keys": ["ctrl+shift+m"], "command": "to_camel_case_from_select" },
-  { "keys": ["ctrl+alt+shift+m"], "command": "to_camel_case_from_clip" },
-
-  { "keys": ["ctrl+shift+k"], "command": "to_kebab_case_from_select" },
-  { "keys": ["ctrl+alt+shift+k"], "command": "to_kebab_case_from_clip" },
-
-  { "keys": ["ctrl+shift+u"], "command": "to_upper_case_from_select" },
-  { "keys": ["ctrl+alt+shift+u"], "command": "to_upper_case_from_clip" },
-
-  { "keys": ["ctrl+alt+shift+t"], "command": "terminal_view_open", "args": {"cmd": "/bin/bash -l"}},
-  { "keys": ["ctrl+up"], "command": "terminal_view_scroll", "args": {"forward": false}, "context": [{"key": "setting.terminal_view"}] },
-  { "keys": ["ctrl+down"], "command": "terminal_view_scroll", "args": {"forward": true}, "context": [{"key": "setting.terminal_view"}] },
 
   { "keys": ["ctrl+;"], "command": "append_semi_colon" },
   { "keys": ["ctrl+shift+;"], "command": "append_semi_colon", "args": {"enter_new_line": "true"} },
