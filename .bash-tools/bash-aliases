@@ -249,23 +249,6 @@ function get-process-name {
   ps -p "$pid" -o comm=
 }
 
-# !codepad
-function codepad {
-  if [[ ("$1" == '--help') || ("$1" == '-h') || -z $1 ]]; then
-    echo -e "usage: codepad [path-to-file]"
-    return
-  fi
-
-  local url=$(curl -s \
-    -d "lang=Plain Text&submit=Submit&private=True" \
-    --data-urlencode "code@$1" codepad.org \
-  | grep -Eo "http://codepad.org/\w*" \
-  | head -n 1)
-
-  echo $url
-  echo $url | xclip -selection c
-}
-
 # !layout
 alias layout-ru='setxkbmap ru'
 alias лэйаут-ин='setxkbmap us'
@@ -276,13 +259,6 @@ alias layout-fix="$HOME/.bash-tools/script-fix-layout.sh"
 function rand-pass {
   echo $(cat /dev/urandom \
     | tr -dc a-zA-Z0-9 \
-    | fold -w 12 \
-    | head -n 1)
-}
-
-function rand-word {
-  echo $(cat /dev/urandom \
-    | tr -dc a-z \
     | fold -w 12 \
     | head -n 1)
 }
@@ -327,6 +303,7 @@ function short-pwd {
 
 # !fs-helpers
 alias rename-batch='~/.bash-tools/script-rename-node'
+alias rename-node='~/.bash-tools/script-rename-node'
 
 alias df-i='pydf'
 alias du-i='ncdu'
