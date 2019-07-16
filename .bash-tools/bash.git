@@ -6,20 +6,7 @@ alias gut='git'
 alias get='git'
 alias gti='git'
 
-function g {
-  if [[ -z $1 ]]; then
-    tig
-  elif [[ -f "$(resolve "$1")" ]] && [[ -n "$(echo "$2" | grep -P '^\+\d+$')" ]]; then
-    tig blame "$1" "$2"
-  elif [[ -f "$(resolve "$1")" ]] || [[ -d "$(resolve "$1")" ]]; then
-    tig "$1"
-  elif [[ -n "$(echo "$1" | grep -P '^[\w-/]+\.{2,3}[\w-/]+$')" ]]; then
-    tig "$1"
-  else
-    git $@
-  fi
-}
-
+alias g='tig'
 alias t='tig'
 alias b='tig blame'
 alias y='tig stash'
@@ -71,11 +58,11 @@ alias __exit-on-error__='local last=$?; test $last -ne 0 && return $last'
 
 function git-not-has-staged {
   local git_ss="$(git status -s)"
-  local modified_staged=$(echo "$git_ss" | grep -c -s -P '^M')
-  local renamed=$(echo "$git_ss" | grep -c -s -P '^R')
-  local added_staged=$(echo "$git_ss" | grep -c -s -P '^A')
-  local deleted_staged=$(echo "$git_ss" | grep -c -s -P '^D')
-  if [ $modified_staged -eq 0 ] && [ $renamed -eq 0 ] && [ $added_staged -eq 0 ] && [ $deleted_staged -eq 0 ]; then
+  local modified_staged="$(echo "$git_ss" | grep -c -s -P '^M')"
+  local renamed="$(echo "$git_ss" | grep -c -s -P '^R')"
+  local added_staged="$(echo "$git_ss" | grep -c -s -P '^A')"
+  local deleted_staged="$(echo "$git_ss" | grep -c -s -P '^D')"
+  if [[ "$modified_staged" -eq 0 && "$renamed" -eq 0 && "$added_staged" -eq 0 && "$deleted_staged" -eq 0 ]]; then
     return 0
   else
     return 1
@@ -84,11 +71,11 @@ function git-not-has-staged {
 
 function git-not-has-unstaged {
   local git_ss="$(git status -s)"
-  local modified_notstaged=$(echo "$git_ss" | grep -c -s -P '^.M')
-  local added_notstaged=$(echo "$git_ss" | grep -c -s -P '^\?\?')
-  local deleted_notstaged=$(echo "$git_ss" | grep -c -s -P '^.D')
-  local unmerged=$(echo "$git_ss" | grep -c -s -P '^(.U|U.)')
-  if [ $modified_notstaged -eq 0 ] && [ $added_notstaged -eq 0 ] && [ $deleted_notstaged -eq 0 ] && [ $unmerged -eq 0 ]; then
+  local modified_notstaged="$(echo "$git_ss" | grep -c -s -P '^.M')"
+  local added_notstaged="$(echo "$git_ss" | grep -c -s -P '^\?\?')"
+  local deleted_notstaged="$(echo "$git_ss" | grep -c -s -P '^.D')"
+  local unmerged="$(echo "$git_ss" | grep -c -s -P '^(.U|U.)')"
+  if [[ "$modified_notstaged" -eq 0 && "$added_notstaged" -eq 0 && "$deleted_notstaged" -eq 0 && "$unmerged" -eq 0 ]]; then
     return 0
   else
     return 1
@@ -115,7 +102,7 @@ function git-has-changes {
 
 function git-find-first-tmp {
   git log --format="%h %s" -n 100 | while read line ; do
-    if [[ -n "$(echo "$line" | grep -P '^\w+\s\d+$')" ]]; then
+    if [[ "$line" =~ ^[[:alnum:]]+[[:space:]][[:digit:]]+$ ]]; then
       local last="$line"
     else
       echo "$last" | sed -r -e 's/\s+[0-9]+//'
@@ -126,7 +113,7 @@ function git-find-first-tmp {
 
 function git-find-last-tmp {
   local last="$(git log --format="%h %s" -n 1)"
-  if [[ -n "$(echo "$last" | grep -P '^\w+\s\d+$')" ]]; then
+  if [[ "$last" =~ ^[[:alnum:]]+[[:space:]][[:digit:]]+$ ]]; then
     echo "$last" | sed -r -e 's/\s+[0-9]+//'
   fi
 }
@@ -159,7 +146,7 @@ function __git-status__ {
 }
 
 function __git-status-short__ {
-  if $(git-has-changes); then
+  if git-has-changes; then
     git -c color.status=always status -s
     echo
   else
@@ -202,8 +189,8 @@ function git-rebase-smart {
       local cm_msg="$(echo "$fu_msg" | sed -r -e 's/^(fixup! )+//' | sed -r -e 's/\\/\\\\/g')"
       local cm_hash="$(git log --format="%h" -n1 "$fu_hash"^ --grep "^$cm_msg$")"
 
-      if [[ -z "$fu_msg" ]] || [[ -z "$fu_hash" ]] || [[ -z "$cm_msg" ]] || [[ -z "$cm_hash" ]]; then
-        clr_bg_red "can not found a base of last fixup!"
+      if [[ -z "$fu_msg" || -z "$fu_hash" || -z "$cm_msg" || -z "$cm_hash" ]]; then
+        clr_bg_red "could not find a base of last fixup!"
         echo -e "fu_msg: $fu_msg \nfu_hash: $fu_hash \ncm_msg: $cm_msg \ncm_hash: $cm_hash"
         return 1
       fi
@@ -234,7 +221,7 @@ function git-rebase-smart {
 }
 
 function git-commit-tmp {
-  if $(git-not-has-changes); then
+  if git-not-has-changes; then
     clr_yellow "nothing to do!"
     return 2
   fi
@@ -250,7 +237,7 @@ function git-commit-tmp {
     fi
   done
 
-  local last=$(git log --format=%B -n 1 HEAD | head -n1 | rg '^[0-9]+$' -m1)
+  local last="$(git log --format=%B -n 1 HEAD | head -n1 | rg '^[0-9]+$' -m1)"
   local next="1"
   if [[ -n "$last" ]]; then
     next="$(expr $last + 1)"
@@ -264,18 +251,18 @@ function git-commit-tmp {
 }
 
 function git-commit-fixup-smart {
-  if $(git-not-has-changes); then
+  if git-not-has-changes; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
   if [[ "$1" == '.' ]]; then
     local paths="$(__git-unstaged-list__)"
-  elif $(git-not-has-staged); then
+  elif git-not-has-staged; then
     local paths="$(gf)"
   fi
 
-  if $(git-not-has-staged) && [[ -z "$paths" ]]; then
+  if git-not-has-staged && [[ -z "$paths" ]]; then
     clr_bg_blue "has not staged and paths is not defined!"
     return 100
   fi
@@ -310,7 +297,7 @@ function git-commit-fixup-smart {
 }
 
 function git-unstage-smart {
-  if $(git-not-has-staged); then
+  if git-not-has-staged; then
     clr_yellow "nothing to do!"
     return 2
   fi
@@ -340,7 +327,7 @@ function git-unstage-smart {
 }
 
 function git-add-smart {
-  if $(git-not-has-unstaged); then
+  if git-not-has-unstaged; then
     clr_yellow "nothing to do!"
     return 2
   fi
@@ -435,7 +422,7 @@ function git-squash-tmp-smart {
 }
 
 function git-last-tmp-to-fixup-smart {
-  if $(git-has-changes); then
+  if git-has-changes; then
     __git-status__
     clr_bg_red "cleanup project first!"
     return 3
@@ -470,7 +457,7 @@ function git-last-tmp-to-fixup-smart {
 }
 
 function git-hoist-smart {
-  if [[ "$1" == "." ]] && [[ -z "$(git log --format="%h %s" -n 100 | grep -P '^\w+\s\d+$')" ]]; then
+  if [[ "$1" == "." && -z "$(git log --format="%h %s" -n 100 | grep -P '^\w+\s\d+$')" ]]; then
     clr_yellow "nothing to do!"
     return 2
   fi
