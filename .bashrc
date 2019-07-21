@@ -6,7 +6,7 @@
 [ -z "$PS1" ] && return
 
 # http://habrahabr.ru/post/198482/
-export HISTCONTROL=ignoreboth
+export HISTCONTROL='ignoreboth:ignoredups:ignorespace:erasedups'
 # Append to the history file, don't overwrite it
 shopt -s histappend
 # Setting history length
