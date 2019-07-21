@@ -294,3 +294,6 @@
 
 [commit]
   verbose = true
+
+[cola]
+  spellcheck = false
