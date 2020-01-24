@@ -39,6 +39,8 @@
   { "keys": ["ctrl+f4"], "command": "null" },
   { "keys": ["ctrl+u"], "command": "null" },
   { "keys": ["ctrl+shift+space"], "command": "null" },
+  { "keys": ["ctrl+shift+m"], "command": "null" },
+  { "keys": ["ctrl+shift+a"], "command": "null" },
   { "keys": ["ctrl+shift+j"], "command": "null" },
   { "keys": ["alt+."], "command": "null" },
   { "keys": ["ctrl+alt+q"], "command": "null" },
