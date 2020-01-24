@@ -1,4 +1,6 @@
 [
+  { "keys": ["ctrl+m"], "command": "mark_and_move_do_it_all" },
+
   { "keys": ["f5"], "command": "refresh_folder_list" },
   { "keys": ["ctrl+shift+a"], "command": "save_all" },
   { "keys": ["ctrl+shift+o"], "command": "prompt_open_folder" },
@@ -23,11 +25,9 @@
   { "keys": ["alt+d"], "command": "find_under_expand_skip" },
 
   { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
-  { "keys": ["ctrl+m"], "command": "toggle_minimap" },
 
-  { "keys": ["ctrl+q"], "command": "set_mark" },
-  { "keys": ["ctrl+shift+q"], "command": "swap_with_mark" },
-
+  { "keys": ["ctrl+q"], "command": "null" },
+  { "keys": ["ctrl+shift+q"], "command": "null" },
   { "keys": ["ctrl+shift+["], "command": "null" },
   { "keys": ["ctrl+shift+]"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+b"], "command": "null" },
