@@ -4,6 +4,7 @@
   { "keys": ["alt+o"], "command": "open_from_path" },
 
   { "keys": ["ctrl+m"], "command": "split_selection_into_lines" },
+  { "keys": ["alt+n"], "command": "mark_and_move_clear" },
   { "keys": ["alt+m"], "command": "mark_and_move_do_it_all" },
   { "keys": ["alt+."], "command": "mark_and_move_next" },
   { "keys": ["alt+,"], "command": "mark_and_move_prev" },
