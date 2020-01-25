@@ -44,6 +44,8 @@
 
   { "keys": ["ctrl+alt+y"], "command": "null" },
 
+  { "keys": ["f9"], "command": "null" },
+  { "keys": ["ctrl+f9"], "command": "null" },
   { "keys": ["ctrl+q"], "command": "null" },
   { "keys": ["ctrl+shift+q"], "command": "null" },
   { "keys": ["ctrl+shift+["], "command": "null" },
