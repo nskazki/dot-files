@@ -28,6 +28,17 @@
 
   { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
 
+  { "keys": ["ctrl+alt+c", "ctrl+alt+s"], "command": "null"},
+  { "keys": ["ctrl+alt+c", "ctrl+alt+shift+s"], "command": "null"},
+  { "keys": ["ctrl+alt+c", "ctrl+alt+c"], "command": "null"},
+  { "keys": ["ctrl+alt+c", "ctrl+alt+p"], "command": "null"},
+  { "keys": ["ctrl+alt+c", "ctrl+alt+d"], "command": "null"},
+  { "keys": ["ctrl+alt+c", "ctrl+alt+h"], "command": "null"},
+  { "keys": ["ctrl+alt+c", "ctrl+alt+w"], "command": "null"},
+  { "keys": ["ctrl+alt+c", "ctrl+alt+/"], "command": "null"},
+  { "keys": ["ctrl+alt+c", "ctrl+alt+b"], "command": "null"},
+  { "keys": ["ctrl+shift+-"], "command": "null"},
+
   { "keys": ["ctrl+q"], "command": "null" },
   { "keys": ["ctrl+shift+q"], "command": "null" },
   { "keys": ["ctrl+shift+["], "command": "null" },
