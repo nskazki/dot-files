@@ -36,6 +36,12 @@
   { "keys": ["alt+]"], "command": "next_modification" },
   { "keys": ["alt+["], "command": "prev_modification" },
 
+  // Google Spell Check
+  { "keys": ["ctrl+alt+g"], "command": "null" },
+
+  // Open URL
+  { "keys": ["ctrl+alt+u"], "command": "null" },
+
   // CaseConversion
   { "keys": ["ctrl+alt+c", "ctrl+alt+s"], "command": "null"},
   { "keys": ["ctrl+alt+c", "ctrl+alt+shift+s"], "command": "null"},
