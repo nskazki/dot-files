@@ -1,6 +1,7 @@
 [
   { "keys": ["alt+p"], "command": "js_prettier" },
   { "keys": ["alt+a"], "command": "alignment" },
+  { "keys": ["alt+o"], "command": "open_from_path" },
 
   { "keys": ["alt+m"], "command": "mark_and_move_do_it_all" },
   { "keys": ["alt+."], "command": "mark_and_move_next" },
@@ -88,7 +89,6 @@
   { "keys": ["alt+9"], "command": "null" },
   { "keys": ["alt+f3"], "command": "null" },
   { "keys": ["alt+keypad_minus"], "command": "null" },
-  { "keys": ["alt+o"], "command": "null" },
   { "keys": ["alt+q"], "command": "null" },
   { "keys": ["alt+shift+-"], "command": "null" },
   { "keys": ["alt+shift+keypad_minus"], "command": "null" },
