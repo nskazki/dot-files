@@ -1,7 +1,10 @@
 [
   { "keys": ["alt+p"], "command": "js_prettier" },
   { "keys": ["alt+a"], "command": "alignment" },
-  { "keys": ["ctrl+m"], "command": "mark_and_move_do_it_all" },
+
+  { "keys": ["alt+m"], "command": "mark_and_move_do_it_all" },
+  { "keys": ["alt+."], "command": "mark_and_move_next" },
+  { "keys": ["alt+,"], "command": "mark_and_move_prev" },
 
   { "keys": ["f5"], "command": "refresh_folder_list" },
   { "keys": ["ctrl+shift+s"], "command": "save_all" },
@@ -54,7 +57,6 @@
   { "keys": ["ctrl+shift+m"], "command": "null" },
   { "keys": ["ctrl+shift+a"], "command": "null" },
   { "keys": ["ctrl+shift+j"], "command": "null" },
-  { "keys": ["alt+."], "command": "null" },
   { "keys": ["ctrl+alt+q"], "command": "null" },
   { "keys": ["ctrl+alt+shift+q"], "command": "null" },
   { "keys": ["alt+-"], "command": "null" },
