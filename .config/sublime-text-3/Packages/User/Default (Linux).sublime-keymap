@@ -1,4 +1,5 @@
 [
+  { "keys": ["alt+p"], "command": "js_prettier" },
   { "keys": ["alt+a"], "command": "alignment" },
   { "keys": ["ctrl+m"], "command": "mark_and_move_do_it_all" },
 
