@@ -3,6 +3,7 @@
   { "keys": ["alt+a"], "command": "alignment" },
   { "keys": ["alt+o"], "command": "open_from_path" },
 
+  { "keys": ["ctrl+m"], "command": "split_selection_into_lines" },
   { "keys": ["alt+m"], "command": "mark_and_move_do_it_all" },
   { "keys": ["alt+."], "command": "mark_and_move_next" },
   { "keys": ["alt+,"], "command": "mark_and_move_prev" },
@@ -136,6 +137,7 @@
   { "keys": ["ctrl+k", "ctrl+l"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+left"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+right"], "command": "null" },
+  { "keys": ["ctrl+k", "ctrl+shift+l"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+shift+left"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+shift+right"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+shift+up"], "command": "null" },
