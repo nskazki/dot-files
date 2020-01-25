@@ -8,6 +8,7 @@
   { "keys": ["alt+,"], "command": "mark_and_move_prev" },
 
   { "keys": ["f5"], "command": "refresh_folder_list" },
+  { "keys": ["ctrl+shift+a"], "command": "save_all" },
   { "keys": ["ctrl+shift+s"], "command": "save_all" },
   { "keys": ["ctrl+shift+o"], "command": "prompt_open_folder" },
 
@@ -144,7 +145,6 @@
   { "keys": ["ctrl+q"], "command": "null" },
   { "keys": ["ctrl+shift+["], "command": "null" },
   { "keys": ["ctrl+shift+]"], "command": "null" },
-  { "keys": ["ctrl+shift+a"], "command": "null" },
   { "keys": ["ctrl+shift+b"], "command": "null" },
   { "keys": ["ctrl+shift+b"], "command": "null" },
   { "keys": ["ctrl+shift+e"], "command": "null" },
