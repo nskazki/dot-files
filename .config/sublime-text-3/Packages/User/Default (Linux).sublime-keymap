@@ -54,7 +54,15 @@
   { "keys": ["ctrl+alt+y"], "command": "null" },
 
   // CoffeeScript
+  { "keys": ["alt+shift+s"], "command": "null" },
+  { "keys": ["alt+shift+r"], "command": "null" },
   { "keys": ["alt+shift+t"], "command": "null" },
+  { "keys": ["alt+shift+c"], "command": "null" },
+  { "keys": ["alt+shift+d"], "command": "null" },
+  { "keys": ["alt+shift+l"], "command": "null" },
+  { "keys": ["alt+shift+n"], "command": "null" },
+  { "keys": ["alt+shift+w"], "command": "null" },
+  { "keys": ["alt+shift+z"], "command": "null" },
 
   // SublimeLinter
   { "keys": ["ctrl+k", "a"], "command": "null" },
