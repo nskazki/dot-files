@@ -45,6 +45,12 @@
   { "keys": ["ctrl+alt+y"], "command": "null" },
   { "keys": ["ctrl+k", "a"], "command": "null" },
 
+  { "keys": ["ctrl+break"], "command": "null" },
+  { "keys": ["f7"], "command": "null" },
+  { "keys": ["ctrl+b"], "command": "null" },
+  { "keys": ["ctrl+shift+b"], "command": "null", "args": {"select": true} },
+  { "keys": ["f4"], "command": "null" },
+  { "keys": ["shift+f4"], "command": "null" },
   { "keys": ["f9"], "command": "null" },
   { "keys": ["ctrl+f9"], "command": "null" },
   { "keys": ["ctrl+q"], "command": "null" },
