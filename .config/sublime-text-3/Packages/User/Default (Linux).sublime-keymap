@@ -2,7 +2,7 @@
   { "keys": ["ctrl+m"], "command": "mark_and_move_do_it_all" },
 
   { "keys": ["f5"], "command": "refresh_folder_list" },
-  { "keys": ["ctrl+shift+a"], "command": "save_all" },
+  { "keys": ["ctrl+shift+s"], "command": "save_all" },
   { "keys": ["ctrl+shift+o"], "command": "prompt_open_folder" },
 
   { "keys": ["ctrl+alt+c"], "command": "file_path_to_clipboard" },
@@ -35,7 +35,6 @@
   { "keys": ["insert"], "command": "null" },
   { "keys": ["ctrl+alt+,"], "command": "null" },
   { "keys": ["ctrl+alt+shift+,"], "command": "null" },
-  { "keys": ["ctrl+shift+s"], "command": "null" },
   { "keys": ["ctrl+f4"], "command": "null" },
   { "keys": ["ctrl+u"], "command": "null" },
   { "keys": ["ctrl+shift+space"], "command": "null" },
