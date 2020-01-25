@@ -17,7 +17,7 @@
 
   { "keys": ["ctrl+v"], "command": "paste" },
   { "keys": ["ctrl+shift+v"], "command": "paste_and_indent" },
-  { "keys": ["ctrl+shift+alt+v"], "command": "paste_from_history" },
+  { "keys": ["alt+v"], "command": "paste_from_history" },
   { "keys": ["ctrl+y"], "command": "redo" },
   { "keys": ["ctrl+t"], "command": "new_file" },
 
