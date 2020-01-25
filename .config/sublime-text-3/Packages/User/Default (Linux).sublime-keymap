@@ -31,6 +31,9 @@
 
   { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
 
+  { "keys": ["alt+]"], "command": "next_modification" },
+  { "keys": ["alt+["], "command": "prev_modification" },
+
   // CaseConversion
   { "keys": ["ctrl+alt+c", "ctrl+alt+s"], "command": "null"},
   { "keys": ["ctrl+alt+c", "ctrl+alt+shift+s"], "command": "null"},
