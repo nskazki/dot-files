@@ -31,6 +31,7 @@
 
   { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
 
+  // CaseConversion
   { "keys": ["ctrl+alt+c", "ctrl+alt+s"], "command": "null"},
   { "keys": ["ctrl+alt+c", "ctrl+alt+shift+s"], "command": "null"},
   { "keys": ["ctrl+alt+c", "ctrl+alt+c"], "command": "null"},
@@ -42,18 +43,26 @@
   { "keys": ["ctrl+alt+c", "ctrl+alt+b"], "command": "null"},
   { "keys": ["ctrl+shift+-"], "command": "null"},
 
-  // append comma
+  // AppendComma
   { "keys": ["ctrl+alt+,"], "command": "null" },
   { "keys": ["ctrl+alt+shift+,"], "command": "null" },
 
+  // Alignment
   { "keys": ["ctrl+alt+a"], "command": "null" },
+
+  // YAML
   { "keys": ["ctrl+alt+y"], "command": "null" },
+
+  // CoffeeScript
   { "keys": ["alt+shift+t"], "command": "null" },
+
+  // SublimeLinter
   { "keys": ["ctrl+k", "a"], "command": "null" },
   { "keys": ["ctrl+k", "l"], "command": "null" },
   { "keys": ["ctrl+k", "n"], "command": "null" },
   { "keys": ["ctrl+k", "p"], "command": "null" },
 
+  // default
   { "keys": ["alt+-"], "command": "null" },
   { "keys": ["alt+."], "command": "null" },
   { "keys": ["alt+0"], "command": "null" },
