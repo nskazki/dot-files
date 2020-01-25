@@ -382,3 +382,9 @@ if [[ -d "$HOME/.nvm" ]]; then
   source "$NVM_DIR/nvm.sh"
   source "$NVM_DIR/bash_completion"
 fi
+
+# go
+if [[ -d "$HOME/go" ]]; then
+  export GOPATH="$HOME/go"
+  export PATH="${GOPATH//://bin:}/bin:$PATH"
+fi
