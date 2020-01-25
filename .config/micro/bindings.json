@@ -1,0 +1,47 @@
+{
+  "AltShiftLeft": "UnbindKey",
+  "AltShiftRight": "UnbindKey",
+  "CtrlShiftLeft": "SelectWordLeft",
+  "CtrlShiftRight": "SelectWordRight",
+
+  // "\u001b\u005b\u0035\u003b\u0032\u007e": "SelectPageUp", // ShiftPageUp (cmd doesn't exist)
+  // "ShiftPageDown": "SelectPageDown",
+
+  "\u001b\u005b\u0035\u003b\u0035\u007e": "PreviousSplit|PreviousTab", // CtrlPageUp
+  "\u001b\u005b\u0036\u003b\u0035\u007e": "NextSplit|NextTab", // CtrlPageDown
+
+  "Alt,": "UnbindKey",
+  "Alt.": "UnbindKey",
+  "\u001b\u005b\u0035\u003b\u0036\u007e": "PreviousTab", // CtrlShiftPageUp
+  "\u001b\u005b\u0036\u003b\u0036\u007e": "NextTab", // CtrlShiftPageDown
+
+  "CtrlShiftUp": "MoveLinesUp",
+  "CtrlShiftDown": "MoveLinesDown",
+
+  "AltLeft":   "UnbindKey",
+  "AltRight":  "UnbindKey",
+  "CtrlLeft":  "WordLeft",
+  "CtrlRight": "WordRight",
+
+  "AltUp":   "UnbindKey",
+  "AltDown": "UnbindKey",
+
+  "Alt-{": "UnbindKey",
+  "Alt-}": "UnbindKey",
+
+  "CtrlR": "UnbindKey",
+  "CtrlW": "UnbindKey",
+
+  "CtrlHome": "UnbindKey",
+  "CtrlEnd":  "UnbindKey",
+
+  "CtrlUp":   "ScrollUp,CursorUp",
+  "CtrlDown": "ScrollDown,CursorDown",
+
+  "CtrlL": "UnbindKey",
+  "CtrlG": "JumpLine",
+
+  "CtrlD": "SpawnMultiCursor",
+  "Alt-d": "SkipMultiCursor",
+  "Esc":   "Escape,RemoveAllMultiCursors",
+}
