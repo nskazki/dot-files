@@ -14,10 +14,6 @@
   { "keys": ["ctrl+shift+s"], "command": "save_all" },
   { "keys": ["ctrl+shift+o"], "command": "prompt_open_folder" },
 
-  { "keys": ["ctrl+alt+c"], "command": "file_path_to_clipboard" },
-  { "keys": ["ctrl+alt+z"], "command": "dir_path_to_clipboard" },
-  { "keys": ["ctrl+alt+x"], "command": "file_name_to_clipboard" },
-
   { "keys": ["ctrl+;"], "command": "append_semi_colon" },
   { "keys": ["ctrl+shift+;"], "command": "append_semi_colon", "args": {"enter_new_line": "true"} },
 
