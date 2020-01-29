@@ -333,15 +333,15 @@ if [[ -f "$HOME/.bash-tools/bash-preexec" ]]; then
     fi
   }
 
-  precmd_show_popup() {
+  #precmd_show_popup() {
     # cmd -> popout
-    if [[ -v COOL_TERM && "$last_cmd_done" -eq 1 ]] && ! has_focus; then
-      notify-send \
-        --urgency=low \
-        -i "$([[ "$last_cmd_code" = 0 ]] && echo terminal || echo error)" \
-        "$last_cmd"
-    fi
-  }
+    #if [[ -v COOL_TERM && "$last_cmd_done" -eq 1 ]] && ! has_focus; then
+    #  notify-send \
+    #    --urgency=low \
+    #    -i "$([[ "$last_cmd_code" = 0 ]] && echo terminal || echo error)" \
+    #    "$last_cmd"
+    #fi
+  #}
 
   preexec_functions+=(preexec_store_cmd)
   preexec_functions+=(preexec_store_call_time)
@@ -350,7 +350,7 @@ if [[ -f "$HOME/.bash-tools/bash-preexec" ]]; then
   precmd_functions+=(precmd_check_done_time)
   precmd_functions+=(precmd_print_exit_code)
   precmd_functions+=(precmd_pwd_to_tab)
-  precmd_functions+=(precmd_show_popup)
+  #precmd_functions+=(precmd_show_popup)
 fi
 
 # node_modules
