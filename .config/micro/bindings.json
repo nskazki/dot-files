@@ -29,5 +29,8 @@
     "CtrlShiftRight": "SelectWordRight",
     "CtrlShiftUp": "MoveLinesUp",
     "CtrlUp": "ScrollUp,CursorUp",
-    "Esc": "Escape,RemoveAllMultiCursors"
+    "Esc": "Escape,RemoveAllMultiCursors",
+    "CtrlP": "CommandMode",
+    "CtrlE": "EndOfLine",
+    "CtrlA": "StartOfLine"
 }
