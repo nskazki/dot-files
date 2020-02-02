@@ -3,9 +3,13 @@
   { "keys": ["alt+a"], "command": "alignment" },
   { "keys": ["alt+o"], "command": "open_from_path" },
 
-  { "keys": ["ctrl+m"], "command": "split_selection_into_lines" },
-  { "keys": ["alt+n"], "command": "mark_and_move_clear" },
-  { "keys": ["alt+m"], "command": "mark_and_move_do_it_all" },
+  { "keys": ["ctrl+i"], "command": "text_marker" },
+  { "keys": ["ctrl+u"], "command": "text_marker_clear" },
+
+  { "keys": ["alt+l"], "command": "split_selection_into_lines" },
+
+  { "keys": ["ctrl+m"], "command": "mark_and_move_do_it_all" },
+  { "keys": ["alt+m"], "command": "mark_and_move_clear" },
   { "keys": ["alt+."], "command": "mark_and_move_next" },
   { "keys": ["alt+,"], "command": "mark_and_move_prev" },
 
@@ -29,6 +33,7 @@
   { "keys": ["ctrl+d"], "command": "find_under_expand" },
   { "keys": ["alt+d"], "command": "find_under_expand_skip" },
 
+  { "keys": ["alt+b"], "command": "focus_side_bar" },
   { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
 
   { "keys": ["alt+]"], "command": "next_modification" },
@@ -81,7 +86,6 @@
 
   // default
   { "keys": ["alt+-"], "command": "null" },
-  { "keys": ["alt+."], "command": "null" },
   { "keys": ["alt+0"], "command": "null" },
   { "keys": ["alt+1"], "command": "null" },
   { "keys": ["alt+2"], "command": "null" },
@@ -98,7 +102,11 @@
   { "keys": ["alt+shift+-"], "command": "null" },
   { "keys": ["alt+shift+keypad_minus"], "command": "null" },
   { "keys": ["alt+shift+w"], "command": "null" },
+  { "keys": ["ctrl++"], "command": "null" },
+  { "keys": ["ctrl+-"], "command": "null" },
   { "keys": ["ctrl+."], "command": "null" },
+  { "keys": ["ctrl+0"], "command": "null" },
+  { "keys": ["ctrl+="], "command": "null" },
   { "keys": ["ctrl+alt+q"], "command": "null" },
   { "keys": ["ctrl+alt+shift+p"], "command": "null" },
   { "keys": ["ctrl+alt+shift+q"], "command": "null" },
@@ -109,7 +117,6 @@
   { "keys": ["ctrl+f4"], "command": "null" },
   { "keys": ["ctrl+f9"], "command": "null" },
   { "keys": ["ctrl+home"], "command": "null" },
-  { "keys": ["ctrl+i"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+/"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+0"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+1"], "command": "null" },
@@ -153,7 +160,9 @@
   { "keys": ["ctrl+shift+b"], "command": "null" },
   { "keys": ["ctrl+shift+b"], "command": "null" },
   { "keys": ["ctrl+shift+e"], "command": "null" },
+  { "keys": ["ctrl+shift+end"], "command": "null" },
   { "keys": ["ctrl+shift+f3"], "command": "null" },
+  { "keys": ["ctrl+shift+home"], "command": "null" },
   { "keys": ["ctrl+shift+i"], "command": "null" },
   { "keys": ["ctrl+shift+j"], "command": "null" },
   { "keys": ["ctrl+shift+k"], "command": "null" },
@@ -165,7 +174,6 @@
   { "keys": ["ctrl+shift+w"], "command": "null" },
   { "keys": ["ctrl+shift+z"], "command": "null" },
   { "keys": ["ctrl+tab"], "command": "null" },
-  { "keys": ["ctrl+u"], "command": "null" },
   { "keys": ["f12"], "command": "null" },
   { "keys": ["f3"], "command": "null" },
   { "keys": ["f4"], "command": "null" },
