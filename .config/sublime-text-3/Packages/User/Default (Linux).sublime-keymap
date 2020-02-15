@@ -3,8 +3,8 @@
   { "keys": ["alt+a"], "command": "alignment" },
   { "keys": ["alt+o"], "command": "open_from_path" },
 
-  { "keys": ["ctrl+i"], "command": "text_marker" },
-  { "keys": ["ctrl+u"], "command": "text_marker_clear" },
+  { "keys": ["ctrl+i"], "command": "text_highlighter_toggle" },
+  { "keys": ["ctrl+u"], "command": "text_highlighter_clear_all" },
 
   { "keys": ["alt+l"], "command": "split_selection_into_lines" },
 
