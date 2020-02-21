@@ -386,3 +386,8 @@ if [[ -d "$HOME/go" ]]; then
   export GOPATH="$HOME/go"
   export PATH="${GOPATH//://bin:}/bin:$PATH"
 fi
+
+# rust
+if [[ -d "$HOME/.cargo" ]]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
+fi
