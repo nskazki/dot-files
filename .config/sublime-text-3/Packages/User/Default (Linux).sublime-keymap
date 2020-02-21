@@ -54,6 +54,13 @@
   { "keys": ["f11"], "command": "title_case" },
   { "keys": ["f12"], "command": "lower_case" },
 
+  { "keys": ["ctrl+q"], "command": "open_recently_closed_file" },
+
+  // File History
+  { "keys": ["ctrl+shift+t"], "command": "reopen_last_file" },
+  { "keys": ["ctrl+alt+t"], "command": "null" },
+  { "keys": ["ctrl+alt+shift+t"], "command": "null" },
+
   // Google Spell Check
   { "keys": ["ctrl+alt+g"], "command": "null" },
 
@@ -169,7 +176,6 @@
   { "keys": ["ctrl+k", "ctrl+x"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+y"], "command": "null" },
   { "keys": ["ctrl+k", "ctrl+z"], "command": "null" },
-  { "keys": ["ctrl+q"], "command": "null" },
   { "keys": ["ctrl+shift+["], "command": "null" },
   { "keys": ["ctrl+shift+]"], "command": "null" },
   { "keys": ["ctrl+shift+b"], "command": "null" },
