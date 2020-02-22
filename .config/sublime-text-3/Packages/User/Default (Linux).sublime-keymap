@@ -6,12 +6,12 @@
   { "keys": ["ctrl+i"], "command": "text_highlighter_toggle" },
   { "keys": ["ctrl+u"], "command": "text_highlighter_clear_all" },
 
-  { "keys": ["alt+l"], "command": "split_selection_into_lines" },
+  { "keys": ["ctrl+m"], "command": "split_selection_into_lines" },
 
-  { "keys": ["ctrl+m"], "command": "mark_and_move_do_it_all" },
-  { "keys": ["alt+m"], "command": "mark_and_move_clear" },
-  { "keys": ["alt+."], "command": "mark_and_move_next" },
-  { "keys": ["alt+,"], "command": "mark_and_move_prev" },
+  { "keys": ["ctrl+0"], "command": "mark_and_move_do_it_all" },
+  { "keys": ["alt+0"], "command": "mark_and_move_clear" },
+  { "keys": ["ctrl+-"], "command": "mark_and_move_next" },
+  { "keys": ["ctrl+="], "command": "mark_and_move_prev" },
 
   { "keys": ["alt+r"], "command": "refresh_folder_list" },
   { "keys": ["ctrl+shift+a"], "command": "save_all" },
@@ -109,7 +109,6 @@
 
   // default
   { "keys": ["alt+-"], "command": "null" },
-  { "keys": ["alt+0"], "command": "null" },
   { "keys": ["alt+1"], "command": "null" },
   { "keys": ["alt+2"], "command": "null" },
   { "keys": ["alt+3"], "command": "null" },
@@ -126,10 +125,7 @@
   { "keys": ["alt+shift+keypad_minus"], "command": "null" },
   { "keys": ["alt+shift+w"], "command": "null" },
   { "keys": ["ctrl++"], "command": "null" },
-  { "keys": ["ctrl+-"], "command": "null" },
   { "keys": ["ctrl+."], "command": "null" },
-  { "keys": ["ctrl+0"], "command": "null" },
-  { "keys": ["ctrl+="], "command": "null" },
   { "keys": ["ctrl+alt+q"], "command": "null" },
   { "keys": ["ctrl+alt+shift+p"], "command": "null" },
   { "keys": ["ctrl+alt+shift+q"], "command": "null" },
