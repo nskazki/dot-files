@@ -289,6 +289,10 @@
 [status]
   showUntrackedFiles = all
 
+[fetch]
+  prune = true
+  pruneTags = true
+
 [cola]
   spellcheck = false
   theme = flat-dark-red
