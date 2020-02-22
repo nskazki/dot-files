@@ -208,21 +208,9 @@
   renames = copies
 
 [merge]
-  # Include summaries of merged commits in newly created merge commit messages
   log = true
-
-[merge]
-  conflictstyle = diff3
-
-[merge]
   tool = smerge
-
-[mergetool "meld_diff3"]
-  cmd = 'meld "$LOCAL" "$BASE" & sleep 0.5 && meld "$BASE" "$REMOTE" & sleep 0.5 && meld "$LOCAL" "$MERGED" "$REMOTE" &'
-
-[mergetool "smerge"]
-  cmd = 'smerge mergetool "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"'
-  trustExitCode = true
+  conflictstyle = diff3
 
 [push]
   # Use the Git 1.x.x default to avoid errors on machines with old Git
