@@ -295,6 +295,9 @@
 [commit]
   verbose = true
 
+[pull]
+  ff = only
+
 [cola]
   spellcheck = false
   theme = flat-dark-red
