@@ -228,6 +228,9 @@
   relativePaths = false
   showUntrackedFiles = all
 
+[stash]
+  showPatch = true
+
 [url "git@github.com:"]
   insteadOf = "gh:"
   pushInsteadOf = "github:"
@@ -246,9 +249,6 @@
 
 [url "https://"]
   insteadOf = git://
-
-[stash]
-  showPatch = true
 
 [commit]
   verbose = true
