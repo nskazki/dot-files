@@ -205,9 +205,7 @@
   untracked = cyan
 
 [diff]
-  # Detect copies as well as renames
   renames = copies
-	tool = meld
 
 # [help]
   # Automatically correct and execute mistyped commands
