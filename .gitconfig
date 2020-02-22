@@ -224,6 +224,10 @@
   autosquash = true
   missingCommitsCheck = error
 
+[status]
+  relativePaths = false
+  showUntrackedFiles = all
+
 [url "git@github.com:"]
   insteadOf = "gh:"
   pushInsteadOf = "github:"
@@ -248,9 +252,6 @@
 
 [commit]
   verbose = true
-
-[status]
-  showUntrackedFiles = all
 
 [fetch]
   prune = true
