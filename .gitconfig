@@ -298,6 +298,9 @@
 [pull]
   ff = only
 
+[status]
+  showUntrackedFiles = all
+
 [cola]
   spellcheck = false
   theme = flat-dark-red
