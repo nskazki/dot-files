@@ -13,9 +13,6 @@
     | sort; \
   }; f"
 
-  type = cat-file -t
-  dump = cat-file -p
-
   # notes
   note-reset = "!f() { \
     echo 'git reflog';\
