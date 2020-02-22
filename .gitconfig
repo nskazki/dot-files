@@ -212,6 +212,9 @@
   tool = smerge
   conflictstyle = diff3
 
+[pull]
+  ff = only
+
 [push]
   # Use the Git 1.x.x default to avoid errors on machines with old Git
   # installations. To use `simple` instead, add this to your `~/.extra` file:
@@ -248,9 +251,6 @@
 
 [commit]
   verbose = true
-
-[pull]
-  ff = only
 
 [status]
   showUntrackedFiles = all
