@@ -177,10 +177,6 @@
   config-bare = "!git config --bool core.bare true"
   config-show = "!git config --list --local"
 
-[apply]
-  # Detect whitespace errors when applying a patch
-  whitespace = fix
-
 [core]
   autocrlf = input
   safecrlf = true
@@ -188,6 +184,9 @@
 
 [am]
   threeWay = true
+
+[apply]
+  whitespace = fix
 
 [color]
   # Use colors in Git commands that are capable of colored output when
