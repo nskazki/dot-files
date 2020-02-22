@@ -2,10 +2,6 @@
 	name = nskazki
 	email = nskazki@gmail.com
 
-[core]
-	autocrlf = input
-	safecrlf = true
-
 [alias]
   alias-list = "!f() { \
     git config --list \
@@ -186,17 +182,8 @@
   whitespace = fix
 
 [core]
-  # Treat spaces before tabs and all kinds of trailing whitespace as an error
-  # [default] trailing-space: looks for spaces at the end of a line
-  # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
-  whitespace = space-before-tab,-indent-with-non-tab,trailing-space
-  # Make `git rebase` safer on OS X
-  # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
-  trustctime = false
-  # Prevent showing files whose names contain non-ASCII symbols as unversioned.
-  # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
-  precomposeunicode = false
-  # Let's try micro
+  autocrlf = input
+  safecrlf = true
   editor = micro
 
 [color]
