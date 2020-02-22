@@ -206,6 +206,7 @@
 
 [diff]
   renames = copies
+  algorithm = minimal
 
 [merge]
   log = true
