@@ -219,6 +219,11 @@
   default = simple
   followTags = true
 
+[rebase]
+  autostash = true
+  autosquash = true
+  missingCommitsCheck = error
+
 [url "git@github.com:"]
   insteadOf = "gh:"
   pushInsteadOf = "github:"
@@ -240,10 +245,6 @@
 
 [stash]
   showPatch = true
-
-[rebase]
-  autostash = true
-  autosquash = true
 
 [commit]
   verbose = true
