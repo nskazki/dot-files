@@ -133,18 +133,6 @@
   branch-verbose = !"git cmd-branch-verbose"
   remote-verbose = !"git cmd-remote-verbose"
 
-  # rebase
-  cmd-rebase-by       = "!r() { git rebase -i HEAD~$1; }; r"
-
-  rebase-by       = !"git cmd-rebase-by"
-
-  # gitignore [git cmd <path>]
-  cmd-gitignore-reset-all = "!git rm -r --cached . && git add ."
-  cmd-gitignore-print-all = "!f() { git ls-files --other --ignored --exclude-standard $@ }; f"
-
-  gitignore-reset = !"git cmd-gitignore-reset-all"
-  gitignore-print = !"git cmd-gitignore-print-all"
-
   # status
   cmd-status-short = "status -s"
 
