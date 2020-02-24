@@ -13,7 +13,7 @@
   { "keys": ["ctrl+-"], "command": "mark_and_move_next" },
   { "keys": ["ctrl+="], "command": "mark_and_move_prev" },
 
-  { "keys": ["alt+r"], "command": "refresh_folder_list" },
+  { "keys": ["ctrl+q"], "command": "refresh_folder_list" },
   { "keys": ["ctrl+shift+a"], "command": "save_all" },
   { "keys": ["ctrl+shift+s"], "command": "save_all" },
   { "keys": ["ctrl+shift+o"], "command": "prompt_open_folder" },
@@ -53,9 +53,6 @@
   { "keys": ["f10"], "command": "upper_case" },
   { "keys": ["f11"], "command": "title_case" },
   { "keys": ["f12"], "command": "lower_case" },
-
-  { "keys": ["ctrl+q"], "command": "open_recently_closed_file" },
-  { "keys": ["ctrl+e"], "command": "history_open" },
 
   // File History
   { "keys": ["ctrl+shift+t"], "command": "reopen_last_file" },
@@ -131,6 +128,7 @@
   { "keys": ["ctrl+alt+shift+p"], "command": "null" },
   { "keys": ["ctrl+alt+shift+q"], "command": "null" },
   { "keys": ["ctrl+break"], "command": "null" },
+  { "keys": ["ctrl+e"], "command": "null" },
   { "keys": ["ctrl+end"], "command": "null" },
   { "keys": ["ctrl+f2"], "command": "null" },
   { "keys": ["ctrl+f3"], "command": "null" },
