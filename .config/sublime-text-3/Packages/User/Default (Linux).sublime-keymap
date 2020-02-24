@@ -54,11 +54,6 @@
   { "keys": ["f11"], "command": "title_case" },
   { "keys": ["f12"], "command": "lower_case" },
 
-  // File History
-  { "keys": ["ctrl+shift+t"], "command": "reopen_last_file" },
-  { "keys": ["ctrl+alt+t"], "command": "null" },
-  { "keys": ["ctrl+alt+shift+t"], "command": "null" },
-
   // Google Spell Check
   { "keys": ["ctrl+alt+g"], "command": "null" },
 
