@@ -99,7 +99,7 @@
   { "keys": ["ctrl+k", "n"], "command": "null" },
   { "keys": ["ctrl+k", "p"], "command": "null" },
 
-  // default
+  // defaults
   { "keys": ["alt+-"], "command": "null" },
   { "keys": ["alt+1"], "command": "null" },
   { "keys": ["alt+2"], "command": "null" },
@@ -187,6 +187,7 @@
   { "keys": ["ctrl+shift+w"], "command": "null" },
   { "keys": ["ctrl+shift+z"], "command": "null" },
   { "keys": ["ctrl+tab"], "command": "null" },
+  { "keys": ["shift+f11"], "command": "null" },
   { "keys": ["shift+f12"], "command": "null" },
   { "keys": ["shift+f2"], "command": "null" },
   { "keys": ["shift+f3"], "command": "null" },
