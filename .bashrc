@@ -91,8 +91,6 @@ export last_diff_time_human=""
 export last_cmd_done=0
 export last_cmd_code=0
 export last_cmd=""
-export curr_short_pwd
-export prev_short_pwd
 
 # Promt
 
@@ -321,15 +319,8 @@ if [[ -f "$HOME/.bash-tools/bash-preexec" ]]; then
 
   precmd_pwd_to_tab() {
     # pwd -> tab-name
-    # store
-    #   curr_short_pwd
-    #   prev_short_pwd
     if [[ -v COOL_TERM ]]; then
-      export prev_short_pwd="$curr_short_pwd"
-      export curr_short_pwd="$(short-pwd)"
-      if [[ "$prev_short_pwd" != "$curr_short_pwd" ]]; then
-        set_title "$curr_short_pwd"
-      fi
+      set_title "$(short-pwd)"
     fi
   }
 
