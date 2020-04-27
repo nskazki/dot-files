@@ -223,7 +223,7 @@
   missingCommitsCheck = error
 
 [status]
-  relativePaths = false
+  # relativePaths = false
   showUntrackedFiles = all
 
 [stash]
