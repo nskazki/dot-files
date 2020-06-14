@@ -3,16 +3,6 @@
 	email = nskazki@gmail.com
 
 [alias]
-  alias-list = "!f() { \
-    git config --list \
-    | grep alias \
-    | grep -v -P ^alias.alias \
-    | grep -v -P ^alias.cmd- \
-    | sed -e s/=.*// \
-    | grep - \
-    | sort; \
-  }; f"
-
   # notes
   note-reset = "!f() { \
     echo 'git reflog';\
@@ -20,126 +10,52 @@
   }; f"
 
   # base
-  cmd-uncommit = "!f() { \
+  unstage = "reset HEAD"
+  recommit = "commit --amend"
+  uncommit = "!f() { \
     rm -f \"$(git git-dir)/.uncommit_cnt\"; \
     git log -1 --pretty=%B > \"$(git git-dir)/.uncommit_msg\"; \
     git reset --soft HEAD^; \
   }; f"
 
-  uncommit = !"git cmd-uncommit"
-  recommit = "commit --amend"
-  unstage = "reset HEAD"
-
-  # root
+  # paths
   root = "rev-parse --show-toplevel"
-
-  # git-dir
   git-dir = "rev-parse --git-dir"
 
-  # tag-delete
-  tag-delete = !"git cmd-tag-delete"
-  cmd-tag-delete = "!f() { \
-    if [ -z \"$1\" ]; then \
-      echo \"usage: git tag-delete <tag-name>\"; \
-      return 1; \
-    fi; \
-    local tag=\"$1\"; \
-    echo \"delete: $tag\"; \
-    if [ $(git prompt) -eq 0 ]; then \
-      echo -n \"local: \"; \
-      git tag -d $tag; \
-      echo -n \"origin: \"; \
-      git push origin :refs/tags/$tag; \
-    fi; \
+  # delete
+  tag-delete = "!f() { \
+    if [ -z \"$1\" ]; then echo 'usage: git tag-delete <tag-name>'; return 1; fi; \
+    echo -n 'local: '; git tag -d \"$1\"; \
+    echo -n 'origin: '; git push origin \":refs/tags/$1\"; \
   }; f"
 
-  # branch-delete
-  branch-delete = !"git cmd-branch-delete"
-  cmd-branch-delete = "!f() { \
-    if [ -z \"$1\" ]; then \
-      echo \"usage: git branchd <branch-name>\"; \
-      return 1; \
-    fi; \
-    local branch=\"$1\"; \
-    echo \"delete: $branch\"; \
-    if [ $(git prompt) -eq 0 ]; then \
-      echo -n \"local: \"; \
-      git branch -D $branch; \
-      echo -n \"origin: \"; \
-      git push origin --delete $branch; \
-    fi; \
-  }; f"
-
-  prompt = "!f() { \
-    read -r -p 'Are you sure? [y/N] ' response; \
-    case $response in \
-      [yY][eE][sS]|[yY]) \
-        echo 0; \
-        return 0; \
-      ;; \
-      *) \
-        echo 1; \
-        return 1; \
-      ;; \
-    esac \
+  branch-delete = "!f() { \
+    if [ -z \"$1\" ]; then echo 'usage: git branchd <branch-name>'; return 1; fi; \
+    echo -n 'local: '; git branch -D \"$1\"; \
+    echo -n 'origin: '; git push origin --delete \"$1\"; \
   }; f"
 
   # logs
-  cmd-log-hist = "!git log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --format='%C(magenta)%h%C(reset) %C(blue)%ad%C(reset) %C(green)%an%C(reset) %s%C(auto)%d%C(reset)'"
-  cmd-log-last = "!git --no-pager cmd-log-hist -n 10"
+  log-hist = "log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --format='%C(magenta)%h%C(reset) %C(blue)%ad%C(reset) %C(green)%an%C(reset) %s%C(auto)%d%C(reset)'"
+  log-last = "log-hist -n 10"
 
-  l        = !"git cmd-log-last"
-  log-last = !"git cmd-log-last"
-  log-hist = !"git cmd-log-hist"
-
-  # Show verbose output about tags, branches or remotes
-  cmd-branch-verbose = "branch -av"
-  cmd-remote-verbose = "remote -v"
-
-  branch-verbose = !"git cmd-branch-verbose"
-  remote-verbose = !"git cmd-remote-verbose"
+  # verbose
+  branch-verbose = "branch -av"
+  remote-verbose = "remote -v"
 
   # status
-  cmd-status-short = "status -s"
-
-  ss           = !"git status"
-  s            = !"git cmd-status-short"
-  status-short = !"git cmd-status-short"
+  status-short = "status -s"
 
   # diff
-  cmd-diff-staged = "!git diff --staged"
+  diff-staged = "diff --staged"
 
-  d           = !"git diff"
-  ds          = !"git cmd-diff-staged"
-  diff-staged = !"git cmd-diff-staged"
-
-  # view-commit
-  cmd-view-commit = "!git show --color=always --stat="$(tput cols)" --pretty=fuller --root --patch-with-stat"
-
-  vv          = !"git cmd-view-commit"
-  view-commit = !"git cmd-view-commit"
-
-  # view-commit-head
-  cmd-view-commit-head = "!git show --color=always --stat="$(tput cols)" --pretty=fuller --root"
-
-  v                = !"git cmd-view-commit-head"
-  view-commit-head = !"git cmd-view-commit-head"
+  # viewcommit
+  view-commit-head = "show --color=always --pretty=fuller --root"
+  view-commit = "view-commit-head --patch-with-stat"
 
   # branch
-  cmd-branch-name   = "!git rev-parse --abbrev-ref HEAD"
-  cmd-branch-rename = "!f() { \
-    local rename=\"$(test \"$2\" && echo \"$2\" || echo \"$1\")\"; \
-    local branch=\"$(test \"$2\" && echo \"$1\" || echo $(git branch-name))\"; \
-    echo $branch '->' $rename; \
-    git branch -m $branch $rename; \
-  }; f"
-
-  branch-name   = !"git cmd-branch-name"
-  branch-rename = !"git cmd-branch-rename"
-
-  # config
-  config-bare = "!git config --bool core.bare true"
-  config-show = "!git config --list --local"
+  branch-name = "rev-parse --abbrev-ref HEAD"
+  branch-rename = "branch -m"
 
 [core]
   autocrlf = input
