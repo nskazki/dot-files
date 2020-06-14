@@ -114,19 +114,13 @@
   diff-staged = !"git cmd-diff-staged"
 
   # view-commit
-  cmd-view-commit = "!f() {\
-    local commit=\"$(test \"$1\" && echo \"$1\" || echo \"HEAD\")\"; \
-    (git show --color=always --stat="$(tput cols)" --pretty=fuller $commit && echo && git diff --color=always $commit^..$commit) | less; \
-  }; f"
+  cmd-view-commit = "!git show --color=always --stat="$(tput cols)" --pretty=fuller --root --patch-with-stat"
 
   vv          = !"git cmd-view-commit"
   view-commit = !"git cmd-view-commit"
 
   # view-commit-head
-  cmd-view-commit-head = "!f() {\
-    local commit=\"$(test \"$1\" && echo \"$1\" || echo \"HEAD\")\"; \
-    git show --color=always --stat="$(tput cols)" --pretty=fuller $commit; \
-  }; f"
+  cmd-view-commit-head = "!git show --color=always --stat="$(tput cols)" --pretty=fuller --root"
 
   v                = !"git cmd-view-commit-head"
   view-commit-head = !"git cmd-view-commit-head"
