@@ -85,7 +85,7 @@
   }; f"
 
   # logs
-  cmd-log-hist = "!git log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --format='%C(magenta)%h %C(blue)%ad %C(green)%an %C(reset)%s%C(auto)%d%C(reset)'"
+  cmd-log-hist = "!git log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --format='%C(magenta)%h%C(reset) %C(blue)%ad%C(reset) %C(green)%an%C(reset) %s%C(auto)%d%C(reset)'"
   cmd-log-last = "!git --no-pager cmd-log-hist -n 10"
 
   l        = !"git cmd-log-last"
