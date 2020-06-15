@@ -50,7 +50,7 @@
   diff-staged = "diff --staged"
 
   # viewcommit
-  view-commit-head = "show --color=always --pretty=fuller --root"
+  view-commit-head = "show --color=always --pretty=fuller --root --stat"
   view-commit = "view-commit-head --patch-with-stat"
 
   # branch
