@@ -37,7 +37,7 @@
 
   # logs
   log-hist = "log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --format='%C(magenta)%h%C(reset) %C(blue)%ad%C(reset) %C(green)%an%C(reset) %s%C(auto)%d%C(reset)'"
-  log-last = "log-hist -n 10"
+  log-last = "!git --no-pager log-hist -n 10"
 
   # verbose
   branch-verbose = "branch -av"
