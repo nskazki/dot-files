@@ -58,48 +58,20 @@ alias r,='r .'
 
 alias __exit_on_error__='local last=$?; test $last -ne 0 && return $last'
 
-function __git_has_not_staged__ {
-  local git_ss="$(git status -s)"
-  local modified_staged="$(echo "$git_ss" | grep -c -s -P '^M')"
-  local renamed="$(echo "$git_ss" | grep -c -s -P '^R')"
-  local added_staged="$(echo "$git_ss" | grep -c -s -P '^A')"
-  local deleted_staged="$(echo "$git_ss" | grep -c -s -P '^D')"
-  if [[ "$modified_staged" -eq 0 && "$renamed" -eq 0 && "$added_staged" -eq 0 && "$deleted_staged" -eq 0 ]]; then
-    return 0
-  else
-    return 1
-  fi
+function __git_has_uncommited__ {
+  # https://stackoverflow.com/a/3879077
+  git update-index -q --ignore-submodules --refresh
+  ! git diff-index --cached --quiet HEAD --ignore-submodules
 }
 
-function __git_has_not_unstaged__ {
-  local git_ss="$(git status -s)"
-  local modified_notstaged="$(echo "$git_ss" | grep -c -s -P '^.M')"
-  local added_notstaged="$(echo "$git_ss" | grep -c -s -P '^\?\?')"
-  local deleted_notstaged="$(echo "$git_ss" | grep -c -s -P '^.D')"
-  local unmerged="$(echo "$git_ss" | grep -c -s -P '^(.U|U.)')"
-  if [[ "$modified_notstaged" -eq 0 && "$added_notstaged" -eq 0 && "$deleted_notstaged" -eq 0 && "$unmerged" -eq 0 ]]; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-function __git_has_not_changes__ {
-  local git_ss="$(git status -s)"
-  if [[ -z "$git_ss" ]]; then
-    return 0
-  else
-    return 1
-  fi
+function __git_has_unstaged__ {
+  git update-index -q --ignore-submodules --refresh
+  ! git diff-files --quiet --ignore-submodules
 }
 
 function __git_has_changes__ {
-  local git_ss="$(git status -s)"
-  if [[ -z "$git_ss" ]]; then
-    return 1
-  else
-    return 0
-  fi
+  __git_has_uncommited__
+  __git_has_unstaged__
 }
 
 function __git_find_first_tmp__ {
@@ -121,15 +93,11 @@ function __git_find_last_tmp__ {
 }
 
 function __git_unstaged_list__ {
-  local git_ss="$(git status -s)"
-  local notstaged="$(echo "$git_ss" | grep -s -P '^.M|^\?\?|^.D|^(.U|U.)' | cut -c4-)"
-  echo "$notstaged" | sed -e 's/"//g'
+  git diff-files --name-only -r --ignore-submodules
 }
 
-function __git_staged_list__ {
-  local git_ss="$(git status -s)"
-  local staged="$(echo "$git_ss" | grep -s -P '^M|^R|^A|^D' | cut -c4-)"
-  echo "$staged" | sed -e 's/"//g'
+function __git_uncommited_list__ {
+  git diff-index --cached --name-only -r --ignore-submodules HEAD
 }
 
 function __git_show__ {
@@ -149,7 +117,7 @@ function __git_status__ {
 
 function git_recommit_smart {
   if [[ "$1" == '.' ]]; then
-    local paths="$(git_unstaged_list)"
+    local paths="$(__git_unstaged_list__)"
   fi
 
   echo
@@ -213,12 +181,12 @@ function git_rebase_smart {
 }
 
 function git_commit_tmp {
-  if __git_has_not_changes__; then
+  if ! __git_has_changes__; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
-  local paths="$(git_unstaged_list)"
+  local paths="$(__git_unstaged_list__)"
 
   echo
   echo "$paths" | while read line ; do
@@ -243,18 +211,18 @@ function git_commit_tmp {
 }
 
 function git_commit_fixup_smart {
-  if __git_has_not_changes__; then
+  if ! __git_has_changes__; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
   if [[ "$1" == '.' ]]; then
-    local paths="$(git_unstaged_list)"
-  elif __git_has_not_staged__; then
+    local paths="$(__git_unstaged_list__)"
+  elif ! __git_has_uncommited__; then
     local paths="$(gf)"
   fi
 
-  if __git_has_not_staged__ && [[ -z "$paths" ]]; then
+  if ! __git_has_uncommited__ && [[ -z "$paths" ]]; then
     clr_bg_blue "has not staged and paths is not defined!"
     return 100
   fi
@@ -289,13 +257,13 @@ function git_commit_fixup_smart {
 }
 
 function git_unstage_smart {
-  if __git_has_not_staged__; then
+  if ! __git_has_uncommited__; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
   if [[ "$1" == "." ]]; then
-    local paths="$(__git_staged_list__)"
+    local paths="$(__git_uncommited_list__)"
   elif [[ -n "$1" ]]; then
     for i ; do local paths="$(echo "$i"; echo "$paths")"; done
   else
@@ -319,13 +287,13 @@ function git_unstage_smart {
 }
 
 function git_add_smart {
-  if __git_has_not_unstaged__; then
+  if ! __git_has_unstaged__; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
   if [[ "$1" == "." ]]; then
-    local paths="$(git_unstaged_list)"
+    local paths="$(__git_unstaged_list__)"
   elif [[ -n "$1" ]]; then
     for i ; do local paths="$(echo "$i"; echo "$paths")"; done
   else
