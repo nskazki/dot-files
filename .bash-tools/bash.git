@@ -101,7 +101,7 @@ function __git_uncommited_list__ {
 }
 
 function __git_show__ {
-  git show --pretty=fuller HEAD --stat --color=always
+  git view-commit-head
   echo
 }
 
