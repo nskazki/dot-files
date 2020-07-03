@@ -344,7 +344,7 @@ function git_remove_untracked_smart {
 
   echo
   echo "$trash" | while read line ; do
-    echo "$(clr_black_i $) gvfs-trash -f \"$(clr_red_b "$line")\""
+    echo "$(clr_black_i $) gio trash -f \"$(clr_red_b "$line")\""
     gvfs-trash -f "$line"
     __exit_on_error__
   done
