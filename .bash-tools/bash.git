@@ -124,7 +124,7 @@ function git_recommit_smart {
   echo "$paths" | while read line ; do
     if [[ -n "$line" ]]; then
       echo "$(clr_black_i $) git add $(clr_yellow \""$line"\")"
-      git add "$line"
+      git add "$(git root)/$line"
       __exit_on_error__
     fi
   done
@@ -192,7 +192,7 @@ function git_commit_tmp {
   echo "$paths" | while read line ; do
     if [[ -n "$line" ]]; then
       echo "$(clr_black_i $) git add $(clr_yellow \""$line"\")"
-      git add "$line"
+      git add "$(git root)/$line"
       __exit_on_error__
     fi
   done
@@ -244,7 +244,7 @@ function git_commit_fixup_smart {
   echo "$paths" | while read line ; do
     if [[ -n "$line" ]]; then
       echo "$(clr_black_i $) git add $(clr_yellow \""$line"\")"
-      git add "$line"
+      git add "$(git root)/$line"
       __exit_on_error__
     fi
   done
@@ -278,7 +278,7 @@ function git_unstage_smart {
   echo
   echo "$paths" | while read line ; do
     echo "$(clr_black_i $) git unstage $(clr_green \""$line"\")"
-    git unstage "$line" > /dev/null
+    git unstage "$(git root)/$line" > /dev/null
     __exit_on_error__
   done
 
@@ -309,7 +309,7 @@ function git_add_smart {
   echo "$paths" | while read line ; do
     if [[ -n "$line" ]]; then
       echo "$(clr_black_i $) git add $(clr_yellow \""$line"\")"
-      git add "$line"
+      git add "$(git root)/$line"
       __exit_on_error__
     fi
   done
