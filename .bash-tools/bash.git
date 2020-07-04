@@ -79,7 +79,7 @@ function __git_find_first_tmp__ {
     if [[ "$line" =~ ^[[:alnum:]]+[[:space:]][[:digit:]]+$ ]]; then
       local last="$line"
     else
-      echo "$last" | sed -r -e 's/\s+[0-9]+//'
+      echo "$last" | awk '{ print $1 }'
       break
     fi
   done
@@ -88,7 +88,7 @@ function __git_find_first_tmp__ {
 function __git_find_last_tmp__ {
   local last="$(git log --format="%h %s" -n 1)"
   if [[ "$last" =~ ^[[:alnum:]]+[[:space:]][[:digit:]]+$ ]]; then
-    echo "$last" | sed -r -e 's/\s+[0-9]+//'
+    echo "$last" | awk '{ print $1 }'
   fi
 }
 
