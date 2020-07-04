@@ -115,6 +115,11 @@ function __git_status__ {
   echo
 }
 
+function __git_fixup_targets__ {
+  # https://stackoverflow.com/a/29613573
+  git log --format="%s" -n 100 | grep -P "^fixup\!\s" | sed -r -e 's/^(fixup! )+//' | uniq | sed 's/[^^]/[&]/g; s/\^/\\^/g'
+}
+
 function git_recommit_smart {
   if [[ "$1" == '.' ]]; then
     local paths="$(__git_unstaged_list__)"
@@ -138,30 +143,37 @@ function git_recommit_smart {
 
 function git_rebase_smart {
   if [[ "$1" == "." ]]; then
-    if [[ -z "$(git log --format="%s" -n 100 | grep -P "^fixup\!\s")" ]]; then
+    if [[ -z "$(__git_fixup_targets__)" ]]; then
       clr_yellow "nothing to do!"
       return 2
     fi
 
-    while [[ -n "$(git log --format="%s" -n 100 | grep -P "^fixup\!\s")" ]]; do
-      local fu_msg="$(git log --format="%s" -n1 --grep "^fixup\!\s")"
-      local fu_hash="$(git log --format="%h" -n1 --grep "^fixup\!\s")"
-      local cm_msg="$(echo "$fu_msg" | sed -r -e 's/^(fixup! )+//' | sed -r -e 's/\\/\\\\/g')"
-      local cm_hash="$(git log --format="%h" -n1 "$fu_hash"^ --grep "^$cm_msg$")"
-
-      if [[ -z "$fu_msg" || -z "$fu_hash" || -z "$cm_msg" || -z "$cm_hash" ]]; then
-        clr_bg_red "could not find a base of last fixup!"
-        echo -e "fu_msg: $fu_msg \nfu_hash: $fu_hash \ncm_msg: $cm_msg \ncm_hash: $cm_hash"
+    readarray -t lines <<< "$(__git_fixup_targets__)"
+    local max="-1"
+    for line in "${lines[@]}"; do
+      local commit="$(git log --format="%h" -n1 --grep "^$line$")"
+      local distance="$(git log --format="%h" $commit..HEAD | wc -l)"
+      if [[ -z "$commit" || "$distance" = "0" ]]; then
+        clr_bg_red "cannot find commit matching $line"
         return 1
       fi
 
-      echo
-      echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR="$(which true)"") git rebase -i $(clr_cyan "$cm_hash")^"
-      echo
-      echo "($fu_hash) $fu_msg -> ($cm_hash) $cm_msg"
-      GIT_SEQUENCE_EDITOR="$(which true)" git rebase -i "$cm_hash"^
-      __exit_on_error__
+      if (("$distance" > "$max")); then
+        local max="$distance"
+        local distanced_commit="$commit"
+      fi
     done
+
+    if [[ -z "$distanced_commit" ]]; then
+      clr_bg_red "something went wrong"
+      return 1
+    fi
+
+    echo
+    echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR="$(which true)"") git rebase -i $(clr_cyan "$distanced_commit")^"
+    echo
+    GIT_SEQUENCE_EDITOR="$(which true)" git rebase -i "$distanced_commit^"
+    __exit_on_error__
     echo
   else
     local commit="$(gh)"
