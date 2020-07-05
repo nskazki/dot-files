@@ -70,8 +70,7 @@ function __git_has_unstaged__ {
 }
 
 function __git_has_changes__ {
-  __git_has_uncommited__
-  __git_has_unstaged__
+  __git_has_uncommited__ || __git_has_unstaged__
 }
 
 function __git_find_first_tmp__ {
@@ -117,7 +116,32 @@ function __git_status__ {
 
 function __git_fixup_targets__ {
   # https://stackoverflow.com/a/29613573
-  git log --format="%s" -n 100 | grep -P "^fixup\!\s" | sed -r -e 's/^(fixup! )+//' | uniq | sed 's/[^^]/[&]/g; s/\^/\\^/g'
+  git log --format='%s' -n 100 | grep -P '^fixup!\s' | sed -r -e 's/^(fixup! )+//' | uniq | sed 's/[^^]/[&]/g; s/\^/\\^/g'
+}
+
+function __git_gt_commit__ {
+  if [[ -z "$2" ]]; then
+    return 0
+  fi
+
+  local distance_a="$(git rev-list --count "$1..HEAD")"
+  local distance_b="$(git rev-list --count "$2..HEAD")"
+  (("$distance_a" > "$distance_b"))
+}
+
+function __git_sort_commits__ {
+  local input_array=("$@")
+  local sorted_array=()
+  for commit in "${input_array[@]}"; do
+    local distance="$(git rev-list --count "$commit..HEAD")"
+    sorted_array["$distance"]="$commit"
+  done
+  echo "${sorted_array[@]}"
+}
+
+function __git_most_distanced_commit__ {
+  local sorted_array=($(__git_sort_commits__ "$@"))
+  echo "${sorted_array[-1]}"
 }
 
 function git_recommit_smart {
@@ -149,21 +173,17 @@ function git_rebase_smart {
     fi
 
     readarray -t lines <<< "$(__git_fixup_targets__)"
-    local max="-1"
+    local commits=()
     for line in "${lines[@]}"; do
       local commit="$(git log --format="%h" -n1 --grep "^$line$")"
-      local distance="$(git log --format="%h" $commit..HEAD | wc -l)"
-      if [[ -z "$commit" || "$distance" = "0" ]]; then
+      if [[ -z "$commit" ]]; then
         clr_bg_red "cannot find commit matching $line"
         return 1
       fi
-
-      if (("$distance" > "$max")); then
-        local max="$distance"
-        local distanced_commit="$commit"
-      fi
+      commits+=("$commit")
     done
 
+    local distanced_commit="$(__git_most_distanced_commit__ "${commits[@]}")"
     if [[ -z "$distanced_commit" ]]; then
       clr_bg_red "something went wrong"
       return 1
