@@ -146,13 +146,13 @@ function __git_most_distanced_commit__ {
 
 function git_recommit_smart {
   if [[ "$1" == '.' ]]; then
-    local paths="$(__git_unstaged_list__)"
+    local paths=($(__git_unstaged_list__))
   fi
 
   echo
-  echo "$paths" | while read line ; do
+  for line in "${paths[@]}"; do
     if [[ -n "$line" ]]; then
-      echo "$(clr_black_i $) git add $(clr_yellow \""$line"\")"
+      echo "$(clr_black_i $) git add $(clr_yellow "$line")"
       git add "$(git root)/$line"
       __exit_on_error__
     fi
