@@ -294,23 +294,25 @@ function git_unstage_smart {
   fi
 
   if [[ "$1" == "." ]]; then
-    local paths="$(__git_uncommited_list__)"
+    local paths=($(__git_uncommited_list__))
   elif [[ -n "$1" ]]; then
-    for i ; do local paths="$(echo "$i"; echo "$paths")"; done
+    local paths=("$@")
   else
-    local paths="$(gf)"
+    local paths=($(gf))
   fi
 
   if [[ -z "$paths" ]]; then
-    clr_bg_blue "paths is not defined!"
+    clr_bg_blue "paths are not defined!"
     return 100
   fi
 
   echo
-  echo "$paths" | while read line ; do
-    echo "$(clr_black_i $) git unstage $(clr_green \""$line"\")"
-    git unstage "$(git root)/$line" > /dev/null
-    __exit_on_error__
+  for line in "${paths[@]}"; do
+    if [[ -n "$line" ]]; then
+      echo "$(clr_black_i $) git unstage $(clr_green "$line")"
+      git unstage "$(git root)/$line" > /dev/null
+      __exit_on_error__
+    fi
   done
 
   echo
