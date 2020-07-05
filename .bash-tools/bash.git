@@ -218,21 +218,20 @@ function git_commit_tmp {
     return 2
   fi
 
-  local paths="$(__git_unstaged_list__)"
-
   echo
-  echo "$paths" | while read line ; do
+  readarray -t lines <<< "$(__git_unstaged_list__)"
+  for line in "${lines[@]}"; do
     if [[ -n "$line" ]]; then
-      echo "$(clr_black_i $) git add $(clr_yellow \""$line"\")"
+      echo "$(clr_black_i $) git add $(clr_yellow "$line")"
       git add "$(git root)/$line"
       __exit_on_error__
     fi
   done
 
-  local last="$(git log --format=%B -n 1 HEAD | head -n1 | rg '^[0-9]+$' -m1)"
+  local last="$(git log --format='%B' -n 1 HEAD | rg '^[0-9]+$')"
   local next="1"
   if [[ -n "$last" ]]; then
-    next="$(expr $last + 1)"
+    local next="$(expr "$last" + 1)"
   fi
 
   echo "$(clr_black_i $) git commit -m $(clr_cyan "$next")"
