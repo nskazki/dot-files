@@ -248,13 +248,13 @@ function git_commit_fixup_smart {
   fi
 
   if [[ "$1" == '.' ]]; then
-    local paths="$(__git_unstaged_list__)"
+    local paths=($(__git_unstaged_list__))
   elif ! __git_has_uncommited__; then
-    local paths="$(gf)"
+    local paths=($(gf))
   fi
 
   if ! __git_has_uncommited__ && [[ -z "$paths" ]]; then
-    clr_bg_blue "has not staged and paths is not defined!"
+    clr_bg_blue "has unstaged and paths are not defined!"
     return 100
   fi
 
@@ -272,9 +272,9 @@ function git_commit_fixup_smart {
   fi
 
   echo
-  echo "$paths" | while read line ; do
+  for line in "${paths[@]}"; do
     if [[ -n "$line" ]]; then
-      echo "$(clr_black_i $) git add $(clr_yellow \""$line"\")"
+      echo "$(clr_black_i $) git add $(clr_yellow "$line")"
       git add "$(git root)/$line"
       __exit_on_error__
     fi
