@@ -326,22 +326,22 @@ function git_add_smart {
   fi
 
   if [[ "$1" == "." ]]; then
-    local paths="$(__git_unstaged_list__)"
+    local paths=($(__git_unstaged_list__))
   elif [[ -n "$1" ]]; then
-    for i ; do local paths="$(echo "$i"; echo "$paths")"; done
+    local paths=("$@")
   else
-    local paths="$(gf)"
+    local paths=($(gf))
   fi
 
   if [[ -z "$paths" ]]; then
-    clr_bg_blue "paths is not defined!"
+    clr_bg_blue "paths are not defined!"
     return 100
   fi
 
   echo
-  echo "$paths" | while read line ; do
+  for line in "${paths[@]}"; do
     if [[ -n "$line" ]]; then
-      echo "$(clr_black_i $) git add $(clr_yellow \""$line"\")"
+      echo "$(clr_black_i $) git add $(clr_yellow "$line")"
       git add "$(git root)/$line"
       __exit_on_error__
     fi
