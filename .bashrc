@@ -249,8 +249,8 @@ if [[ -f "$HOME/.bash-tools/bash-z" ]]; then
 fi
 
 # fzf
-if [[ -d "$HOME/.app/fzf/bin" ]]; then
-  export PATH="$PATH:$HOME/.app/fzf/bin"
+if [[ -d "$HOME/app/fzf/bin" ]]; then
+  export PATH="$PATH:$HOME/app/fzf/bin"
   source "$HOME/.bash-tools/fzf.bash"
   source "$HOME/.bash-tools/fzf.git"
   source "$HOME/.bash-tools/bash.git"
