@@ -99,7 +99,7 @@ if [[ "$SHLVL" -eq 1 ]]; then bashcount_p=""
 else bashcount_p="\[$cr_magenta_i\]bash#$SHLVL\[$cr_reset\] "; fi
 
 # host part
-if [[ "$HOSTNAME" =~ (xyn|eevee) ]]; then cr_host="$cr_cyan_i"
+if [[ "$HOSTNAME" =~ (xyn|eevee|lillipup) ]]; then cr_host="$cr_cyan_i"
 else cr_host="$cr_cyan_bg"; fi
 host_p="\[$cr_host\]$HOSTNAME\[$cr_reset\] "
 
