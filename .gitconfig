@@ -51,7 +51,7 @@
 
   # viewcommit
   view-commit-head = "show --color=always --pretty=fuller --root --stat"
-  view-commit = "view-commit-head --patch-with-stat"
+  view-commit = "!git view-commit-head --patch-with-stat"
 
   # branch
   branch-name = "rev-parse --abbrev-ref HEAD"
