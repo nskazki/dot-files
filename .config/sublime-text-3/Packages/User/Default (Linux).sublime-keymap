@@ -36,8 +36,11 @@
   { "keys": ["alt+b"], "command": "focus_side_bar" },
   { "keys": ["ctrl+b"], "command": "toggle_side_bar" },
 
-  { "keys": ["alt+]"], "command": "next_modification" },
-  { "keys": ["alt+["], "command": "prev_modification" },
+  { "keys": ["alt+]"], "command": "jump_forward" },
+  { "keys": ["alt+["], "command": "jump_back" },
+
+  { "keys": ["alt+delete"], "command": "run_macro_file", "args": { "file": "res://Packages/User/subword-delete.sublime-macro" } },
+  { "keys": ["alt+backspace"], "command": "run_macro_file", "args": { "file": "res://Packages/User/subword-backspace.sublime-macro" } },
 
   { "keys": ["f1"], "command": "dir_path_to_clipboard" },
   { "keys": ["f2"], "command": "file_path_to_clipboard" },
