@@ -236,13 +236,13 @@ function git_commit_tmp {
   readarray -t lines <<< "$(__git_stageable_list__)"
   for line in "${lines[@]}"; do
     if [[ -n "$line" ]]; then
-      echo "$(clr_black_i $) git add $(clr_yellow "$line")"
-      git add "$(git root)/$line"
+      echo "$(clr_black_i $) git add -f $(clr_yellow "$line")"
+      git add -f "$(git root)/$line"
       __exit_on_error__
     fi
   done
 
-  local last="$(git log --format='%B' -n 1 HEAD | rg '^[0-9]+$')"
+  local last="$(git log --format='%B' -n 1 HEAD | sed -r -e 's/^(fixup! )+//' | rg '^[0-9]+$')"
   local next="1"
   if [[ -n "$last" ]]; then
     local next="$(expr "$last" + 1)"
