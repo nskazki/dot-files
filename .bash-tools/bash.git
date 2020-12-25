@@ -595,5 +595,5 @@ function git_redate {
 
   echo "$filter"
 
-  git filter-branch -f --commit-filter "$filter" $commit^..HEAD
+  FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --commit-filter "$filter" $commit^..HEAD
 }
