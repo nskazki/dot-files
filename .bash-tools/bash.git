@@ -113,6 +113,14 @@ function __git_find_latest_tmp__ {
   fi
 }
 
+function __git_find_every_tmp__ {
+  git log --format="%h %s" -n 100 | while read line ; do
+    if [[ "$line" =~ ^[[:alnum:]]+[[:space:]][[:digit:]]+$ ]]; then
+      echo "$line" | awk '{ print $1 }'
+    fi
+  done
+}
+
 function __git_show__ {
   git view-commit-head
   echo
@@ -457,28 +465,28 @@ function git_last_tmp_to_fixup_smart {
 }
 
 function git_hoist_smart {
-  if [[ "$1" == "." && -z "$(git log --format="%h %s" -n 100 | grep -P '^\w+\s\d+$')" ]]; then
+  if [[ "$1" == "." && -z "$(__git_find_every_tmp__)" ]]; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
   if [[ "$1" == "." ]]; then
-    local commits="$(git log --format="%h %s" -n 100 | grep -P '^\w+\s\d+$' | grep -P -o '^\w+')"
+    local commits=($(__git_find_every_tmp__))
   else
-    local commits="$(gh)"
+    local commits=($(gh))
   fi
 
-  if [[ -z "$commits" ]]; then
+  if [[ -z "${commits[@]}" ]]; then
     clr_bg_blue "input was interrupted!"
     return 130
   fi
 
-  local last_commit="$(echo "$commits" | tail -n1)"
+  local most_distant_commit="$(__git_most_distant_commit__ "${commits[@]}")"
 
   echo
-  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-hoist.js") git rebase -i $(clr_cyan "$last_commit")^"
+  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-hoist.js") git rebase -i $(clr_cyan "$most_distant_commit")^"
   echo
-  COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-hoist.js" git rebase -i "$last_commit"^
+  COMMITS="${commits[@]}" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-hoist.js" git rebase -i "$most_distant_commit"^
   __exit_on_error__
   echo
 }
