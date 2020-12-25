@@ -366,33 +366,26 @@ function git_add_smart {
 }
 
 function git_remove_untracked_smart {
-  local git_ss="$(git status -s)"
-  local added_notstaged=$(echo "$git_ss" | grep -c -s -P '^\?\?')
-
-  if [[ "$added_notstaged" -eq 0 ]]; then
+  if ! __git_has_untracked__; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
-  local all="$(git status -s | grep "??" | sed -e "s/?? //")"
   if [[ "$1" == '.' ]]; then
-    local trash="$all"
+    readarray -t paths <<< "$(__git_untracked_list__)"
   else
-    local trash="$(echo "$all" | fzf --multi \
-      --preview '((file --mime {} | grep directory > /dev/null 2>&1 && ls --color=always --group-directories-first -1 -lah {}) \
-               || (file --mime {} | grep binary > /dev/null 2>&1 && echo {} is a binary file) \
-               || (highlight -O ansi -l {} || coderay {} || cat {})) 2> /dev/null | head -500')"
+    readarray -t paths <<< "$(__git_untracked_list__ | fzf --multi)"
   fi
 
-  if [[ -z "$trash" ]]; then
-    clr_bg_blue "trash is not defined!"
+  if [[ -z "${paths[@]}" ]]; then
+    clr_bg_blue "paths are not defined!"
     return 100
   fi
 
   echo
-  echo "$trash" | while read line ; do
+  for line in "${paths[@]}"; do
     echo "$(clr_black_i $) gio trash -f \"$(clr_red_b "$line")\""
-    gvfs-trash -f "$line"
+    gio trash -f "$(git root)/$line"
     __exit_on_error__
   done
 
