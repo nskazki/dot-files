@@ -428,7 +428,7 @@ function git_last_tmp_to_fixup_smart {
     return 3
   fi
 
-  if [[ -z "$(git log --format="%h %s" -n1 | grep -P '^\w+\s\d+$')" ]]; then
+  if [[ -z "$(__git_find_latest_tmp__)" ]]; then
     __git_log__
     clr_bg_red "last commit is not temporary!"
     return 4
