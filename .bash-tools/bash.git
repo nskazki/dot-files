@@ -320,14 +320,14 @@ function git_unstage_smart {
   fi
 
   if [[ "$1" == "." ]]; then
-    local paths=($(__git_staged_list__))
+    readarray -t paths <<< "$(__git_staged_list__)"
   elif [[ -n "$1" ]]; then
-    local paths=("$@")
+    readarray -t paths <<< "$@"
   else
-    local paths=($(gf))
+    readarray -t paths <<< "$(gf)"
   fi
 
-  if [[ -z "$paths" ]]; then
+  if [[ -z "${paths[@]}" ]]; then
     clr_bg_blue "paths are not defined!"
     return 100
   fi
