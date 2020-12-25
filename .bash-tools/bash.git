@@ -168,14 +168,16 @@ function __git_most_distant_commit__ {
 
 function git_recommit_smart {
   if [[ "$1" == '.' ]]; then
-    local paths=($(__git_stageable_list__))
+    readarray -t paths <<< "$(__git_stageable_list__)"
+  else
+    paths=''
   fi
 
   echo
   for line in "${paths[@]}"; do
     if [[ -n "$line" ]]; then
-      echo "$(clr_black_i $) git add $(clr_yellow "$line")"
-      git add "$(git root)/$line"
+      echo "$(clr_black_i $) git add -f $(clr_yellow "$line")"
+      git add -f "$(git root)/$line"
       __exit_on_error__
     fi
   done
