@@ -352,14 +352,14 @@ function git_add_smart {
   fi
 
   if [[ "$1" == "." ]]; then
-    local paths=($(__git_stageable_list__))
+    readarray -t paths <<< "$(__git_stageable_list__)"
   elif [[ -n "$1" ]]; then
-    local paths=("$@")
+    readarray -t paths <<< "$@"
   else
-    local paths=($(gf))
+    readarray -t paths <<< "$(gf)"
   fi
 
-  if [[ -z "$paths" ]]; then
+  if [[ -z "${paths[@]}" ]]; then
     clr_bg_blue "paths are not defined!"
     return 100
   fi
@@ -367,8 +367,8 @@ function git_add_smart {
   echo
   for line in "${paths[@]}"; do
     if [[ -n "$line" ]]; then
-      echo "$(clr_black_i $) git add $(clr_yellow "$line")"
-      git add "$(git root)/$line"
+      echo "$(clr_black_i $) git add -f $(clr_yellow "$line")"
+      git add -f "$(git root)/$line"
       __exit_on_error__
     fi
   done
