@@ -532,19 +532,19 @@ function git_rename_smart {
 }
 
 function git_recombine_smart {
-  local commits="$(gh)"
+  local commits=($(gh))
 
-  if [[ -z "$commits" ]]; then
+  if [[ -z "${commits[@]}" ]]; then
     clr_bg_blue "input was interrupted!"
     return 130
   fi
 
-  local last_commit="$(echo "$commits" | tail -n1)"
+  local most_distant_commit="$(__git_most_distant_commit__ "${commits[@]}")"
 
   echo
-  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-recombine.js") git rebase -i $(clr_cyan "$last_commit")^"
+  echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-recombine.js") git rebase -i $(clr_cyan "$most_distant_commit")^"
   echo
-  COMMITS="$commits" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-recombine.js" git rebase -i "$last_commit"^
+  COMMITS="${commits[@]}" GIT_SEQUENCE_EDITOR="$HOME/.bash-tools/rebase-recombine.js" git rebase -i "$most_distant_commit"^
   __exit_on_error__
   echo
 }
