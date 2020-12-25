@@ -58,22 +58,44 @@ alias r,='r .'
 
 alias __exit_on_error__='local last=$?; test $last -ne 0 && return $last'
 
-function __git_has_uncommited__ {
-  # https://stackoverflow.com/a/3879077
+function __git_has_staged__ {
+  # https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository
+  # https://stackoverflow.com/a/2659808
   git update-index -q --ignore-submodules --refresh
   ! git diff-index --cached --quiet HEAD --ignore-submodules
 }
 
-function __git_has_unstaged__ {
+function __git_has_modified__ {
   git update-index -q --ignore-submodules --refresh
   ! git diff-files --quiet --ignore-submodules
 }
 
-function __git_has_changes__ {
-  __git_has_uncommited__ || __git_has_unstaged__
+function __git_has_untracked__ {
+  test -n "$(__git_untracked_list__)"
 }
 
-function __git_find_first_tmp__ {
+function __git_dirty__ {
+  __git_has_staged__ || __git_has_modified__ || __git_has_untracked__
+}
+
+function __git_staged_list__ {
+  git diff-index --cached --name-only -r --ignore-submodules HEAD
+}
+
+function __git_modified_list__ {
+  git diff-files --name-only -r --ignore-submodules
+}
+
+function __git_untracked_list__ {
+  git ls-files --others --exclude-standard --full-name -- "$(git root)"
+}
+
+function __git_stageable_list__ {
+  __git_modified_list__
+  __git_untracked_list__
+}
+
+function __git_find_oldest_tmp__ {
   git log --format="%h %s" -n 100 | while read line ; do
     if [[ "$line" =~ ^[[:alnum:]]+[[:space:]][[:digit:]]+$ ]]; then
       local last="$line"
@@ -84,19 +106,11 @@ function __git_find_first_tmp__ {
   done
 }
 
-function __git_find_last_tmp__ {
+function __git_find_latest_tmp__ {
   local last="$(git log --format="%h %s" -n 1)"
   if [[ "$last" =~ ^[[:alnum:]]+[[:space:]][[:digit:]]+$ ]]; then
     echo "$last" | awk '{ print $1 }'
   fi
-}
-
-function __git_unstaged_list__ {
-  git diff-files --name-only -r --ignore-submodules
-}
-
-function __git_uncommited_list__ {
-  git diff-index --cached --name-only -r --ignore-submodules HEAD
 }
 
 function __git_show__ {
@@ -139,14 +153,14 @@ function __git_sort_commits__ {
   echo "${sorted_array[@]}"
 }
 
-function __git_most_distanced_commit__ {
+function __git_most_distant_commit__ {
   local sorted_array=($(__git_sort_commits__ "$@"))
   echo "${sorted_array[-1]}"
 }
 
 function git_recommit_smart {
   if [[ "$1" == '.' ]]; then
-    local paths=($(__git_unstaged_list__))
+    local paths=($(__git_stageable_list__))
   fi
 
   echo
@@ -183,16 +197,16 @@ function git_rebase_smart {
       commits+=("$commit")
     done
 
-    local distanced_commit="$(__git_most_distanced_commit__ "${commits[@]}")"
-    if [[ -z "$distanced_commit" ]]; then
+    local most_distant_commit="$(__git_most_distant_commit__ "${commits[@]}")"
+    if [[ -z "$most_distant_commit" ]]; then
       clr_bg_red "something went wrong"
       return 1
     fi
 
     echo
-    echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR="$(which true)"") git rebase -i $(clr_cyan "$distanced_commit")^"
+    echo "$(clr_black_i $) $(clr_magenta "GIT_SEQUENCE_EDITOR="$(which true)"") git rebase -i $(clr_cyan "$most_distant_commit")^"
     echo
-    GIT_SEQUENCE_EDITOR="$(which true)" git rebase -i "$distanced_commit^"
+    GIT_SEQUENCE_EDITOR="$(which true)" git rebase -i "$most_distant_commit^"
     __exit_on_error__
     echo
   else
@@ -213,13 +227,13 @@ function git_rebase_smart {
 }
 
 function git_commit_tmp {
-  if ! __git_has_changes__; then
+  if ! __git_dirty__; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
   echo
-  readarray -t lines <<< "$(__git_unstaged_list__)"
+  readarray -t lines <<< "$(__git_stageable_list__)"
   for line in "${lines[@]}"; do
     if [[ -n "$line" ]]; then
       echo "$(clr_black_i $) git add $(clr_yellow "$line")"
@@ -242,18 +256,18 @@ function git_commit_tmp {
 }
 
 function git_commit_fixup_smart {
-  if ! __git_has_changes__; then
+  if ! __git_dirty__; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
   if [[ "$1" == '.' ]]; then
-    local paths=($(__git_unstaged_list__))
-  elif ! __git_has_uncommited__; then
+    local paths=($(__git_stageable_list__))
+  elif ! __git_has_staged__; then
     local paths=($(gf))
   fi
 
-  if ! __git_has_uncommited__ && [[ -z "$paths" ]]; then
+  if ! __git_has_staged__ && [[ -z "$paths" ]]; then
     clr_bg_blue "has unstaged and paths are not defined!"
     return 100
   fi
@@ -288,13 +302,13 @@ function git_commit_fixup_smart {
 }
 
 function git_unstage_smart {
-  if ! __git_has_uncommited__; then
+  if ! __git_has_staged__; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
   if [[ "$1" == "." ]]; then
-    local paths=($(__git_uncommited_list__))
+    local paths=($(__git_staged_list__))
   elif [[ -n "$1" ]]; then
     local paths=("$@")
   else
@@ -320,13 +334,13 @@ function git_unstage_smart {
 }
 
 function git_add_smart {
-  if ! __git_has_unstaged__; then
+  if ! __git_has_modified__; then
     clr_yellow "nothing to do!"
     return 2
   fi
 
   if [[ "$1" == "." ]]; then
-    local paths=($(__git_unstaged_list__))
+    local paths=($(__git_stageable_list__))
   elif [[ -n "$1" ]]; then
     local paths=("$@")
   else
@@ -388,7 +402,7 @@ function git_remove_untracked_smart {
 
 function git_squash_tmp_smart {
   if [[ "$1" == '.' ]]; then
-    local commit="$(__git_find_first_tmp__)"
+    local commit="$(__git_find_oldest_tmp__)"
   else
     local commit="$(gh)"
   fi
@@ -398,7 +412,7 @@ function git_squash_tmp_smart {
     return 2
   fi
 
-  local last="$(__git_find_last_tmp__)"
+  local last="$(__git_find_latest_tmp__)"
   if [[ "$commit" == "$last" ]]; then
     clr_yellow "nothing to do!"
     return 2
@@ -415,7 +429,7 @@ function git_squash_tmp_smart {
 }
 
 function git_last_tmp_to_fixup_smart {
-  if __git_has_changes__; then
+  if __git_dirty__; then
     __git_status__
     clr_bg_red "cleanup project first!"
     return 3
