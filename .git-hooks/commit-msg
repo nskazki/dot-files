@@ -1,0 +1,13 @@
+#!/bin/bash
+
+message="$(cat "$1")"
+if [[ -n "$message" && ! "$message" =~ ^# && ! "$message" =~ ^\[[0-9]+\][[:space:]] && ! "$message" =~ ^[0-9]+([[:space:]]+#|$) && ! "$message" =~ ^Merge[[:space:]] && ! "$message" =~ ^fixup![[:space:]] ]]; then
+  branch="$(git rev-parse --abbrev-ref HEAD)"
+  if [[ "$branch" =~ ^([0-9]+) ]]; then
+    prefix="[${BASH_REMATCH[1]}]"
+    prefixed="$prefix $message"
+    echo "$prefixed" > "$1"
+  else
+    echo "not prefixed!"
+  fi
+fi

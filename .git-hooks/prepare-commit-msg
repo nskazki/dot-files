@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# don't fuck around merge\fixup\etc commits
+
+message_path="$1"
+message_text="$(cat "$message_path")"
+
+if [[ -n "$message_text" && ! "$message_text" =~ ^[[:space:]]*# ]]; then
+  exit
+fi
+
+# cleaning up to restore later
+
+rm -f "$message_path"
+
+# injecting the prefix
+
+if [[ ! "$message_text" =~ ^\[[0-9]+\] && ! "$message_text" =~ ^[0-9]+([[:space:]]+#|$) ]]; then
+  branch="$(git rev-parse --abbrev-ref HEAD)"
+  if [[ "$branch" =~ ^([0-9]+) ]]; then
+    prefix="[${BASH_REMATCH[1]}]"
+    echo "$prefix" >> "$message_path"
+  fi
+fi
+
+# injecting the uncommited message
+
+uncommit_message_path="$(git root)/.git/.uncommit_msg"
+
+if [[ -f "$uncommit_message_path" ]]; then
+  uncommit_message_text="$(cat "$uncommit_message_path")"
+
+  uncommit_count_path="$(git root)/.git/.uncommit_cnt"
+  if [[ -f "$uncommit_count_path" ]]; then
+    uncommit_count_text="$(expr $(cat "$uncommit_count_path") - 1)"
+  else
+    uncommit_count_text="2"
+  fi
+
+  if [[ "$uncommit_count_text" -eq "0" ]]; then
+    rm -f "$uncommit_count_path"
+    rm -f "$uncommit_message_path"
+  else
+    echo "$uncommit_count_text" > "$uncommit_count_path"
+  fi
+
+  echo >> "$message_path"
+  echo "$uncommit_message_text" | while read line ; do
+    echo "# $line" >> "$message_path"
+  done
+  echo "# left: $uncommit_count_text" >> "$message_path"
+fi
+
+# restroing the original
+
+echo "$message_text" >> "$message_path"
