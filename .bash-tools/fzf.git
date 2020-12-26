@@ -14,7 +14,7 @@ gf() {
          [[ -z "$NOT_STAGED" ]] && [[ -z "$STAGED" ]] && echo -e "\e[1;41m    FILE    \e[0m" && \
             ((file --mime {2..-1} | grep directory > /dev/null 2>&1 && ls --color=always --group-directories-first -1 -lah {2..-1}) \
           || (file --mime {2..-1} | grep binary > /dev/null 2>&1 && echo {2..-1} is a binary file) \
-          || (highlight -O ansi -l {} || coderay {2..-1} || cat {2..-1})) 2> /dev/null | head -n 500' \
+          || (cat {2..-1})) 2> /dev/null | head -n 500' \
     | cut -c4- \
     | sed 's/.* -> //' \
     | sed 's/\s/\\ /g'
