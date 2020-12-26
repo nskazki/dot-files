@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# enable color support of ls and also add handy aliases
+# plain aliases
 if [ -x /usr/bin/dircolors ]; then
   test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
   alias ls='ls --color=auto'
@@ -10,15 +10,29 @@ if [ -x /usr/bin/dircolors ]; then
   alias egrep='egrep --color=auto'
 fi
 
-# !text-helpers
-alias uncolor='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
-alias unlines='sed '"'"':a;N;$!ba;s/\n/ /g'"'"
-
-alias head1='head -n 1'
-alias tail1='tail -n 1'
-
 alias tailf='tail -f'
 alias wl='wc -l'
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ~='cd ~'
+alias -- -='cd - > /dev/null'
+
+alias clip-set='xclip -selection c'
+alias clip-get='xclip -selection clipboard -o'
+
+alias ls='ls -h --color=auto --group-directories-first -1'
+alias ll='ls -l'
+alias la='ls -la'
+
+# layout
+alias layout-ru='setxkbmap ru'
+alias лэйаут-ин='setxkbmap us'
+alias CAPS_DIS='xdotool key Caps_Lock'
+
+# text-helpers
+alias uncolor='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
+alias unline='sed '"'"':a;N;$!ba;s/\n/ /g'"'"
 
 function trim {
   local trimmed="$1"
@@ -63,86 +77,17 @@ function truncate {
   done
 }
 
-function mark {
-  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "usage:  echo 123456 | mark 123 red"
-    echo "colors: $(clr_blue_b b), $(clr_cyan_b c), $(clr_green_b g)"
-    echo "        $(clr_magenta_b m), $(clr_yellow_b y), $(clr_red_b r)"
-    echo "def color: $(clr_red_b r)"
-    echo "def text:  error"
-    return
-  fi
-
-  declare -A fg_color_map
-  fg_color_map[r]=31
-  fg_color_map[g]=32
-  fg_color_map[y]=33
-  fg_color_map[b]=34
-  fg_color_map[m]=35
-  fg_color_map[c]=36
-  fg_color_map[red]=31
-  fg_color_map[green]=32
-  fg_color_map[yellow]=33
-  fg_color_map[blue]=34
-  fg_color_map[magenta]=35
-  fg_color_map[cyan]=36
-
-  if [[ -z "$1" ]]; then
-    local color="r"
-    local mark="error"
-  elif [[ -z "$2" ]]; then
-    local color="r"
-    local mark="$1"
-  else
-    local  mark="$1"
-    local color="$2"
-  fi
-
-  fg_c=$(echo -e "\e[1;${fg_color_map[$color]}m")
-  c_rs=$'\e[0m'
-  sed -r "s/$mark/$fg_c\0$c_rs/g"
-}
-
-# !cd
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias ~='cd ~'
-alias -- -='cd - > /dev/null'
-
-# !yarn
+# yarn
 function yarn-upgrade {
   local pckg="$(yarn outdated --color \
           | tail -n +7 | head -n -1 \
           | fzf --multi --reverse --height 50% \
           | awk '{ print $1"@"$4 }' \
-          | unlines)"
+          | unline)"
   yarn add $@ $pckg
 }
 
-# !npm
-function npm-which-strict {
-  [ $(which npm-which) ] || npm i -g npm-which
-
-  local path="$(npm-which "$1" 2>&1)"
-  if [ -z "$(echo $path | grep " not found")" ]; then
-    echo "$path"
-  else
-    echo "$1 - not found"
-    return 1
-  fi
-}
-
-function npm-ln-sync {
-  find /usr/bin -maxdepth 1 -type l \
-    | grep -v -P '/w$' \
-    | pipe 'realpath "{}" | grep .nvm/versions/node/ > /dev/null && echo "{}"' \
-    | pipe 'npm-which-strict "{}" > /dev/null && echo "{}"' \
-    | pipe 'sudo rm -f "{}" && basename "{}"' \
-    | pipe npm-ln
-}
-
+# npm
 function npm-ln {
   if [[ -z "$1" || ("$1" == '--help') || ("$1" == '-h') ]]; then
     echo -e "usage: npm-ln <package-name>"
@@ -191,24 +136,12 @@ function npmignore-test {
   cd -
 }
 
-# !clip
-alias clip-set='xclip -selection c'
-alias clip-get='xclip -selection clipboard -o'
-
-# !ls
-alias ls='ls -h --color=auto --group-directories-first -1'
-alias ll='ls -l'
-alias la='ls -la'
-
-# !popups
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# !inotify
+# inotify
 function inotify-fix {
   echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 }
 
-# !mysql
+# mysql
 function mysql-client {
   if [[ ("$1" == '--help') || ("$1" == '-h') || (-z "$1") ]]; then
     echo -e "usage: mysql-client mysql://user:password@127.0.0.1:3307/seo"
@@ -232,30 +165,8 @@ function mysql-client {
   mysql -u $user -p$pass -h $host -P $port -D $path
 }
 
-# !ps
-alias psgl='ps aux | grep -v grep | grep -i -e'
-alias psgt='ps aux | grep -v grep | grep -i -e VSZ -e'
-function psgk {
-  kill -9 $(psgl "$1" | row2)
-}
 
-function get-process-pid {
-  echo "$$"
-}
-
-function get-process-name {
-  if [ -z "$1" ]; then local pid="$$"
-  else local pid="$1"; fi
-  ps -p "$pid" -o comm=
-}
-
-# !layout
-alias layout-ru='setxkbmap ru'
-alias лэйаут-ин='setxkbmap us'
-alias CAPS_DIS='xdotool key Caps_Lock'
-alias layout-fix="$HOME/.bash-tools/script-fix-layout.sh"
-
-# !random
+# random
 function rand-pass {
   echo $(cat /dev/urandom \
     | tr -dc a-zA-Z0-9 \
@@ -271,7 +182,7 @@ function rand-port {
     | awk '{array [$1] = $1} END {i=32768; again=1; while (again == 1) {if (array[i] == i) {i=i+1} else {print i; again=0}}}')
 }
 
-# !ip
+# ip
 alias ip-white='dig +short myip.opendns.com @resolver1.opendns.com'
 
 function ip-grey {
@@ -284,7 +195,7 @@ function ip-grey {
   printf ${1+-v} $1 "%s${_nl:0:$[${#1}>0?0:1]}" $_myip
 }
 
-# !human-readeble
+# human-readeble
 function human-interval {
  ((h=${1}/3600))
  ((m=(${1}%3600)/60))
@@ -301,8 +212,7 @@ function short-pwd {
     | sed "s:/\+:/:"
 }
 
-# !fs-helpers
-alias rename-batch='~/.bash-tools/script-rename-node'
+# fs-helpers
 alias rename-node='~/.bash-tools/script-rename-node'
 
 alias df-i='pydf'
@@ -339,14 +249,12 @@ function file-clip {
 
 alias pwd-clip='echo -n $(pwd) | clip-set'
 
-# !other
+# other
 alias hosts='cat /etc/hosts'
-alias netstat-servers='sudo netstat -luntp'
 alias dates='date +%s'
 alias timer='time read'
 alias ping8='ping 8.8.8.8'
 alias online='while true; do sleep 2 && xdotool mousemove 500 500 && sleep 2 && xdotool mousemove 700 700; done'
-alias stopwatch="ts '[%Y-%m-%d %H:%M:%.S]'"
 
 alias p=pipe
 function pipe {
@@ -376,11 +284,7 @@ function curl-code {
   curl -L -s -o /dev/null -w '%{http_code} %{url_effective}\n' $@
 }
 
-# !dump-replacers
-alias tree='tree --dirsfirst'
-alias df='df -h'
-alias du='du -h'
-alias uptime='uptime -p'
+# dump-replacers
 alias mkdir='mkdir -pv'
 alias git-cola='git-cola&'
 alias cola='git-cola'
