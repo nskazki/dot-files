@@ -74,6 +74,10 @@ function __git_has_untracked__ {
   test -n "$(__git_untracked_list__)"
 }
 
+function __git_has_stageable__ {
+  __git_has_modified__ || __git_has_untracked__
+}
+
 function __git_dirty__ {
   __git_has_staged__ || __git_has_modified__ || __git_has_untracked__
 }
@@ -346,7 +350,7 @@ function git_unstage_smart {
 }
 
 function git_add_smart {
-  if ! __git_has_modified__; then
+  if ! __git_has_stageable__; then
     clr_yellow "nothing to do!"
     return 2
   fi
