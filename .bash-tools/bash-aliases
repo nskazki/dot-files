@@ -1,93 +1,4 @@
 #! /usr/bin/env bash
-
-# plain aliases
-if [ -x /usr/bin/dircolors ]; then
-  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-  alias ls='ls --color=auto'
-
-  alias grep='grep --color=auto'
-  alias fgrep='fgrep --color=auto'
-  alias egrep='egrep --color=auto'
-fi
-
-alias tailf='tail -f'
-alias wl='wc -l'
-
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ~='cd ~'
-alias -- -='cd - > /dev/null'
-
-alias clip-set='xclip -selection c'
-alias clip-get='xclip -selection clipboard -o'
-
-alias ls='ls -h --color=auto --group-directories-first -1'
-alias ll='ls -l'
-alias la='ls -la'
-
-# layout
-alias layout-ru='setxkbmap ru'
-alias лэйаут-ин='setxkbmap us'
-alias CAPS_DIS='xdotool key Caps_Lock'
-
-# text-helpers
-alias uncolor='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]//g"'
-alias unline='sed '"'"':a;N;$!ba;s/\n/ /g'"'"
-
-function trim {
-  local trimmed="$1"
-  # Strip leading spaces.
-  while [[ $trimmed == ' '* ]]; do
-     trimmed="${trimmed## }"
-  done
-  # Strip trailing spaces.
-  while [[ $trimmed == *' ' ]]; do
-      trimmed="${trimmed%% }"
-  done
-  echo "$trimmed"
-}
-
-function truncate {
-  if [[ -z "$1" ]]; then
-    echo -e "usage: truncate 80 'some long multiline text'"
-    return
-  fi
-
-  local clmn="$1"
-  local text="$2"
-
-  if [[ -z "$text" ]]; then
-    text="$clmn"
-    clmn="80"
-  fi
-
-  if [[ "$clmn" -le 3 ]]; then
-    echo -e "[clmn=$clmn] should be gt 3!"
-    return 1
-  fi
-
-  echo "$text" | while read line; do
-    if [ "${#line}" -gt "$clmn" ]; then
-      local limit="$(expr $clmn - 3)"
-      local truncated="$(echo "$line" | cut -c 1-$limit)"
-      echo "$truncated..."
-    else
-      echo "$line"
-    fi
-  done
-}
-
-# yarn
-function yarn-upgrade {
-  local pckg="$(yarn outdated --color \
-          | tail -n +7 | head -n -1 \
-          | fzf --multi --reverse --height 50% \
-          | awk '{ print $1"@"$4 }' \
-          | unline)"
-  yarn add $@ $pckg
-}
-
-# npm
 function npm-ln {
   if [[ -z "$1" || ("$1" == '--help') || ("$1" == '-h') ]]; then
     echo -e "usage: npm-ln <package-name>"
@@ -136,12 +47,10 @@ function npmignore-test {
   cd -
 }
 
-# inotify
 function inotify-fix {
   echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 }
 
-# mysql
 function mysql-client {
   if [[ ("$1" == '--help') || ("$1" == '-h') || (-z "$1") ]]; then
     echo -e "usage: mysql-client mysql://user:password@127.0.0.1:3307/seo"
@@ -165,8 +74,6 @@ function mysql-client {
   mysql -u $user -p$pass -h $host -P $port -D $path
 }
 
-
-# random
 function rand-pass {
   echo $(cat /dev/urandom \
     | tr -dc a-zA-Z0-9 \
@@ -182,81 +89,6 @@ function rand-port {
     | awk '{array [$1] = $1} END {i=32768; again=1; while (again == 1) {if (array[i] == i) {i=i+1} else {print i; again=0}}}')
 }
 
-# ip
-alias ip-white='dig +short myip.opendns.com @resolver1.opendns.com'
-
-function ip-grey {
-  local _ip _myip _line _nl=$'\n'
-  while IFS=$': \t' read -a _line ;do
-    [ -z "${_line%inet}" ] &&
-       _ip=${_line[${#_line[1]}>4?1:2]} &&
-       [ "${_ip#127.0.0.1}" ] && _myip=$_ip
-    done< <(LANG=C /sbin/ifconfig)
-  printf ${1+-v} $1 "%s${_nl:0:$[${#1}>0?0:1]}" $_myip
-}
-
-# human-readeble
-function human-interval {
- ((h=${1}/3600))
- ((m=(${1}%3600)/60))
- ((s=${1}%60))
- printf "%02d:%02d:%02d\n" $h $m $s
-}
-
-function short-pwd {
-  local base="$(basename "$PWD")"
-  echo "$PWD" \
-    | sed "s:${HOME}:~:" \
-    | sed "s:\([^/.]\)[^/]*/:\1/:g" \
-    | sed "s:/[^/]*$:/$base:" \
-    | sed "s:/\+:/:"
-}
-
-# fs-helpers
-alias rename-node='~/.bash-tools/script-rename-node'
-
-alias df-i='pydf'
-alias du-i='ncdu'
-
-function du-dir {
-  local dir=$([ -n "$1" ] && echo "$1" || echo "*")
-  du -hs $dir | sort -h
-}
-
-alias file-mod='stat -c "%a %n"'
-alias file-size='du -b'
-
-function file-path {
-  if [[ -z "$1" || "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "file-path <file-name>"
-    return 1
-  fi
-
-  readlink -f "$1"
-}
-
-function file-clip {
-  if [[ -z "$1" || "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "file-clip <file-name>"
-    return 1
-  fi
-
-  local path=$(file-path $@)
-  if [[ -n "$path" ]]; then
-    echo -n "$path" | clip-set
-  fi
-}
-
-alias pwd-clip='echo -n $(pwd) | clip-set'
-
-# other
-alias hosts='cat /etc/hosts'
-alias dates='date +%s'
-alias timer='time read'
-alias ping8='ping 8.8.8.8'
-alias online='while true; do sleep 2 && xdotool mousemove 500 500 && sleep 2 && xdotool mousemove 700 700; done'
-
-alias p=pipe
 function pipe {
   local import_aliases="source $HOME/.bash-tools/bash-aliases"
   local user_input="$*"
@@ -284,12 +116,6 @@ function curl-code {
   curl -L -s -o /dev/null -w '%{http_code} %{url_effective}\n' $@
 }
 
-# dump-replacers
-alias mkdir='mkdir -pv'
-alias git-cola='git-cola&'
-alias cola='git-cola'
-
-##########################################
 # row
 for r in {1..9}; do
   alias row$r="awk '{ print \$$r }'"
@@ -310,4 +136,3 @@ for l in {1..9}; do
   done
 done
 #
-###########################################
