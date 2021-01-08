@@ -36,6 +36,7 @@ set -x LESS 'FRSX' # quit if one screen, colors, truncate lines, inline mode
 
 set -x npm_config_userconfig ~/.npm_auth
 set -ax fish_user_paths node_modules/.bin
+set -ax fish_user_paths (yarn global bin)
 
 if [ -d ~/.cargo ]
   set -ax fish_user_paths ~/.cargo/bin
