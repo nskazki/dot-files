@@ -1,5 +1,8 @@
 function bound
-  commandline -it -- (eval $argv[1] | string escape | string join ' ')
-  commandline -it -- ' '
+  set output (eval $argv[1] | string escape | string join ' ')
+  if present $output
+    commandline -it -- $output
+    commandline -it -- ' '
+  end
   commandline -f repaint
 end
