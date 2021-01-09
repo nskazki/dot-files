@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # don't fuck around merge\fixup\etc commits
 
