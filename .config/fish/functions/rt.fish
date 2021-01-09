@@ -19,9 +19,9 @@ function rt
   end
 
   echo
-  echo (color brblack '$') (color magenta 'GIT_SEQUENCE_EDITOR=~/.bash-tools/rebase-squash-tmp.js') 'git rebase -i' (color cyan $commit)^
+  echo (color brblack '$') (color magenta 'GIT_SEQUENCE_EDITOR=~/.scripts/rebase-squash-tmp.js') 'git rebase -i' (color cyan $commit)^
   echo
-  GIT_SEQUENCE_EDITOR='$HOME/.bash-tools/rebase-squash-tmp.js' git rebase -i $commit^ || return $status
+  GIT_SEQUENCE_EDITOR='$HOME/.scripts/rebase-squash-tmp.js' git rebase -i $commit^ || return $status
 
   __git_show__
 end

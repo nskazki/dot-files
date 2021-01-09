@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-output="$(git show -s --format=%s%n%n%b | ~/.bash-tools/spellcheck.sh)"
+output="$(git show -s --format=%s%n%n%b | ~/.scripts/spellcheck.sh)"
 
 if [ -n "$output" ]; then
   echo

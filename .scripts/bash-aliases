@@ -90,7 +90,7 @@ function rand-port {
 }
 
 function pipe {
-  local import_aliases="source $HOME/.bash-tools/bash-aliases"
+  local import_aliases="source $HOME/.scripts/bash-aliases"
   local user_input="$*"
 
   if [ -z "$(echo "$user_input" | grep "{}")" ]; then
