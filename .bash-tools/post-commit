@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+output="$(git show -s --format=%s%n%n%b | ~/.bash-tools/spellcheck.sh)"
+
+if [ -n "$output" ]; then
+  echo
+  echo "$output"
+  echo
+
+  notify-send -t 10000 -i important "Possible mistakes found!"
+fi
