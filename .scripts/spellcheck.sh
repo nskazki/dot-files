@@ -39,7 +39,7 @@ else
   input="$(cat -)"
 fi
 
-words="$(echo "$input" | sed -r 's/[^a-zA-Z]/ /g; s/([a-z])([A-Z])/\1 \2/g;')"
+words="$(echo "$input" | sed -r 's/[^a-zA-Z]/ /g; s/([a-z])([A-Z])/\1 \2/g; s/(\b[A-Z])([A-Z][a-z]+)/\\1 \\2/g;')"
 readarray -t mistakes <<< "$(echo "$words" | hunspell -l -p ~/.hunspell/complete | sort -u)"
 
 if [[ -n "${mistakes[@]}" ]]; then

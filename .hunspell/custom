@@ -11,11 +11,13 @@ nskazki
 
 # filetypes
 
+js
 weba
 webm
 
 # brands
 
+bugsnag
 googleplus
 ipod
 pinterest
@@ -49,8 +51,11 @@ popouts
 promisified
 promisify
 rgb
+scrollbar
+scrollbars
 sourcemap
 sourcemaps
+ui
 uuid
 webfont
 webfonts
@@ -65,6 +70,7 @@ fsevents
 happypack
 percy
 plyr
+vue
 vuejs
-webpacker
 webpack
+webpacker
