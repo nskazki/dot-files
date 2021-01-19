@@ -31,6 +31,7 @@ bind \cg\cf 'bound gf'
 bind \cg\cb 'bound gb'
 bind \cg\ct 'bound gt'
 bind \cg\ch 'bound gh'
+bind \cg\cr 'bound gr'
 
 set -x LESS 'FRSX' # quit if one screen, colors, truncate lines, inline mode
 
