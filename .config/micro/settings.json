@@ -1,5 +1,6 @@
 {
     "autoclose": true,
+    "autosu": true,
     "colorcolumn": 72,
     "colorscheme": "twilight",
     "comment": true,
@@ -10,11 +11,13 @@
     "linter": true,
     "literate": true,
     "mkparents": true,
+    "mouse": false,
     "pluginchannels": [
         "https://raw.githubusercontent.com/micro-editor/plugin-channel/master/channel.json"
     ],
     "pluginrepos": [],
     "rmtrailingws": true,
+    "savecursor": true,
     "saveundo": true,
     "scrollbar": true,
     "scrollspeed": 1,
