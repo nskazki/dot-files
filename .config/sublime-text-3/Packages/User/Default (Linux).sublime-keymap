@@ -48,7 +48,7 @@
   { "keys": ["f7"], "command": "convert_to_camel"},
   { "keys": ["f8"], "command": "convert_to_pascal"},
   { "keys": ["f9"], "command": "convert_to_snake"},
-  { "keys": ["f10"], "command": "upper_case" },
+  { "keys": ["f10"], "command": "convert_to_screaming_snake" },
   { "keys": ["f11"], "command": "title_case" },
   { "keys": ["f12"], "command": "lower_case" },
 
