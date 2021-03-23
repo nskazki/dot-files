@@ -32,6 +32,7 @@ cwd
 debounced
 debouncing
 deline
+dev
 devcert
 devcerts
 devtool
@@ -46,6 +47,7 @@ hardcoded
 idlize
 idlized
 leftclick
+linters
 popout
 popouts
 promisified
@@ -62,14 +64,19 @@ webfonts
 
 # npm
 
+ajv
 angular
+caniuse
 dompurify
+eslint
 fingerprintjs
 fontawesome
 fsevents
 happypack
+jsyaml
 percy
 plyr
+svgo
 vue
 vuejs
 webpack
