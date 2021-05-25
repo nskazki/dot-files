@@ -1,0 +1,62 @@
+{
+	"file_exclude_patterns":
+	[
+		"*.pyc",
+		"*.pyo",
+		"*.exe",
+		"*.dll",
+		"*.obj",
+		"*.o",
+		"*.a",
+		"*.lib",
+		"*.so",
+		"*.dylib",
+		"*.ncb",
+		"*.sdf",
+		"*.suo",
+		"*.pdb",
+		"*.idb",
+		".DS_Store",
+		"*.class",
+		"*.psd",
+		"*.db",
+		"*.sublime-workspace"
+	],
+	"folder_exclude_patterns":
+	[
+		".svn",
+		".git",
+		".hg",
+		"CVS"
+	],
+	"ignored_packages":
+	[
+		"JavaScript",
+		"Markdown",
+		"Textile",
+		"Vintage",
+	],
+	// appearance
+	"theme": "Monokai Pro.sublime-theme",
+	"color_scheme": "Monokai Pro.sublime-color-scheme",
+	"tab_size": 2,
+	"font_size": 14,
+	"word_wrap": false,
+	"caret_style": "smooth",
+	"highlight_line": true,
+	"highlight_modified_tabs": true,
+	"hide_pointer_while_typing": false,
+	// editing
+	"save_on_focus_lost": true,
+	"default_line_ending": "unix",
+	"control_character_style": "names",
+	"translate_tabs_to_spaces": true,
+	"ensure_newline_at_eof_on_save": true,
+	"trim_trailing_white_space_on_save": true,
+	// completion
+	"auto_complete": true,
+	"show_definitions": false,
+	"auto_complete_cycle": true,
+	"auto_complete_commit_on_tab": false,
+	"auto_complete_include_snippets": false,
+}
