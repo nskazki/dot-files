@@ -44,4 +44,5 @@
         { "light": "#ffff80", "dark": "#9e9e9e" }
     ],
     "subtleBrackets.disableNative": false, // it doesn't do it right
+    "scm.diffDecorationsGutterWidth": 2, // the default one it too thick
 }
