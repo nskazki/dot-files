@@ -1,6 +1,7 @@
 {
     "diffEditor.ignoreTrimWhitespace": false,
     "telemetry.enableTelemetry": false,
+    "window.title": "${activeEditorMedium}",
     "window.enableMenuBarMnemonics": false, // It conflicts with alt+V
     "breadcrumbs.enabled": false,
     "workbench.colorTheme": "Monokai Pro",
@@ -27,6 +28,7 @@
     "files.simpleDialog.enable": true,
     "typescript.suggestionActions.enabled": false, // it would suggest converting CommonJS imports to ES6 ones
     "javascript.suggestionActions.enabled": false,
+    "editor.lightbulb.enabled": false, // I don't need any of these irritating hints
     "editor.snippetSuggestions": "none", // I don't like snippets
     "editor.suggest.showSnippets": false,
     "typescript.suggest.includeCompletionsWithSnippetText": false,
@@ -40,5 +42,6 @@
         { "light": "#ffb3ff", "dark": "#ffffff" },
         { "light": "#b3ffb3", "dark": "#ff8a65" },
         { "light": "#ffff80", "dark": "#9e9e9e" }
-    ]
+    ],
+    "subtleBrackets.disableNative": false, // it doesn't do it right
 }
