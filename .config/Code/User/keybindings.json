@@ -1,0 +1,57 @@
+// Place your key bindings in this file to override the defaults
+[
+  {
+    "key": "ctrl+i",
+    "command": "highlightwords.addHighlight"
+  },
+  {
+    "key": "ctrl+u",
+    "command": "highlightwords.removeAllHighlights"
+  },
+  {
+    "key": "ctrl+shift+1",
+    "command": "workbench.action.moveEditorToLeftGroup"
+  },
+  {
+    "key": "ctrl+shift+2",
+    "command": "workbench.action.moveEditorToRightGroup"
+  },
+  {
+    "key": "alt+d",
+    "command": "editor.action.moveSelectionToNextFindMatch",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+k ctrl+d",
+    "command": "-editor.action.moveSelectionToNextFindMatch",
+    "when": "editorFocus"
+  },
+  {
+    "key": "ctrl+,",
+    "command": "extension.appendComma",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+,",
+    "command": "-extension.appendComma",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+2",
+    "command": "workbench.action.focusSecondEditorGroup"
+  },
+  {
+    "key": "shift+alt+2",
+    "command": "-workbench.action.splitEditor"
+  },
+  {
+    "key": "alt+v",
+    "command": "clipboard.pasteFromClipboard",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+v",
+    "command": "-clipboard.pasteFromClipboard",
+    "when": "editorTextFocus"
+  }
+]
