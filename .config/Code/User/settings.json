@@ -12,8 +12,8 @@
     "editor.tabSize": 2,
     "editor.fontSize": 18,
     "editor.lineHeight": 22,
-    "editor.fontFamily": "Monospace, 'monospace', monospace", // highlighting for brackets is way too bright
-    "editor.matchBrackets": "never", // replaced wuth https://marketplace.visualstudio.com/items?itemName=rafamel.subtle-brackets
+    "editor.fontFamily": "Monospace, 'monospace', monospace",
+    "editor.matchBrackets": "never", // default highlighting for brackets is way too bright - replaced with https://marketplace.visualstudio.com/items?itemName=rafamel.subtle-brackets
     "editor.hover.enabled": false, // I don't need definitions blinking as I move the cursor
     "editor.parameterHints.enabled": false, // I don't need parameters blinking as I type
     "editor.minimap.enabled": false, // I value the screen space
