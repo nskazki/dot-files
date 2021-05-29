@@ -20,6 +20,7 @@
     "editor.minimap.enabled": false, // I value the screen space
     "editor.occurrencesHighlight": false, // that stange feature highlighting whatever you select
     "editor.multiCursorModifier": "ctrlCmd",
+    "editor.hideCursorInOverviewRuler": true, // I don't need to know the cursor position when I look at the scroolbar
     "files.autoSave": "onFocusChange",
     "files.eol": "\n",
     "files.insertFinalNewline": true,
@@ -28,6 +29,8 @@
     "files.simpleDialog.enable": true,
     "typescript.suggestionActions.enabled": false, // it would suggest converting CommonJS imports to ES6 ones
     "javascript.suggestionActions.enabled": false,
+    "typescript.validate.enable": false, // I don't need red underlines appearing and disapearing as I type
+    "javascript.validate.enable": false,
     "editor.lightbulb.enabled": false, // I don't need any of these irritating hints
     "editor.snippetSuggestions": "none", // I don't like snippets
     "editor.suggest.showSnippets": false,
@@ -45,4 +48,16 @@
     ],
     "subtleBrackets.disableNative": false, // it doesn't do it right
     "scm.diffDecorationsGutterWidth": 2, // the default one it too thick
+    "workbench.colorCustomizations": {
+        // I don't need that explosion of random colors under my scrollbar
+        // https://stackoverflow.com/a/51684408/16062729
+        "editorOverviewRuler.addedForeground": "#0000",
+        "editorOverviewRuler.modifiedForeground": "#0000",
+        "editorOverviewRuler.deletedForeground": "#0000",
+        "editorOverviewRuler.errorForeground": "#0000",
+        "editorOverviewRuler.warningForeground": "#0000",
+        "editorOverviewRuler.infoForeground": "#0000"
+    },
+    "color-highlight.markerType": "dot-before",
+    "color-highlight.markRuler": false,
 }
