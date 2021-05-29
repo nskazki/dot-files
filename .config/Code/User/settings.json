@@ -8,6 +8,7 @@
     "workbench.iconTheme": "Monokai Pro Icons",
     "workbench.editor.showIcons": false,
     "workbench.editor.untitled.hint": "hidden", // some hint I don't need
+    "workbench.activityBar.visible": false, // I don't like blinking counters
     "explorer.compactFolders": false, // I don't like squashed folders
     "explorer.openEditors.visible": 0, // tabs are enough for me to know which files are opened
     "editor.tabSize": 2,
@@ -34,6 +35,7 @@
     "editor.lightbulb.enabled": false, // I don't need any of these irritating hints
     "editor.snippetSuggestions": "none", // I don't like snippets
     "editor.suggest.showSnippets": false,
+    "search.mode": "reuseEditor", // sublime-like
     "typescript.suggest.includeCompletionsWithSnippetText": false,
     "highlightwords.box": false, // the default color is too bright, do: ~/.vscode/extensions/rsbondi.highlight-words-0.1.4/out/src/config.js -> dark.color = '#2d2a2e';
     "highlightwords.colors": [
@@ -59,5 +61,5 @@
         "editorOverviewRuler.infoForeground": "#0000"
     },
     "color-highlight.markerType": "dot-before",
-    "color-highlight.markRuler": false,
+    "color-highlight.markRuler": false
 }
