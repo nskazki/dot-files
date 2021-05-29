@@ -53,5 +53,13 @@
     "key": "ctrl+shift+v",
     "command": "-clipboard.pasteFromClipboard",
     "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+delete",
+    "command": "deleteAllRight"
+  },
+  {
+    "key": "ctrl+shift+backspace",
+    "command": "deleteAllLeft"
   }
 ]
