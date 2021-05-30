@@ -79,4 +79,5 @@
     "vetur.validation.template": false, // I'm okay with ESLint
     "eslint.run": "onSave",
     "errorLens.margin": "1ch",
+    "togglequotes.chars": ["`", "'"],
 }
