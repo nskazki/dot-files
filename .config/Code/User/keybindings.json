@@ -107,5 +107,9 @@
   {
     "key": "ctrl+j",
     "command": "editor.action.joinLines"
+  },
+  {
+    "key": "ctrl+shift+v",
+    "command": "extension.paste-and-indent"
   }
 ]
