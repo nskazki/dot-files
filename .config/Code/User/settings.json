@@ -74,6 +74,9 @@
         "errorLens.hintMessageBackground": "#17a2a220",
     },
     "vetur.ignoreProjectWarning": true, // https://vuejs.github.io/vetur/guide/FAQ.html#vetur-can-t-find-tsconfig-json-jsconfig-json-in-xxxx-xxxxxx
+    "vetur.validation.style": false, // I don't know what it would do
+    "vetur.validation.script": false, // I'm okay with ESLint
+    "vetur.validation.template": false, // I'm okay with ESLint
     "color-highlight.markerType": "dot-before",
     "color-highlight.markRuler": false,
     "eslint.run": "onSave",
