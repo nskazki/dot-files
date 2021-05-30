@@ -103,5 +103,9 @@
   {
     "key": "ctrl+-",
     "command": "-workbench.action.zoomOut"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "editor.action.joinLines"
   }
 ]
