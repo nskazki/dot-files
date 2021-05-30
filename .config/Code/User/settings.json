@@ -28,6 +28,10 @@
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
     "files.simpleDialog.enable": true,
+    "files.associations": {
+        // I don't want to be bothered about comments in JSON
+        "*.json": "jsonc"
+    },
     "typescript.suggestionActions.enabled": false, // it would suggest converting CommonJS imports to ES6 ones
     "javascript.suggestionActions.enabled": false,
     "typescript.validate.enable": false, // I don't need red underlines appearing and disapearing as I type
@@ -58,8 +62,20 @@
         "editorOverviewRuler.deletedForeground": "#0000",
         "editorOverviewRuler.errorForeground": "#0000",
         "editorOverviewRuler.warningForeground": "#0000",
-        "editorOverviewRuler.infoForeground": "#0000"
+        "editorOverviewRuler.infoForeground": "#0000",
+
+        "errorLens.errorBackground": "#0000",
+        "errorLens.errorMessageBackground": "#e454541b",
+        "errorLens.warningBackground": "#0000",
+        "errorLens.warningMessageBackground": "#ff942f1b",
+        "errorLens.infoBackground": "#0000",
+        "errorLens.infoMessageBackground": "#00b7e420",
+        "errorLens.hintBackground": "#0000",
+        "errorLens.hintMessageBackground": "#17a2a220",
     },
+    "vetur.ignoreProjectWarning": true, // https://vuejs.github.io/vetur/guide/FAQ.html#vetur-can-t-find-tsconfig-json-jsconfig-json-in-xxxx-xxxxxx
     "color-highlight.markerType": "dot-before",
-    "color-highlight.markRuler": false
+    "color-highlight.markRuler": false,
+    "eslint.run": "onSave",
+    "errorLens.margin": "1ch",
 }
