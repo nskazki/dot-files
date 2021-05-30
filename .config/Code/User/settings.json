@@ -77,8 +77,6 @@
     "vetur.validation.style": false, // I don't know what it would do
     "vetur.validation.script": false, // I'm okay with ESLint
     "vetur.validation.template": false, // I'm okay with ESLint
-    "color-highlight.markerType": "dot-before",
-    "color-highlight.markRuler": false,
     "eslint.run": "onSave",
     "errorLens.margin": "1ch",
 }
