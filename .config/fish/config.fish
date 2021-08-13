@@ -49,8 +49,7 @@ if [ -d ~/.rbenv ]
   rbenv init - | source
 end
 
-if [ -d ~/app/fzf ]
-  set -ax fish_user_paths ~/app/fzf/bin
+if [ -f ~/bin/fzf ]
   set -x FZF_DEFAULT_OPTS \
     "--color=dark --height 50% --ansi --reverse --no-sort --multi --preview-window right:40% \
      --bind 'ctrl-s:toggle-sort' \
