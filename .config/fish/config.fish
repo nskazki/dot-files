@@ -36,10 +36,6 @@ bind \cr 'search-history'
 
 set -x LESS 'FRSX' # quit if one screen, colors, truncate lines, inline mode
 
-set -x npm_config_userconfig ~/.npm_auth
-set -ax fish_user_paths node_modules/.bin
-set -ax fish_user_paths (yarn global bin)
-
 if [ -d ~/.cargo ]
   set -ax fish_user_paths ~/.cargo/bin
 end
@@ -55,6 +51,13 @@ if [ -f ~/bin/fzf ]
      --bind 'ctrl-s:toggle-sort' \
      --bind 'ctrl-k:preview-up' \
      --bind 'ctrl-j:preview-down'"
+end
+
+if [ -n (which fnm) ]
+  fnm env | source
+  set -x npm_config_userconfig ~/.npm_auth
+  set -ax fish_user_paths node_modules/.bin
+  set -ax fish_user_paths (yarn global bin)
 end
 
 # https://fishshell.com/docs/current/index.html?highlight=fish_color_selection#variables-for-changing-highlighting-colors
