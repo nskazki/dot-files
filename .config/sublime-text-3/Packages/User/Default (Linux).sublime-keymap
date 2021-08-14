@@ -52,6 +52,8 @@
   { "keys": ["f11"], "command": "title_case" },
   { "keys": ["f12"], "command": "lower_case" },
 
+  { "keys": ["shift+f11"], "command": "toggle_full_screen" },
+
   // CaseConversion
   { "keys": ["ctrl+alt+c", "ctrl+alt+s"], "command": "null"},
   { "keys": ["ctrl+alt+c", "ctrl+alt+shift+s"], "command": "null"},
@@ -184,7 +186,6 @@
   { "keys": ["ctrl+shift+z"], "command": "null" },
   { "keys": ["ctrl+tab"], "command": "null" },
   { "keys": ["shift+delete"], "command": "null" },
-  { "keys": ["shift+f11"], "command": "null" },
   { "keys": ["shift+f12"], "command": "null" },
   { "keys": ["shift+f2"], "command": "null" },
   { "keys": ["shift+f3"], "command": "null" },
