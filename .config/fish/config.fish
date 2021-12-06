@@ -36,16 +36,21 @@ bind \cr 'search-history'
 
 set -x LESS 'FRSX' # quit if one screen, colors, truncate lines, inline mode
 
+if [ -d /opt/homebrew/bin/brew ]
+  eval (/opt/homebrew/bin/brew shellenv)
+  fish_add_path /opt/homebrew/opt/node@12/bin
+end
+
 if [ -d ~/.cargo ]
-  set -ax fish_user_paths ~/.cargo/bin
+  fish_add_path ~/.cargo/bin
 end
 
 if [ -d ~/.rbenv ]
-  set -ax fish_user_paths ~/.rbenv/bin
+  fish_add_path ~/.rbenv/bin
   rbenv init - | source
 end
 
-if [ -f ~/bin/fzf ]
+if [ -x (command -v fzf) ]
   set -x FZF_DEFAULT_OPTS \
     "--color=dark --height 50% --ansi --reverse --no-sort --multi --preview-window right:40% \
      --bind 'ctrl-s:toggle-sort' \
@@ -53,11 +58,12 @@ if [ -f ~/bin/fzf ]
      --bind 'ctrl-j:preview-down'"
 end
 
-if [ -n (which fnm) ]
+if [ -x (command -v fnm) ]
   fnm env | source
   set -x npm_config_userconfig ~/.npm_auth
-  set -ax fish_user_paths node_modules/.bin
-  set -ax fish_user_paths (yarn global bin)
+  fish_add_path node_modules/.bin
+  fish_add_path (npm -g bin)
+  fish_add_path (yarn global bin)
 end
 
 # https://fishshell.com/docs/current/index.html?highlight=fish_color_selection#variables-for-changing-highlighting-colors

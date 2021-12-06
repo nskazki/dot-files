@@ -1,6 +1,6 @@
 function fish_prompt
   if __in_git_repo__
-    set git_ps1 (bash -c 'source /etc/bash_completion.d/git-prompt && __git_ps1 %s')
+    set git_ps1 (bash -c '[[ -f /opt/homebrew/etc/bash_completion.d/git-prompt.sh ]] && source /opt/homebrew/etc/bash_completion.d/git-prompt.sh || source /etc/bash_completion.d/git-prompt;  __git_ps1 %s')
     set git_ps1_cr green
 
     if string match (basename $PWD) '.git'
