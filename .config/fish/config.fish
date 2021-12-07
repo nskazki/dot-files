@@ -47,7 +47,10 @@ end
 
 if [ -d ~/.rbenv ]
   fish_add_path ~/.rbenv/bin
-  rbenv init - | source
+end
+
+if [ -x (command -v rbenv) ]
+  rbenv init - fish | source
 end
 
 if [ -x (command -v fzf) ]
