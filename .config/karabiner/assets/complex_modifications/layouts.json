@@ -1,0 +1,42 @@
+{
+  "title": "layouts",
+  "rules": [
+    {
+      "description": "layouts - set RU layout",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "modifiers": {
+              "mandatory": [
+                "left_shift"
+              ]
+            },
+            "key_code": "caps_lock"
+          },
+          "to": [
+            {
+              "shell_command": "/usr/local/bin/xkbswitch -s 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "layouts - set EN layout",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "caps_lock"
+          },
+          "to": [
+            {
+              "shell_command": "/usr/local/bin/xkbswitch -s 0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
