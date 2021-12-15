@@ -6,6 +6,4 @@ if [ -n "$output" ]; then
   echo
   echo "$output"
   echo
-
-  notify-send -t 10000 -i important "Possible mistakes found!"
 fi

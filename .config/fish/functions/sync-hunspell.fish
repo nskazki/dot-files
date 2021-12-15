@@ -15,7 +15,7 @@ function sync-hunspell
     yarn global --no-progress --non-interactive add cspell &>/dev/null
   end
 
-  set node_modules ~/.config/yarn/global/node_modules
+  set node_modules (yarn global dir)/node_modules
   set dictionaries\
     $node_modules/@cspell/dict-fullstack/fullstack.txt.gz\
     $node_modules/@cspell/dict-software-terms/softwareTerms.txt.gz
@@ -29,7 +29,7 @@ function sync-hunspell
 
   for dictionary in $dictionaries
     if string match -rq '\\.gz$' $dictionary
-      set dynamic_cat 'zcat'
+      set dynamic_cat 'gzcat'
     else
       set dynamic_cat 'cat'
     end

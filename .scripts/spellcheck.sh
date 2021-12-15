@@ -39,8 +39,10 @@ else
   input="$(cat -)"
 fi
 
+# http://wordlist.aspell.net/dicts/
+
 words="$(echo "$input" | sed -r 's/[^a-zA-Z]/ /g; s/([a-z])([A-Z])/\1 \2/g; s/(\b[A-Z])([A-Z][a-z]+)/\\1 \\2/g;')"
-readarray -t mistakes <<< "$(echo "$words" | hunspell -l -p ~/.hunspell/complete | sort -u)"
+readarray -t mistakes <<< "$(echo "$words" | hunspell -d en_US -l -p ~/.hunspell/complete | sort -u)"
 
 if [[ -n "${mistakes[@]}" ]]; then
   echo -e "\e[0;31mPossible mistakes:\e[0m\n"
@@ -50,7 +52,7 @@ if [[ -n "${mistakes[@]}" ]]; then
 
   for index in "${!mistakes[@]}"; do
     mistake="${mistakes[index]}"
-    correct="$(echo "$mistake" | hunspell -p ~/.hunspell/complete | grep "&" | head -n 1 | sed -r 's/^.*?: //; s/,//g')"
+    correct="$(echo "$mistake" | hunspell -d en_US -p ~/.hunspell/complete | grep "&" | head -n 1 | sed -r 's/^.*: //; s/,//g')"
 
     if [ -n "$correct" ]; then
       suffix="→ $correct"
