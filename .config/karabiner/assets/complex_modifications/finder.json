@@ -1,0 +1,25 @@
+{
+  "title": "finder",
+  "rules": [{
+    "description": "finder - redefine CMD+Q",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "key_code": "q",
+        "modifiers": {
+          "mandatory": ["left_command"]
+        }
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.apple\\.finder$"]
+      }],
+      "to": [
+        {
+          "key_code": "w",
+          "modifiers": ["left_command"]
+        }
+      ]
+    }]
+  }]
+}

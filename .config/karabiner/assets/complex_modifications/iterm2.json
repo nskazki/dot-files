@@ -1,0 +1,130 @@
+{
+  "title": "iterms2",
+  "rules": [{
+    "description": "iterms2 - safe CMD+W",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "key_code": "w",
+        "modifiers": {
+          "mandatory": ["left_command"]
+        }
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "to": [
+        {
+          "key_code": "w",
+          "modifiers": ["left_control"]
+        }
+      ]
+    }]
+  }, {
+    "description": "iterms2 - safe CMD+A",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "key_code": "a",
+        "modifiers": {
+          "mandatory": ["left_command"]
+        }
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "to": [
+        {
+          "key_code": "a",
+          "modifiers": ["left_control"]
+        }
+      ]
+    }]
+  }, {
+    "description": "iterms2 - safe CMD+E",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "key_code": "e",
+        "modifiers": {
+          "mandatory": ["left_command"]
+        }
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "to": [
+        {
+          "key_code": "e",
+          "modifiers": ["left_control"]
+        }
+      ]
+    }]
+  }, {
+    "description": "iterms2 - safe CMD+D",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "key_code": "d",
+        "modifiers": {
+          "mandatory": ["left_command"]
+        }
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "to": [
+        {
+          "key_code": "d",
+          "modifiers": ["left_control"]
+        }
+      ]
+    }]
+  }, {
+    "description": "iterms2 - safe CMD+Q",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "key_code": "q",
+        "modifiers": {
+          "mandatory": ["left_command"]
+        }
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "to": [
+        {
+          "key_code": "q",
+          "modifiers": ["left_control"]
+        }
+      ]
+    }]
+  }, {
+    "description": "iterms2 - safe CMD+S",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "key_code": "s",
+        "modifiers": {
+          "mandatory": ["left_command"]
+        }
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "to": [
+        {
+          "key_code": "s",
+          "modifiers": ["left_control"]
+        }
+      ]
+    }]
+  }]
+}
