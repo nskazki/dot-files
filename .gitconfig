@@ -55,6 +55,7 @@
   autocrlf = input
   safecrlf = true
   editor = micro
+  ignorecase = false
 
 [am]
   threeWay = true
