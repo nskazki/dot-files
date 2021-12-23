@@ -32,7 +32,7 @@
           },
           "to": [
             {
-              "shell_command": "/usr/local/bin/xkbswitch -s 0"
+              "shell_command": "/usr/local/bin/xkbswitch -s 4"
             }
           ]
         }
