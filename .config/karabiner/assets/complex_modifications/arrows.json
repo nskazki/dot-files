@@ -1,32 +1,33 @@
 {
-  "title": "layouts",
+  "title": "arrows",
   "rules": [{
-    "description": "layouts: caps+shift -> RU",
+    "description": "arrows: CMD+up -> page_up",
     "manipulators": [{
       "type": "basic",
       "from": {
         "modifiers": {
-          "mandatory": ["left_shift"],
+          "mandatory": ["left_command"],
           "optional": ["any"]
         },
-        "key_code": "caps_lock"
+        "key_code": "up_arrow"
       },
       "to": [{
-        "shell_command": "/usr/local/bin/xkbswitch -s 1"
+        "key_code": "page_up"
       }]
     }]
   }, {
-    "description": "layouts: caps -> EN",
+    "description": "arrows: CMD+down -> page_down",
     "manipulators": [{
       "type": "basic",
       "from": {
         "modifiers": {
+          "mandatory": ["left_command"],
           "optional": ["any"]
         },
-        "key_code": "caps_lock"
+        "key_code": "down_arrow"
       },
       "to": [{
-        "shell_command": "/usr/local/bin/xkbswitch -s 4"
+        "key_code": "page_down"
       }]
     }]
   }]

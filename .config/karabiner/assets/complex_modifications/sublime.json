@@ -1,0 +1,84 @@
+{
+  "title": "sublime",
+  "rules": [{
+    "description": "sublime: CMD+j -> CMD+shift+j",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "j"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.sublimetext\\.4$"]
+      }],
+      "to": [{
+        "key_code": "j",
+        "modifiers": [
+          "left_command",
+          "left_shift"
+        ]
+      }]
+    }]
+  }, {
+    "description": "sublime: shift+shift -> ctrl+shift+m",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "key_code": "left_shift",
+        "modifiers": {
+          "optional": ["any"]
+        }
+      },
+      "to": [{
+        "key_code": "m",
+        "modifiers": ["left_shift", "left_command"]
+      }],
+      "conditions": [{
+        "type": "variable_if",
+        "name": "left_shift_pressed",
+        "value": 1
+      }, {
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.sublimetext\\.4$"]
+      }]
+    }, {
+      "type": "basic",
+      "from": {
+        "key_code": "left_shift",
+        "modifiers": {
+          "optional": ["any"]
+        }
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.sublimetext\\.4$"]
+      }],
+      "to": [{
+        "set_variable": {
+          "name": "left_shift_pressed",
+          "value": 1
+        } 
+      }, {
+        "key_code": "left_shift"
+      }],
+      "to_delayed_action": {
+        "to_if_invoked": [{
+          "set_variable": {
+            "name": "left_shift_pressed",
+            "value": 0
+          }
+        }],
+        "to_if_canceled": [{
+          "set_variable": {
+            "name": "left_shift_pressed",
+            "value": 0
+          }
+        }]
+      }
+    }]
+  }]
+}

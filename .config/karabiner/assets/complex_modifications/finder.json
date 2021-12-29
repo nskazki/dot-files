@@ -1,13 +1,14 @@
 {
   "title": "finder",
   "rules": [{
-    "description": "finder - redefine CMD+Q",
+    "description": "finder: CMD+q -> CMD+w",
     "manipulators": [{
       "type": "basic",
       "from": {
         "key_code": "q",
         "modifiers": {
-          "mandatory": ["left_command"]
+          "mandatory": ["left_command"],
+          "optional": ["any"]
         }
       },
       "conditions": [{

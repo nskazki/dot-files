@@ -1,0 +1,65 @@
+{
+  "title": "osx",
+  "rules": [{
+    "description": "osx: CMD+h -> CMD+shift+h",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "h"
+      },
+      "to": [{
+        "key_code": "h",
+        "modifiers": [
+          "left_command",
+          "left_shift"
+        ]
+      }]
+    }]
+  }, {
+    "description": "osx: CMD+m -> CMD+shift+m",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "m"
+      },
+      "to": [{
+        "key_code": "m",
+        "modifiers": [
+          "left_command",
+          "left_shift"
+        ]
+      }]
+    }]
+  }, {
+    "description": "osx: long CMD+q",
+    "manipulators": [
+      {
+        "type": "basic",
+        "from": {
+          "key_code": "q",
+          "modifiers": {
+            "mandatory": ["left_command"],
+            "optional": ["any"]
+          }
+        },
+        "conditions": [{
+          "type": "frontmost_application_unless",
+          "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+        }],
+        "to_if_held_down": [{
+          "key_code": "q",
+          "modifiers": ["left_command"],
+          "repeat": false
+        }]
+      }
+    ]
+  }]
+} 
