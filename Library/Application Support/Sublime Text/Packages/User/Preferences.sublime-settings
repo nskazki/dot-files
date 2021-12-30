@@ -1,0 +1,49 @@
+// Settings in here override those in "Default/Preferences.sublime-settings",
+// and are overridden in turn by syntax-specific settings.
+{
+  "ignored_packages": [
+    "Hippie Autocomplete",
+    "LSP",
+    "LSP-typescript",
+    "LSP-vue",
+    "SublimeLinter-rubocop",
+    "SublimeLinter-ruby",
+    "Vintage",
+  ],
+
+  "theme": "Adaptive.sublime-theme",
+  "color_scheme": "GitHub Light.sublime-color-scheme",
+  "show_full_path": true,
+  "hide_new_tab_button": true,
+
+  "font_size": 12,
+  "font_face": "Hack",
+
+  "tab_size": 2,
+  "translate_tabs_to_spaces": true,
+
+  "word_wrap": false,
+  "caret_style": "smooth",
+
+  "drag_text": false,
+  "find_selected_text": true,
+  "scroll_past_end": true,
+  "move_to_limit_on_up_down": true,
+  "open_files_in_new_window": "never",
+  "close_windows_when_empty": false,
+
+  "highlight_line": true,
+  "highlight_modified_tabs": true,
+
+  "save_on_focus_lost": true,
+  "ensure_newline_at_eof_on_save": true,
+  "trim_trailing_white_space_on_save": true,
+
+  "show_definitions": false,
+  "auto_complete_use_index": false,
+  "auto_complete_cycle": true,
+  "ignored_snippets": ["*"],
+  // "index_files": false,
+  // "auto_complete_commit_on_tab": true,
+  // "mini_auto_complete": true,
+}
