@@ -1,0 +1,221 @@
+{
+  "title": "chrome",
+  "rules": [{
+    "description": "chrome: ctrl+shift+pageup -> CMD+ctrl+left",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_control", "left_shift"],
+          "optional": ["any"]
+        },
+        "key_code": "page_up"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "left_arrow",
+        "modifiers": [
+          "left_command",
+          "left_control"
+        ]
+      }]
+    }]
+  }, {
+    "description": "chrome: ctrl+shift+pagedown -> CMD+ctrl+right",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_control", "left_shift"],
+          "optional": ["any"]
+        },
+        "key_code": "page_down"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "right_arrow",
+        "modifiers": [
+          "left_command",
+          "left_control"
+        ]
+      }]
+    }]
+  }, {
+    "description": "chrome: CMD+1 -> none",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "1"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "vk_none"
+      }]
+    }]
+  }, {
+    "description": "chrome: CMD+2 -> none",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "2"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "vk_none"
+      }]
+    }]
+  }, {
+    "description": "chrome: CMD+3 -> none",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "3"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "vk_none"
+      }]
+    }]
+  }, {
+    "description": "chrome: CMD+4 -> none",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "4"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "vk_none"
+      }]
+    }]
+  }, {
+    "description": "chrome: CMD+5 -> none",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "5"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "vk_none"
+      }]
+    }]
+  }, {
+    "description": "chrome: CMD+6 -> none",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "6"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "vk_none"
+      }]
+    }]
+  }, {
+    "description": "chrome: CMD+7 -> none",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "7"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "vk_none"
+      }]
+    }]
+  }, {
+    "description": "chrome: CMD+8 -> none",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "8"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "vk_none"
+      }]
+    }]
+  }, {
+    "description": "chrome: CMD+9 -> none",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        },
+        "key_code": "9"
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.google\\.Chrome$"]
+      }],
+      "to": [{
+        "key_code": "vk_none"
+      }]
+    }]
+  }]
+}

@@ -61,5 +61,43 @@
         }]
       }
     ]
+  }, {
+    "description": "osx: long ctrl+1",
+    "manipulators": [
+      {
+        "type": "basic",
+        "from": {
+          "key_code": "1",
+          "modifiers": {
+            "mandatory": ["left_control"],
+            "optional": ["any"]
+          }
+        },
+        "to_if_held_down": [{
+          "key_code": "1",
+          "modifiers": ["left_control"],
+          "repeat": false
+        }]
+      }
+    ]
+  }, {
+    "description": "osx: long ctrl+2",
+    "manipulators": [
+      {
+        "type": "basic",
+        "from": {
+          "key_code": "2",
+          "modifiers": {
+            "mandatory": ["left_control"],
+            "optional": ["any"]
+          }
+        },
+        "to_if_held_down": [{
+          "key_code": "2",
+          "modifiers": ["left_control"],
+          "repeat": false
+        }]
+      }
+    ]
   }]
 } 
