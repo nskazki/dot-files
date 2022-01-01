@@ -425,4 +425,14 @@
   { "keys": ["super+4"], "command": "next_bookmark" },
   { "keys": ["super+5"], "command": "prev_bookmark" },
   { "keys": ["super+6"], "command": "clear_bookmarks" },
+
+  // fallbacks
+
+  { "keys": ["ctrl+a"], "command": "select_all" },
+  { "keys": ["ctrl+s"], "command": "save", "args": { "async": true } },
+  { "keys": ["ctrl+d"], "command": "find_under_expand" },
+  { "keys": ["ctrl+z"], "command": "undo" },
+  { "keys": ["ctrl+x"], "command": "cut" },
+  { "keys": ["ctrl+c"], "command": "copy" },
+  { "keys": ["ctrl+v"], "command": "paste" },
 ]
