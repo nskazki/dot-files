@@ -325,8 +325,8 @@
   { "keys": ["alt+up"], "command": "swap_line_up" },
   { "keys": ["alt+down"], "command": "swap_line_down" },
 
-  { "keys": ["ctrl+up"], "command": "scroll_lines", "args": {"amount": 1.0} },
-  { "keys": ["ctrl+down"], "command": "scroll_lines", "args": {"amount": -1.0} },
+  { "keys": ["ctrl+up"], "command": "scroll_lines", "args": {"amount": 5.0} },
+  { "keys": ["ctrl+down"], "command": "scroll_lines", "args": {"amount": -5.0} },
 
   { "keys": ["ctrl+alt+up"], "command": "select_lines", "args": {"forward": false} },
   { "keys": ["ctrl+alt+down"], "command": "select_lines", "args": {"forward": true} },
