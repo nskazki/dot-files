@@ -11,6 +11,25 @@
     "Vintage",
   ],
 
+  "folder_exclude_patterns": [
+    ".svn",
+    ".git",
+    ".hg",
+    "CVS",
+    ".Trash",
+    ".Trash-*",
+    "log",
+    ".log",
+    "logs",
+    ".logs",
+    "tmp",
+    ".tmp",
+    "coverage",
+    ".coverage",
+    "public",
+    "node_modules"
+  ],
+
   "theme": "Adaptive.sublime-theme",
   "color_scheme": "GitHub Light.sublime-color-scheme",
   "show_full_path": true,
