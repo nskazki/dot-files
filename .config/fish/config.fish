@@ -34,6 +34,18 @@ bind \cg\ch 'bound gh'
 bind \cg\cr 'bound gr'
 bind \cr 'search-history'
 
+# https://fishshell.com/docs/current/interactive.html#shared-bindings
+# https://fishshell.com/docs/current/cmds/bind.html#special-input-functions
+
+bind \eb 'backward-bigword' # alt+left
+bind \ef 'forward-bigword' # alt+right
+
+bind \e\[1\;5D 'backward-word' # ctrt+left
+bind \e\[1\;5C 'forward-word' # ctrt+right
+
+bind \eW 'backward-kill-word' # ctrl+backspace
+bind \eD 'kill-bigword' # alt+del
+
 set -x LESS 'FRSX' # quit if one screen, colors, truncate lines, inline mode
 
 if [ -d /opt/homebrew/bin/brew ]
