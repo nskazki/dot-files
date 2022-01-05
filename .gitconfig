@@ -120,8 +120,8 @@
 
 [cola]
   spellcheck = false
-  theme = flat-dark-red
-  icontheme = dark
+  theme = flat-light-blue
+  icontheme = light
   fontdiff = Hack,14,-1,5,50,0,0,0,0,0
 
 [core]
