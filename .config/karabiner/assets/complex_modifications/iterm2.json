@@ -155,6 +155,50 @@
       ]
     }]
   }, {
+    "description": "iterm2: CMD+c -> ctrl+c",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "key_code": "c",
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        }
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "to": [
+        {
+          "key_code": "c",
+          "modifiers": ["left_control"]
+        }
+      ]
+    }]
+  }, {
+    "description": "iterm2: CMD+l -> ctrl+l",
+    "manipulators": [{
+      "type": "basic",
+      "from": {
+        "key_code": "l",
+        "modifiers": {
+          "mandatory": ["left_command"],
+          "optional": ["any"]
+        }
+      },
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "to": [
+        {
+          "key_code": "l",
+          "modifiers": ["left_control"]
+        }
+      ]
+    }]
+  }, {
     "description": "iterm2: CMD+n -> CMD+t",
     "manipulators": [{
       "type": "basic",

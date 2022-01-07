@@ -399,6 +399,7 @@
   { "keys": ["super+shift+h"], "command": "show_panel", "args": {"panel": "replace", "reverse": false} },
 
   { "keys": ["super+shift+o"], "command": "prompt_open_folder" },
+  { "keys": ["super+ctrl+o"], "command": "prompt_open_folder" },
 
   // F
 
@@ -448,12 +449,17 @@
   { "keys": ["ctrl+d"], "command": "find_under_expand" },
   { "keys": ["ctrl+f"], "command": "show_panel", "args": {"panel": "find", "reverse": false} },
   { "keys": ["ctrl+z"], "command": "undo" },
+  { "keys": ["ctrl+shift+z"], "command": "redo" },
   { "keys": ["ctrl+x"], "command": "cut" },
   { "keys": ["ctrl+c"], "command": "copy" },
   { "keys": ["ctrl+v"], "command": "paste" },
+  { "keys": ["ctrl+w"], "command": "close" },
 
   { "keys": ["super+ctrl+w"], "command": "close_window" },
 
   { "keys": ["ctrl+shift+p"], "command": "show_overlay", "args": {"overlay": "command_palette"} },
   { "keys": ["super+ctrl+p"], "command": "show_overlay", "args": {"overlay": "command_palette"} },
+
+  { "keys": ["super+shift+delete"], "command": "run_macro_file", "args": {"file": "res://Packages/Default/Delete to Hard EOL.sublime-macro"} },
+  { "keys": ["super+ctrl+delete"], "command": "run_macro_file", "args": {"file": "res://Packages/Default/Delete to Hard EOL.sublime-macro"} },
 ]
