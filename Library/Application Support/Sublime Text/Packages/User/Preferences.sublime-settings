@@ -2,7 +2,6 @@
 // and are overridden in turn by syntax-specific settings.
 {
   "ignored_packages": [
-    "Hippie Autocomplete",
     "LSP",
     "LSP-typescript",
     "LSP-vue",
@@ -62,7 +61,7 @@
   "auto_complete_use_index": false,
   "auto_complete_cycle": true,
   "ignored_snippets": ["*"],
-  // "auto_complete": false,
+  "auto_complete": false,
   // "index_files": false,
   // "auto_complete_commit_on_tab": true,
   // "mini_auto_complete": true,
