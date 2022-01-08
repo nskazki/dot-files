@@ -339,6 +339,9 @@
   { "keys": ["ctrl+super+left"], "command": "move_tab", "args": { "position": "-1" } },
   { "keys": ["ctrl+super+right"], "command": "move_tab", "args": { "position": "+1" } },
 
+  { "keys": ["ctrl+super+shift+left"], "command": "move_tab", "args": { "position": "-1" } },
+  { "keys": ["ctrl+super+shift+right"], "command": "move_tab", "args": { "position": "+1" } },
+
   { "keys": ["ctrl+shift+pageup"], "command": "move_tab", "args": { "position": "-1" } },
   { "keys": ["ctrl+shift+pagedown"], "command": "move_tab", "args": { "position": "+1" } },
 
@@ -462,4 +465,7 @@
 
   { "keys": ["super+shift+delete"], "command": "run_macro_file", "args": {"file": "res://Packages/Default/Delete to Hard EOL.sublime-macro"} },
   { "keys": ["super+ctrl+delete"], "command": "run_macro_file", "args": {"file": "res://Packages/Default/Delete to Hard EOL.sublime-macro"} },
+
+  { "keys": ["ctrl+shift+pagedown"], "command": "next_view" },
+  { "keys": ["ctrl+shift+pageup"], "command": "prev_view" },
 ]
