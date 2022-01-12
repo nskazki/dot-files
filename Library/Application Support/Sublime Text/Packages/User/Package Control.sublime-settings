@@ -1,0 +1,34 @@
+{
+	"bootstrapped": true,
+	"installed_packages":
+	[
+		"Alignment",
+		"AppendComma",
+		"AppendSemiColon",
+		"Better CoffeeScript",
+		"Case Conversion",
+		"ChangeQuotes",
+		"EditorConfig",
+		"fish",
+		"GitHub Theme",
+		"Google Spell Check",
+		"Hippie Autocomplete",
+		"LSP",
+		"LSP-typescript",
+		"LSP-vue",
+		"MoveTab",
+		"Package Control",
+		"PackageResourceViewer",
+		"Sass",
+		"sublime-github",
+		"SublimeLinter",
+		"SublimeLinter-eslint",
+		"SublimeLinter-rubocop",
+		"SublimeLinter-ruby",
+		"Text Highlighter",
+		"Vue Syntax Highlight",
+	],
+	"in_process_packages":
+	[
+	],
+}
