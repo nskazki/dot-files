@@ -1,12 +1,12 @@
 {
   "title": "chrome",
   "rules": [{
-    "description": "chrome: ctrl+shift+pageup -> CMD+ctrl+left",
+    "description": "chrome: ctrl+command+pageup -> CMD+ctrl+left",
     "manipulators": [{
       "type": "basic",
       "from": {
         "modifiers": {
-          "mandatory": ["left_control", "left_shift"],
+          "mandatory": ["left_control", "left_command"],
           "optional": ["any"]
         },
         "key_code": "page_up"
@@ -24,12 +24,12 @@
       }]
     }]
   }, {
-    "description": "chrome: ctrl+shift+pagedown -> CMD+ctrl+right",
+    "description": "chrome: ctrl+command+pagedown -> CMD+ctrl+right",
     "manipulators": [{
       "type": "basic",
       "from": {
         "modifiers": {
-          "mandatory": ["left_control", "left_shift"],
+          "mandatory": ["left_control", "left_command"],
           "optional": ["any"]
         },
         "key_code": "page_down"
