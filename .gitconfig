@@ -1,5 +1,5 @@
 [user]
-  name = nskazki
+  name = Nikita Skazki
   email = nskazki@gmail.com
 
 [alias]
@@ -54,8 +54,14 @@
 [core]
   autocrlf = input
   safecrlf = true
+  ignorecase = true
   editor = micro
-  ignorecase = false
+
+[core]
+  # https://github.com/git/git/blob/master/contrib/diff-highlight
+  # https://github.com/dandavison/delta
+  # https://github.com/mookid/diffr
+  pager = diffr --colors refine-removed:none:background:0x8f,0x00,0x34:nobold --colors removed:none:background:0x42,0x00,0x18 --colors refine-added:none:background:0x2d,0x50,0x02:nobold --colors added:none:background:0x14,0x23,0x01 | less
 
 [am]
   threeWay = true
@@ -100,7 +106,7 @@
 
 [rebase]
   autostash = true
-  autosquash = true
+  autosquash = false
   missingCommitsCheck = error
 
 [status]
@@ -123,9 +129,3 @@
   theme = flat-light-blue
   icontheme = light
   fontdiff = Hack,14,-1,5,50,0,0,0,0,0
-
-[core]
-  # https://github.com/git/git/blob/master/contrib/diff-highlight
-  # https://github.com/dandavison/delta
-  # https://github.com/mookid/diffr
-  pager = diffr --colors refine-removed:none:background:0x8f,0x00,0x34:nobold --colors removed:none:background:0x42,0x00,0x18 --colors refine-added:none:background:0x2d,0x50,0x02:nobold --colors added:none:background:0x14,0x23,0x01 | less -R
