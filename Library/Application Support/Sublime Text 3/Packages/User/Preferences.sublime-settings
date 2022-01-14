@@ -5,6 +5,31 @@
 	"color_scheme": "GitHub Light.sublime-color-scheme",
 	"drag_text": false,
 	"ensure_newline_at_eof_on_save": true,
+	"file_exclude_patterns":
+	[
+		"*.pyc",
+		"*.pyo",
+		"*.exe",
+		"*.dll",
+		"*.obj",
+		"*.o",
+		"*.a",
+		"*.lib",
+		"*.so",
+		"*.dylib",
+		"*.ncb",
+		"*.sdf",
+		"*.suo",
+		"*.pdb",
+		"*.idb",
+		".DS_Store",
+		"*.class",
+		"*.psd",
+		"*.db",
+		"*.sublime-workspace",
+		".harold.left.json",
+		".harold.right.json"
+	],
 	"find_selected_text": true,
 	"folder_exclude_patterns":
 	[
