@@ -388,9 +388,9 @@
 
   { "keys": ["super+g"], "command": "show_overlay", "args": {"overlay": "goto", "text": ":"} },
 
-  { "keys": ["super+b"], "command": "focus_side_bar" },
-  { "keys": ["super+shift+b"], "command": "hide_side_bar" },
-  { "keys": ["super+ctrl+b"], "command": "hide_side_bar" },
+  // { "keys": ["super+b"], "command": "focus_side_bar" },
+  // { "keys": ["super+shift+b"], "command": "hide_side_bar" },
+  // { "keys": ["super+ctrl+b"], "command": "hide_side_bar" },
 
   { "keys": ["super+t"], "command": "new_file" },
 
@@ -474,7 +474,7 @@
 
   { "keys": ["super+shift+j"], "command": "join_lines" },
 
-  { "keys": ["super+ctrl+w"], "command": "close_window" },
+  // { "keys": ["super+ctrl+w"], "command": "close_window" },
 
   { "keys": ["ctrl+shift+p"], "command": "show_overlay", "args": {"overlay": "command_palette"} },
   { "keys": ["super+ctrl+p"], "command": "show_overlay", "args": {"overlay": "command_palette"} },
