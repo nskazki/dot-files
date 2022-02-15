@@ -1,17 +1,38 @@
-function yarn-upgrade
+function package-upgrade
   if present $argv
     set cmd $argv
   else
     set cmd '.'
   end
 
-  set outdated (yarn --cwd "$cmd" outdated --color 2>&1 | string collect)
+  if test -d yarn.lock
+    set yarn 1
+  else
+    set yarn 0
+  end
+
+  if test $yarn -eq 1
+    set outdated (yarn --cwd "$cmd" outdated --color 2>&1 | string collect)
+  else
+    set outdated (npm --prefix "$cmd" --color=always outdated 2>&1 | string collect)
+  end
+
   if string match -qr '\\berror ' (uncolor $outdated)
     echo -- $outdated
     return 1
   end
 
-  set lines (echo $outdated | tail -n +7 | head -n -1 | fzf --multi)
+  if blank $outdated
+    color yellow 'everything is up to date it seems'
+    return 1
+  end
+
+  if test $yarn -eq 1
+    set lines (echo $outdated | tail -n +7 | head -n -1 | fzf --multi)
+  else
+    set lines (echo $outdated | tail -n +1 | fzf --multi)
+  end
+
   for line in $lines
     set match (string match -r '^(.+?)\\s+.+?\\s+.+?\\s+(.+?)\\s+' $line)
     set name $match[2]
@@ -32,6 +53,11 @@ function yarn-upgrade
     set -a packages "$name@$prefix$latest"
   end
 
-  echo 'yarn --cwd' \"$cmd\" 'add --' $packages
-  yarn --cwd "$cmd" add -- $packages
+  if test $yarn -eq 1
+    echo 'yarn --cwd' \"$cmd\" 'add --' $packages
+    yarn --cwd "$cmd" add -- $packages
+  else
+    echo 'npm --prefix' \"$cmd\" 'add --' $packages
+    npm --prefix "$cmd" add -- $packages
+  end
 end
