@@ -50,7 +50,7 @@ set -x LESS 'FRSX' # quit if one screen, colors, truncate lines, inline mode
 
 if [ -d /opt/homebrew/bin/brew ]
   eval (/opt/homebrew/bin/brew shellenv)
-  fish_add_path /opt/homebrew/opt/node@12/bin
+  # fish_add_path /opt/homebrew/opt/node@12/bin
 end
 
 if [ -d ~/.cargo ]
