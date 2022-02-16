@@ -5,7 +5,7 @@ function package-upgrade
     set cmd '.'
   end
 
-  if test -d yarn.lock
+  if test -e yarn.lock
     set yarn 1
   else
     set yarn 0
@@ -31,6 +31,11 @@ function package-upgrade
     set lines (echo $outdated | tail -n +7 | head -n -1 | fzf --multi)
   else
     set lines (echo $outdated | tail -n +1 | fzf --multi)
+  end
+
+  if blank $lines
+    color yellow 'nothing is selected'
+    return 1
   end
 
   for line in $lines
