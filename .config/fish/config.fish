@@ -65,11 +65,11 @@ if [ -d ~/go ]
   fish_add_path ~/go/bin
 end
 
-if [ -x (command -v rbenv) ]
+if command -v rbenv > /dev/null
   rbenv init - fish | source
 end
 
-if [ -x (command -v fzf) ]
+if command -v fzf > /dev/null
   set -x FZF_DEFAULT_OPTS \
     "--color=dark --height 50% --ansi --reverse --no-sort --multi --preview-window right:40% \
      --bind 'ctrl-s:toggle-sort' \
@@ -77,7 +77,7 @@ if [ -x (command -v fzf) ]
      --bind 'ctrl-j:preview-down'"
 end
 
-if [ -x (command -v fnm) ]
+if command -v fnm > /dev/null
   fnm env | source
   set -x npm_config_userconfig ~/.npm_auth
   fish_add_path node_modules/.bin
@@ -85,7 +85,7 @@ if [ -x (command -v fnm) ]
   fish_add_path (yarn global bin)
 end
 
-if [ -x (command -v thefuck) ]
+if command -v thefuck > /dev/null
   thefuck --alias | source
 end
 
