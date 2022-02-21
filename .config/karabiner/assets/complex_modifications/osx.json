@@ -197,9 +197,6 @@
             "name": "double_ctrl_1",
             "value": 0
           }
-        }, {
-          "key_code": "1",
-          "modifiers": ["left_command"]
         }],
         "to_if_canceled": [{
           "set_variable": {
@@ -250,9 +247,6 @@
             "name": "double_ctrl_2",
             "value": 0
           }
-        }, {
-          "key_code": "2",
-          "modifiers": ["left_command"]
         }],
         "to_if_canceled": [{
           "set_variable": {
@@ -303,9 +297,6 @@
             "name": "double_ctrl_3",
             "value": 0
           }
-        }, {
-          "key_code": "3",
-          "modifiers": ["left_command"]
         }],
         "to_if_canceled": [{
           "set_variable": {
@@ -356,9 +347,6 @@
             "name": "double_ctrl_4",
             "value": 0
           }
-        }, {
-          "key_code": "4",
-          "modifiers": ["left_command"]
         }],
         "to_if_canceled": [{
           "set_variable": {
