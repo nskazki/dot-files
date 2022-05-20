@@ -56,12 +56,12 @@ if [ -d ~/.cargo ]
   fish_add_path ~/.cargo/bin
 end
 
-if [ -d ~/.rbenv ]
-  fish_add_path ~/.rbenv/bin
-end
-
 if [ -d ~/go ]
   fish_add_path ~/go/bin
+end
+
+if [ -d ~/.rbenv ]
+  fish_add_path ~/.rbenv/bin
 end
 
 if command -v rbenv > /dev/null
@@ -86,6 +86,10 @@ end
 
 if command -v thefuck > /dev/null
   thefuck --alias | source
+end
+
+if command -v direnv > /dev/null
+  direnv hook fish | source
 end
 
 # https://fishshell.com/docs/current/index.html?highlight=fish_color_selection#variables-for-changing-highlighting-colors
