@@ -425,7 +425,7 @@
   { "keys": ["f5"], "command": "copy_remote_url_default"},
 
   { "keys": ["f6"], "command": "convert_to_dash"},
-  { "keys": ["f7"], "command": "convert_to_camel"},
+  { "keys": ["f7"], "command": "convert_to_snake"},
   { "keys": ["f8"], "command": "convert_to_pascal"},
 
   // numbers
