@@ -68,6 +68,10 @@ if [ -d /opt/homebrew/opt/node@16 ]
   fish_add_path /opt/homebrew/opt/node@16/bin
 end
 
+if [ -d /Applications/Postgres.app/Contents/Versions/latest ]
+  fish_add_path /Applications/Postgres.app/Contents/Versions/latest/bin
+end
+
 if command -v rbenv > /dev/null
   rbenv init - fish | source
 end
