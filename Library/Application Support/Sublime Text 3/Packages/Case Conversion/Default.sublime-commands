@@ -1,0 +1,44 @@
+[
+	{
+	    "caption": "Convert Case: PascalCase",
+	    "command": "convert_to_pascal"
+	},
+	{
+	    "caption": "Convert Case: camelCase",
+	    "command": "convert_to_camel"
+	},
+	{
+	    "caption": "Convert Case: snake_case",
+	    "command": "convert_to_snake"
+	},
+	{
+	    "caption": "Convert Case: SCREAMING_SNAKE_CASE",
+	    "command": "convert_to_screaming_snake"
+	},
+	{
+	    "caption": "Convert Case: dot.case",
+	    "command": "convert_to_dot"
+	},
+	{
+	    "caption": "Convert Case: dash-case",
+	    "command": "convert_to_dash"
+	},
+	{
+	    "caption": "Convert Case: separate␣words",
+	    "command": "convert_to_separate_words"
+	},
+	{
+	    "caption": "Convert Case: separate/with/slash",
+	    "command": "convert_to_slash"
+	},
+	{
+	    "caption": "Convert Case: separate\\with\\backslash",
+	    "command": "convert_to_back_slash"
+	},
+	{
+	    "caption": "Convert Case: Toggle Case",
+	    "command": "toggle_snake_camel_pascal"
+	},
+	{ "caption": "Convert Case: Toggle Dash to Camel", "command": "toggle_dash_to_camel" },
+	{ "caption": "Convert Case: Toggle Lower to Upper", "command": "toggle_lower_to_upper" },
+]
