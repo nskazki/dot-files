@@ -60,33 +60,32 @@ def to_separate_words(text, detectAcronyms, acronyms):
     words, case, sep = case_parse.parseVariable(text, detectAcronyms, acronyms, True)
     return ' '.join(words)
 
-
-def toggle_case(text, detectAcronyms, acronyms):
-    words, case, sep = case_parse.parseVariable(text, detectAcronyms, acronyms)
-    if case == 'pascal' and not sep:
-        return to_snake_case(text, detectAcronyms, acronyms)
-    elif case == 'lower' and sep == '_':
-        return to_camel_case(text, detectAcronyms, acronyms)
-    elif case == 'camel' and not sep:
-        return to_pascal_case(text, detectAcronyms, acronyms)
-    else:
-        return text
-
 def toggle_dash_to_camel(text, detectAcronyms, acronyms):
     if re.search(r"[-_]", text):
         return to_camel_case(text, detectAcronyms, acronyms)
     else:
         return to_dash_case(text, detectAcronyms, acronyms)
 
-def toggle_lower_to_upper(text, detectAcronyms, acronyms):
-    if re.search(r"-", text) or re.search(r"^[A-Z0-9_]+$", text):
+def toggle_all(text, detectAcronyms, acronyms):
+    if re.search(r"^[-_]$", text) or re.search(r"^[0-9]$", text):
+        return text
+    if re.search(r"^[a-z0-9]+$", text):
+        return to_pascal_case(text, detectAcronyms, acronyms)
+    elif re.search(r"^[A-Z][a-z0-9]+$", text):
+        return to_screaming_snake_case(text, detectAcronyms, acronyms)
+    elif re.search(r"^[A-Z0-9]+$", text):
+        return to_camel_case(text, detectAcronyms, acronyms)
+    elif re.search(r"-", text):
         return to_snake_case(text, detectAcronyms, acronyms)
     elif re.search(r"_", text):
-        return to_screaming_snake_case(text, detectAcronyms, acronyms)
+        if re.search(r"^[0-9A-Z_]+$", text):
+            return to_camel_case(text, detectAcronyms, acronyms)
+        else:
+            return to_screaming_snake_case(text, detectAcronyms, acronyms)
     elif re.search(r"^[a-z]", text):
         return to_pascal_case(text, detectAcronyms, acronyms)
     else:
-        return to_camel_case(text, detectAcronyms, acronyms)
+        return to_dash_case(text, detectAcronyms, acronyms)
 
 def run_on_selections(view, edit, func):
     settings = sublime.load_settings(SETTINGS_FILE)
@@ -108,18 +107,15 @@ def run_on_selections(view, edit, func):
         if new_text != text:
             view.replace(edit, region, new_text)
 
+
 class ToggleDashToCamel(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, toggle_dash_to_camel)
 
-class ToggleLowerToUpper(sublime_plugin.TextCommand):
-    def run(self, edit):
-        run_on_selections(self.view, edit, toggle_lower_to_upper)
 
-
-class ToggleSnakeCamelPascalCommand(sublime_plugin.TextCommand):
+class ToggleAll(sublime_plugin.TextCommand):
     def run(self, edit):
-        run_on_selections(self.view, edit, toggle_case)
+        run_on_selections(self.view, edit, toggle_all)
 
 
 class ConvertToSnakeCommand(sublime_plugin.TextCommand):

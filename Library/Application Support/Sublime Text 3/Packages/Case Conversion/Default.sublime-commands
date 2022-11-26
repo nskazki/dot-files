@@ -40,5 +40,5 @@
 	    "command": "toggle_snake_camel_pascal"
 	},
 	{ "caption": "Convert Case: Toggle Dash to Camel", "command": "toggle_dash_to_camel" },
-	{ "caption": "Convert Case: Toggle Lower to Upper", "command": "toggle_lower_to_upper" },
+	{ "caption": "Convert Case: Toggle All", "command": "toggle_all" },
 ]
