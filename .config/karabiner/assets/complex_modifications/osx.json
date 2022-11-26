@@ -39,67 +39,6 @@
       }]
     }]
   }, {
-    "description": "osx: long CMD+q",
-    "manipulators": [
-      {
-        "type": "basic",
-        "from": {
-          "key_code": "q",
-          "modifiers": {
-            "mandatory": ["left_command"],
-            "optional": ["any"]
-          }
-        },
-        "conditions": [{
-          "type": "frontmost_application_unless",
-          "bundle_identifiers": ["^com\\.google\\.Chrome$"]
-        }],
-        "to_if_held_down": [{
-          "key_code": "q",
-          "modifiers": ["left_command"],
-          "repeat": false
-        }]
-      }
-    ]
-  }, {
-    "description": "osx: long ctrl+1",
-    "manipulators": [
-      {
-        "type": "basic",
-        "from": {
-          "key_code": "1",
-          "modifiers": {
-            "mandatory": ["left_control"],
-            "optional": ["any"]
-          }
-        },
-        "to_if_held_down": [{
-          "key_code": "1",
-          "modifiers": ["left_control"],
-          "repeat": false
-        }]
-      }
-    ]
-  }, {
-    "description": "osx: long ctrl+2",
-    "manipulators": [
-      {
-        "type": "basic",
-        "from": {
-          "key_code": "2",
-          "modifiers": {
-            "mandatory": ["left_control"],
-            "optional": ["any"]
-          }
-        },
-        "to_if_held_down": [{
-          "key_code": "2",
-          "modifiers": ["left_control"],
-          "repeat": false
-        }]
-      }
-    ]
-  }, {
     "description": "osx: double CMD+q -> CMD+q",
     "manipulators": [{
       "type": "basic",
@@ -157,7 +96,7 @@
       }
     }]
   }, {
-    "description": "osx: double ctrl+1 -> ctrl+1, single ctrl+1 -> CMD+1",
+    "description": "osx: double ctrl+1 -> ctrl+1, single ctrl+1 -> none",
     "manipulators": [{
       "type": "basic",
       "conditions": [{
@@ -207,7 +146,7 @@
       }
     }]
   }, {
-    "description": "osx: double ctrl+2 -> ctrl+2, single ctrl+2 -> CMD+2",
+    "description": "osx: double ctrl+2 -> ctrl+2, single ctrl+2 -> none",
     "manipulators": [{
       "type": "basic",
       "conditions": [{
@@ -257,7 +196,7 @@
       }
     }]
   }, {
-    "description": "osx: double ctrl+3 -> ctrl+3, single ctrl+3 -> CMD+3",
+    "description": "osx: double ctrl+3 -> ctrl+3, single ctrl+3 -> none",
     "manipulators": [{
       "type": "basic",
       "conditions": [{
@@ -307,7 +246,7 @@
       }
     }]
   }, {
-    "description": "osx: double ctrl+4 -> ctrl+4, single ctrl+4 -> CMD+4",
+    "description": "osx: double ctrl+4 -> ctrl+4, single ctrl+4 -> none",
     "manipulators": [{
       "type": "basic",
       "conditions": [{
