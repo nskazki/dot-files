@@ -1,6 +1,70 @@
 {
   "title": "osx",
   "rules": [{
+    "description": "os: F8 -> super+F8 unless termimal",
+    "manipulators": [{
+      "type": "basic",
+      "conditions": [{
+        "type": "frontmost_application_unless",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "from": {
+        "key_code": "f8"
+      },
+      "to": [{
+        "key_code": "f8",
+        "modifiers": ["left_control", "left_option", "left_command"]
+      }]
+    }]
+  }, {
+    "description": "os: F9 -> super+F9 unless termimal",
+    "manipulators": [{
+      "type": "basic",
+      "conditions": [{
+        "type": "frontmost_application_unless",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "from": {
+        "key_code": "f9"
+      },
+      "to": [{
+        "key_code": "f9",
+        "modifiers": ["left_control", "left_option", "left_command"]
+      }]
+    }]
+  }, {
+    "description": "os: F10 -> super+F10 unless termimal",
+    "manipulators": [{
+      "type": "basic",
+      "conditions": [{
+        "type": "frontmost_application_unless",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "from": {
+        "key_code": "f10"
+      },
+      "to": [{
+        "key_code": "f10",
+        "modifiers": ["left_control", "left_option", "left_command"]
+      }]
+    }]
+  }, {
+    "description": "os: F11 -> super+F11 unless termimal",
+    "manipulators": [{
+      "type": "basic",
+      "conditions": [{
+        "type": "frontmost_application_unless",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "from": {
+        "key_code": "f11"
+      },
+      "to": [{
+        "key_code": "f11",
+        "modifiers": ["left_control", "left_option", "left_command"]
+      }]
+    }]
+  }, {
     "description": "osx: CMD+h -> CMD+shift+h",
     "manipulators": [{
       "type": "basic",
