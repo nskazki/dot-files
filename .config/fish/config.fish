@@ -100,6 +100,11 @@ if command -v direnv > /dev/null
   direnv hook fish | source
 end
 
+if [ -d ~/.bun ]
+  set -x BUN_INSTALL ~/.bun
+  fish_add_path ~.bun/bin
+end
+
 # https://fishshell.com/docs/current/index.html?highlight=fish_color_selection#variables-for-changing-highlighting-colors
 
 set fish_color_cancel            -r
@@ -133,8 +138,3 @@ set fish_pager_color_completion  normal
 set fish_pager_color_description yellow
 set fish_pager_color_prefix      --bold
 set fish_pager_color_progress    green --background=303030
-
-# Bun
-set -Ux BUN_INSTALL "/Users/nskazki/.bun"
-set -px --path PATH "/Users/nskazki/.bun/bin"
-
