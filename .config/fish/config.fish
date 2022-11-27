@@ -48,6 +48,9 @@ bind \eD 'kill-bigword' # alt+del
 
 set -x LESS 'FRSX' # quit if one screen, colors, truncate lines, inline mode
 
+set -x EDITOR micro
+set -x VISUAL subl
+
 if [ -d /opt/homebrew/bin/brew ]
   eval (/opt/homebrew/bin/brew shellenv)
 end
