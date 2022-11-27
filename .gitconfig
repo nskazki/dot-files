@@ -24,7 +24,7 @@
   }; f"
 
   branch-delete = "!f() { \
-    if [ -z \"$1\" ]; then echo 'usage: git branchd <branch-name>'; return 1; fi; \
+    if [ -z \"$1\" ]; then echo 'usage: git branch-delete <branch-name>'; return 1; fi; \
     echo -n 'local: '; git branch -D \"$1\"; \
     echo -n 'origin: '; git push origin --delete \"$1\"; \
   }; f"
@@ -94,7 +94,6 @@
 
 [merge]
   log = true
-  tool = smerge
   conflictstyle = diff3
 
 [pull]
@@ -129,3 +128,10 @@
   theme = flat-light-blue
   icontheme = light
   fontdiff = Hack,14,-1,5,50,0,0,0,0,0
+
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
