@@ -1,7 +1,7 @@
 function clip-set
   if present $argv
-    echo -n -- $argv | xclip -selection c
+    echo -n -- $argv | pbcopy
   else
-    xclip -selection c
+    pbcopy
   end
 end
