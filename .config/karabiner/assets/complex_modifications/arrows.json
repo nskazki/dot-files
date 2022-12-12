@@ -1,9 +1,13 @@
 {
   "title": "arrows",
   "rules": [{
-    "description": "arrows: CMD+up -> page_up",
+    "description": "arrows: CMD+up -> page_up unless termimal",
     "manipulators": [{
       "type": "basic",
+      "conditions": [{
+        "type": "frontmost_application_unless",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
       "from": {
         "modifiers": {
           "mandatory": ["left_command"],
@@ -16,9 +20,13 @@
       }]
     }]
   }, {
-    "description": "arrows: CMD+down -> page_down",
+    "description": "arrows: CMD+down -> page_down unless termimal",
     "manipulators": [{
       "type": "basic",
+      "conditions": [{
+        "type": "frontmost_application_unless",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
       "from": {
         "modifiers": {
           "mandatory": ["left_command"],
