@@ -108,6 +108,10 @@ if [ -d ~/.bun ]
   fish_add_path ~.bun/bin
 end
 
+if [ -e ~/.iterm2_shell_integration.fish ]
+  source ~/.iterm2_shell_integration.fish
+end
+
 # https://fishshell.com/docs/current/index.html?highlight=fish_color_selection#variables-for-changing-highlighting-colors
 
 set fish_color_cancel            -r
