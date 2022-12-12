@@ -394,7 +394,7 @@
 
   { "keys": ["super+t"], "command": "new_file" },
 
-  { "keys": ["super+y"], "command": "sublime_linter_line_report" },
+  { "keys": ["super+y"], "command": "sublime_linter_goto_error" },
   { "keys": ["super+shift+y"], "command": "sublime_linter_panel_toggle" },
 
   { "keys": ["super+."], "command": "split_selection_into_lines" },
