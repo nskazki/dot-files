@@ -76,7 +76,7 @@ if command -v fzf > /dev/null
 end
 
 if command -v node > /dev/null
-  set -x npm_config_userconfig ~/.npm_auth
+  set -x npm_config_userconfig $HOME/.npm_auth
   fish_add_path node_modules/.bin
   fish_add_path (npm -g bin)
   fish_add_path (yarn global --cwd=$HOME bin)
@@ -91,7 +91,7 @@ if command -v direnv > /dev/null
 end
 
 if [ -d ~/.bun ]
-  set -x BUN_INSTALL ~/.bun
+  set -x BUN_INSTALL $HOME/.bun
   fish_add_path ~.bun/bin
 end
 
