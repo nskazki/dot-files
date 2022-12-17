@@ -54,7 +54,7 @@
   # https://github.com/git/git/blob/master/contrib/diff-highlight
   # https://github.com/dandavison/delta
   # https://github.com/mookid/diffr
-  pager = diffr --colors refine-removed:none:background:0x8f,0x00,0x34:nobold --colors removed:none:background:0x42,0x00,0x18 --colors refine-added:none:background:0x2d,0x50,0x02:nobold --colors added:none:background:0x14,0x23,0x01 | less
+  pager = diffr --colors refine-removed:none:background:0x8f,0x00,0x34:nobold --colors removed:none:background:0x42,0x00,0x18 --colors refine-added:none:background:0x2d,0x50,0x02:nobold --colors added:none:background:0x14,0x23,0x01 | ~/.scripts/less-with-total-lines.sh
 
 [am]
   threeWay = true
