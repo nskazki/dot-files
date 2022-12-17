@@ -108,7 +108,6 @@
 
 [stash]
   showPatch = true
-  showStat = true
 
 [commit]
   verbose = true
