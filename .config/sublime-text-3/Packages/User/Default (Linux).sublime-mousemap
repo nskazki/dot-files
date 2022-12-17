@@ -1,7 +1,0 @@
-[
-  // Change font size with ctrl+scroll wheel
-  { "button": "scroll_up", "modifiers": ["ctrl"], "command": "null" },
-  { "button": "scroll_down", "modifiers": ["ctrl"], "command": "null" },
-  { "button": "scroll_up", "modifiers": ["ctrl"], "command": "terminal_view_scroll", "args": {"forward": false}, "context": [{"key": "setting.terminal_view"}] },
-  { "button": "scroll_down", "modifiers": ["ctrl"], "command": "terminal_view_scroll", "args": {"forward": true}, "context": [{"key": "setting.terminal_view"}] },
-]
