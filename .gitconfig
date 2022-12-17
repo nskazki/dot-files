@@ -19,17 +19,8 @@
   git-dir = "rev-parse --git-dir"
 
   # delete
-  tag-delete = "!f() { \
-    if [ -z \"$1\" ]; then echo 'usage: git tag-delete <tag-name>'; return 1; fi; \
-    echo -n 'local: '; git tag -d \"$1\"; \
-    echo -n 'origin: '; git push origin \":refs/tags/$1\"; \
-  }; f"
-
-  branch-delete = "!f() { \
-    if [ -z \"$1\" ]; then echo 'usage: git branch-delete <branch-name>'; return 1; fi; \
-    echo -n 'local: '; git branch -D \"$1\"; \
-    echo -n 'origin: '; git push origin --delete \"$1\"; \
-  }; f"
+  tag-delete = "!git tag -d $1; git push origin :refs/tags/$1;"
+  branch-delete = "!git branch -D $1; git push origin --delete $1;"
 
   # logs
   log-hist = "log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --format='%C(magenta)%h%C(reset) %C(blue)%ad%C(reset) %C(green)%an%C(reset) %s%C(auto)%d%C(reset)'"
