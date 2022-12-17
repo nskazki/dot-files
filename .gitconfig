@@ -87,6 +87,7 @@
 
 [merge]
   log = true
+  autostash = true
   conflictstyle = diff3
 
 [pull]
