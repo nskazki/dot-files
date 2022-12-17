@@ -75,8 +75,7 @@ if command -v fzf > /dev/null
      --bind 'ctrl-j:preview-down'"
 end
 
-if command -v fnm > /dev/null
-  fnm env | source
+if command -v node > /dev/null
   set -x npm_config_userconfig ~/.npm_auth
   fish_add_path node_modules/.bin
   fish_add_path (npm -g bin)
