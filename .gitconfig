@@ -4,7 +4,7 @@
 
 [alias]
   # base
-  unstage = "reset HEAD"
+  unstage = "reset HEAD" # https://git-scm.com/book/en/v2/Git-Tools-Reset-Demystified#_reset_with_a_path
   recommit = "commit --amend"
   uncommit = "!f() { \
     rm -f \"$(git git-dir)/.uncommit_cnt\"; \
