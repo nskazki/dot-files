@@ -92,7 +92,7 @@ if command -v fnm > /dev/null
   set -x npm_config_userconfig ~/.npm_auth
   fish_add_path node_modules/.bin
   fish_add_path (npm -g bin)
-  fish_add_path (yarn global bin)
+  fish_add_path (yarn global --cwd=$HOME bin)
 end
 
 if command -v thefuck > /dev/null
