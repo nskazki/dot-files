@@ -1,15 +1,18 @@
-# https://github.com/PatrickF1/fzf.fish/blob/main/functions/__fzf_search_history.fish
+# https://github.com/PatrickF1/fzf.fish/blob/main/functions/_fzf_search_history.fish
 
 function search-history
-  set line (
-    builtin history --null --show-time="%y/%m/%d %H:%M:%S | " |
-    fzf --read0 --tiebreak=index --query=(commandline) |
-    string collect
+  if test -z "$fish_private_mode"
+    builtin history merge
+  end
+
+  set commands (
+    builtin history --null |
+    fzf --read0 --print0 --multi --tiebreak=index --query=(commandline) |
+    string split0
   )
 
-  if present $line
-    set cmd (string split --max 1 " | " $line)[2]
-    commandline --replace -- $cmd
+  if present $commands
+    commandline --replace -- $commands
   end
 
   commandline --function repaint
