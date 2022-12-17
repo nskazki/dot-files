@@ -12,6 +12,8 @@
     git reset --soft HEAD^; \
   }; f"
 
+  recreate-conflict = "checkout --conflict=diff3"
+
   # paths
   root = "rev-parse --show-toplevel"
   git-dir = "rev-parse --git-dir"
@@ -123,6 +125,10 @@
 [fetch]
   prune = true
   pruneTags = true
+
+[rerere]
+  enabled = true
+  autoupdate = true
 
 [cola]
   spellcheck = false
