@@ -46,7 +46,7 @@ bind \cr 'search-history'
 # bind \eW 'backward-kill-word' # ctrl+backspace
 # bind \eD 'kill-bigword' # alt+del
 
-set -x LESS 'FRSX' # quit if one screen, colors, truncate lines, inline mode
+set -x LESS FRSX # quit if one screen, colors, truncate lines, inline mode
 
 set -x EDITOR micro
 set -x VISUAL subl
