@@ -9,7 +9,9 @@ const {
 const filePath = process.argv[2]
 const rawText = readFileSync(filePath).toString().replace(/^#.*$/gm, '').trim()
 const rawLines = rawText.split('\n')
-const lines = rawLines.map(rawLine => {
+const lines = rawLines.filter((rawLine) => {
+  return !/^update-ref\s/.test(rawLine)
+}).map(rawLine => {
   const match = /^(\w+)\s+(\w+)\s+(.+)\s*$/.exec(rawLine)
   return {
     cmd: match[1],
