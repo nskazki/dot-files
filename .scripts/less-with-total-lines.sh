@@ -5,13 +5,17 @@ if [[ -n "$@" ]]; then
 else
   shopt -s extglob # https://stackoverflow.com/a/3015564/16062729
   input="$(cat -)"
-  lines="$(echo -n "$input" | wc -l)"
-  lines="${lines##*( )}"
   limit="$(tput lines)"
 
-  if test "$lines" -gt "$limit"; then
+  chars="$(echo -n "$input" | wc -m)"
+  chars="${chars##*( )}"
+
+  lines="$(echo "$input" | wc -l)"
+  lines="${lines##*( )}"
+
+  if test "$lines" -ge "$limit"; then
     LESS="$LESS -Pslines %lt-%lb/$lines" less <<< "$input"
-  elif test "$lines" -gt 0; then
+  elif test "$chars" -gt 0; then
     echo "$input"
   fi
 fi
