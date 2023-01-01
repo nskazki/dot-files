@@ -418,9 +418,13 @@
 
   // F
 
-  { "keys": ["f1"], "command": "dir_path_to_clipboard" },
-  { "keys": ["f2"], "command": "file_path_to_clipboard" },
-  { "keys": ["f3"], "command": "file_name_to_clipboard" },
+  { "keys": ["f1"], "command": "dir_to_clipboard" },
+  { "keys": ["f2"], "command": "path_to_clipboard" },
+  { "keys": ["f3"], "command": "name_to_clipboard" },
+  { "keys": ["super+f1"], "command": "full_dir_to_clipboard" },
+  { "keys": ["super+f2"], "command": "full_path_to_clipboard" },
+  { "keys": ["super+f3"], "command": "full_name_to_clipboard" },
+
   { "keys": ["f4"], "command": "copy_remote_url_permalink"},
   { "keys": ["f5"], "command": "copy_remote_url_default"},
 
