@@ -1,28 +1,6 @@
 {
   "title": "iterm2",
   "rules": [{
-    "description": "iterm2: CMD+w -> ctrl+w",
-    "manipulators": [{
-      "type": "basic",
-      "from": {
-        "key_code": "w",
-        "modifiers": {
-          "mandatory": ["left_command"],
-          "optional": ["any"]
-        }
-      },
-      "conditions": [{
-        "type": "frontmost_application_if",
-        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
-      }],
-      "to": [
-        {
-          "key_code": "w",
-          "modifiers": ["left_control"]
-        }
-      ]
-    }]
-  }, {
     "description": "iterm2: CMD+a -> ctrl+a",
     "manipulators": [{
       "type": "basic",
@@ -84,50 +62,6 @@
       "to": [
         {
           "key_code": "d",
-          "modifiers": ["left_control"]
-        }
-      ]
-    }]
-  }, {
-    "description": "iterm2: CMD+q -> ctrl+q",
-    "manipulators": [{
-      "type": "basic",
-      "from": {
-        "key_code": "q",
-        "modifiers": {
-          "mandatory": ["left_command"],
-          "optional": ["any"]
-        }
-      },
-      "conditions": [{
-        "type": "frontmost_application_if",
-        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
-      }],
-      "to": [
-        {
-          "key_code": "q",
-          "modifiers": ["left_control"]
-        }
-      ]
-    }]
-  }, {
-    "description": "iterm2: CMD+s -> ctrl+s",
-    "manipulators": [{
-      "type": "basic",
-      "from": {
-        "key_code": "s",
-        "modifiers": {
-          "mandatory": ["left_command"],
-          "optional": ["any"]
-        }
-      },
-      "conditions": [{
-        "type": "frontmost_application_if",
-        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
-      }],
-      "to": [
-        {
-          "key_code": "s",
           "modifiers": ["left_control"]
         }
       ]
