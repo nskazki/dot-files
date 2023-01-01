@@ -1,7 +1,7 @@
 {
   "title": "osx",
   "rules": [{
-    "description": "os: F8 -> super+F8 unless termimal",
+    "description": "osx: F8 -> super+F8 unless termimal",
     "manipulators": [{
       "type": "basic",
       "conditions": [{
@@ -17,7 +17,7 @@
       }]
     }]
   }, {
-    "description": "os: F9 -> super+F9 unless termimal",
+    "description": "osx: F9 -> super+F9 unless termimal",
     "manipulators": [{
       "type": "basic",
       "conditions": [{
@@ -33,7 +33,7 @@
       }]
     }]
   }, {
-    "description": "os: F10 -> super+F10 unless termimal",
+    "description": "osx: F10 -> super+F10 unless termimal",
     "manipulators": [{
       "type": "basic",
       "conditions": [{
@@ -49,7 +49,7 @@
       }]
     }]
   }, {
-    "description": "os: F11 -> super+F11 unless termimal",
+    "description": "osx: F11 -> super+F11 unless termimal",
     "manipulators": [{
       "type": "basic",
       "conditions": [{
