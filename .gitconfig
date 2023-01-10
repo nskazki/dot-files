@@ -19,8 +19,8 @@
   git-dir = "rev-parse --git-dir"
 
   # delete
-  tag-delete = "!git tag -d $1; git push origin :refs/tags/$1"
-  branch-delete = "!git branch -D $1; git push origin --delete $1"
+  tag-delete = "!f() { git tag -d $1; git push origin :refs/tags/$1; }; f"
+  branch-delete = "!f() { git branch -D $1; git push origin --delete $1; }; f"
 
   # logs
   log-hist = "log --graph --color=always --date=format:'%Y-%m-%d %H:%M' --format='%C(magenta)%h%C(reset) %C(blue)%ad%C(reset) %C(green)%an%C(reset) %s%C(auto)%d%C(reset)'"
