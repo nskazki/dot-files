@@ -86,6 +86,7 @@
   algorithm = minimal
 
 [merge]
+  ff = false
   log = true
   autostash = true
   conflictstyle = diff3
