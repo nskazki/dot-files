@@ -38,7 +38,13 @@
 
   # viewcommit
   view-commit-head = "show --color=always --pretty=fuller --root --stat"
-  view-commit = "!git view-commit-head --patch-with-stat"
+  view-commit = "!f() { \
+    if [[ "$(git show --no-patch --pretty=%P "$@")" != *' '* ]]; then \
+      git view-commit-head --patch "$@"; \
+    else \
+      (git view-commit-head "$@"; git show --pretty="" --patch --remerge-diff --color=always "$@"; git show --pretty="" --patch --first-parent --color=always "$@" | ~/.scripts/diffr-with-custom-colors.sh) | ~/.scripts/less-with-total-lines.sh; \
+    fi; \
+  }; f"
 
   # branch
   branch-name = "rev-parse --abbrev-ref HEAD"
@@ -54,7 +60,7 @@
   # https://github.com/git/git/blob/master/contrib/diff-highlight
   # https://github.com/dandavison/delta
   # https://github.com/mookid/diffr
-  pager = diffr --colors refine-removed:none:background:0x8f,0x00,0x34:nobold --colors removed:none:background:0x42,0x00,0x18 --colors refine-added:none:background:0x2d,0x50,0x02:nobold --colors added:none:background:0x14,0x23,0x01 | ~/.scripts/less-with-total-lines.sh
+  pager = ~/.scripts/diffr-with-custom-colors.sh | ~/.scripts/less-with-total-lines.sh
 
 [am]
   threeWay = true
