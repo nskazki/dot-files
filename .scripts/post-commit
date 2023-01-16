@@ -1,9 +1,28 @@
 #!/usr/bin/env bash
 
-output="$(git show -s --format=%s%n%n%b | ~/.scripts/spellcheck.sh)"
+shopt -s extglob # https://stackoverflow.com/a/3015564/16062729
 
-if [ -n "$output" ]; then
+mistakes="$(git show -s --format=%s%n%n%b | ~/.scripts/spellcheck.sh)"
+
+if [ -n "$mistakes" ]; then
   echo
-  echo "$output"
+  echo "$mistakes"
+  any_output=1
+fi
+
+limit=72
+subject="$(git show -s --format=%s | grep -vE '^#')"
+charcount="$(echo -n "$subject" | wc -c)"
+charcount="${charcount##*( )}"
+
+if [[ ! "$subject" =~ ^fixup![[:space:]] && "$charcount" -gt $limit ]]; then
+  echo
+  echo -e "\e[0;31mSubject is $charcount symbols long! Limit it to $limit symbols!\e[0m"
+  echo
+  echo -e "${subject:0:72}\e[0;31m${subject:72}\e[0m"
+  any_output=1
+fi
+
+if [ -n "$any_output" ]; then
   echo
 fi
