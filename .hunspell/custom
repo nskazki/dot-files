@@ -1,9 +1,22 @@
 # git
 
 ok
+tos
 tod
 tof
+idk
+lol
+lel
+kek
+mek
 fixup
+
+# edge cases
+
+doesn
+isn
+aren
+wasn
 
 # branch prefixes
 
@@ -12,16 +25,19 @@ glm
 # sign
 
 nskazki
+dropbear
 
 # filetypes
 
 js
+md
 weba
 webm
 
 # brands
 
 bugsnag
+facebook
 googleplus
 ipod
 pinterest
@@ -31,25 +47,39 @@ youtube
 
 # terms
 
+backport
+buggyfill
+cacheable
+cli
+cms
+composables
 csrf
 cwd
 debounced
 debouncing
+debuggable
 deline
+deps
 dev
 devcert
 devcerts
 devtool
 devtools
 endline
+entrypoints
+env
+eventhub
+fadein
 filepath
 flyout
 flyouts
 fns
+fullscreen
 hacky
 hardcoded
 idlize
 idlized
+javascripts
 leftclick
 linters
 mixins
@@ -60,29 +90,89 @@ promisify
 rgb
 scrollbar
 scrollbars
+serializers
 sourcemap
 sourcemaps
 ui
+unamd
 uuid
+viewports
 webfont
 webfonts
+xxx
+yamls
+
+# apps
+
+direnv
+iterm
+mailcatcher
 
 # npm
 
 ajv
 angular
+angularjs
+axios
+blankshield
+blueimp
+browserslist
+bugsnag
 caniuse
+chartjs
+codemirror
+cssnano
+dedent
+docgen
 dompurify
+dygraphs
+emojione
+esbuild
 eslint
 fingerprintjs
+flatpickr
 fontawesome
+formdata
+fortawesome
 fsevents
+gsap
 happypack
+hljs
+htmllint
+ifvisible
+imagesloaded
+immer
+jquery
+jsdom
+jsmd5
 jsyaml
+linkifyjs
+modernizr
+ngclipboard
 percy
+perfnow
 plyr
+processer
+qs
+rewiremock
+screenfull
+scrollmagic
+seedrandom
+simkey
+simplebar
+socialshare
+storysource
 svgo
+tiptap
+treeify
+unassert
+uuidv
 vue
 vuejs
+vuelidate
+vueuse
+vuex
+webfontloader
 webpack
 webpacker
+yaku
