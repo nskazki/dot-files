@@ -41,7 +41,7 @@ fi
 
 # http://wordlist.aspell.net/dicts/
 
-words="$(echo "$input" | sed -r 's/[^a-zA-Z]/ /g; s/([a-z])([A-Z])/\1 \2/g; s/(\b[A-Z])([A-Z][a-z]+)/\\1 \\2/g;')"
+words="$(echo "$input" | sed -E "s/[^a-zA-Z']/ /g; s/([a-z])([A-Z])/\1 \2/g; s/([A-Z]+)([A-Z][a-z]+)/\1 \2/g; s/(^| )[A-Z]+( |\$)/ /g")"
 readarray -t mistakes <<< "$(echo "$words" | hunspell -d en_US -l -p ~/.hunspell/complete | sort -u)"
 
 if [[ -n "${mistakes[@]}" ]]; then
