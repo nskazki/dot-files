@@ -83,21 +83,11 @@ function fish_prompt
 
   set pwd (set_color blue)(prompt_pwd)(set_color normal)
 
-  if present $NODE_ENV
-    set nodeenv (set_color blue --background yellow)N:$NODE_ENV(set_color normal)
-  end
-
-  if present $RAILS_ENV
-    set railsenv (set_color blue --background yellow)N:$RAILS_ENV(set_color normal)
-  end
-
   set -a output $level
   set -a output $pwd
   set -a output $git_ps1
   set -a output $git_files
   set -a output $git_stash
-  set -a output $nodeenv
-  set -a output $railsenv
   set -a output ''
 
   echo $output
