@@ -1,6 +1,25 @@
 {
   "title": "osx",
   "rules": [{
+    "description": "osx: fn+f -> f if termimal",
+    "manipulators": [{
+      "type": "basic",
+      "conditions": [{
+        "type": "frontmost_application_if",
+        "bundle_identifiers": ["^com\\.googlecode\\.iterm2$"]
+      }],
+      "from": {
+        "modifiers": {
+          "mandatory": ["fn"],
+          "optional": ["any"]
+        },
+        "key_code": "f"
+      },
+      "to": [{
+        "key_code": "f"
+      }]
+    }]
+  }, {
     "description": "osx: F8 -> super+F8 unless termimal",
     "manipulators": [{
       "type": "basic",
