@@ -14,16 +14,24 @@ function fish_right_prompt
     set -a output 'done in' (color yellow (human-interval $last_duration))
   end
 
+  if present $DIRECTUS_TOKEN
+    set -a output (set_color -b blue)DT:(string shorten -m 6 -- $DIRECTUS_TOKEN)(set_color normal)
+  end
+
+  if present $DIRECTUS_URL
+    set -a output (set_color -b blue)DU:(string match -g -r '^(?:https?://)?(\w+)' -- $DIRECTUS_URL)(set_color normal)
+  end
+
   if present $PERCY_TOKEN
-    set -a output (set_color blue --background magenta)PERCY:(string shorten -m 7 -- $PERCY_TOKEN)(set_color normal)
+    set -a output (set_color -b magenta)P:(string shorten -m 6 -- $PERCY_TOKEN)(set_color normal)
   end
 
   if present $NODE_ENV
-    set -a output (set_color blue --background green)NODE:$NODE_ENV(set_color normal)
+    set -a output (set_color -b green)N:$NODE_ENV(set_color normal)
   end
 
   if present $RAILS_ENV
-    set -a output (set_color blue --background red)RAILS:$RAILS_ENV(set_color normal)
+    set -a output (set_color -b red)R:$RAILS_ENV(set_color normal)
   end
 
   if present $output
