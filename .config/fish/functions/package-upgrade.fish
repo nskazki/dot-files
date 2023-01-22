@@ -17,7 +17,7 @@ function package-upgrade
     set outdated (npm --prefix "$cmd" --color=always outdated 2>&1 | string collect)
   end
 
-  if string match -qr '\\berror ' (uncolor $outdated)
+  if string match -qr '\\berror ' -- (uncolor $outdated)
     echo -- $outdated
     return 1
   end
@@ -39,7 +39,7 @@ function package-upgrade
   end
 
   for line in $lines
-    set match (string match -r '^(.+?)\\s+.+?\\s+.+?\\s+(.+?)\\s+' $line)
+    set match (string match -r '^(.+?)\\s+.+?\\s+.+?\\s+(.+?)\\s+' -- $line)
     set name $match[2]
     set latest $match[3]
 
@@ -49,12 +49,12 @@ function package-upgrade
     end
 
     set current (jq ".dependencies.\"$name\",.devDependencies.\"$name\"" $cmd/package.json | string match -v null | string unescape)
-    if ! string match -qr '^([~^])?\\d+\.\\d+\.\\d+$' $current
+    if ! string match -qr '^([~^])?\\d+\.\\d+\.\\d+$' -- $current
       color red 'better upgrade it manually from' $name@$current 'to' $latest
       return 1
     end
 
-    set prefix (string match -r '^[~^]' $current)
+    set prefix (string match -r '^[~^]' -- $current)
     set -a packages "$name@$prefix$latest"
   end
 

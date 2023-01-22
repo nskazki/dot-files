@@ -15,7 +15,7 @@ function fish_right_prompt
   end
 
   if present $PERCY_TOKEN
-    set -a output (set_color blue --background magenta)PERCY:(string shorten -m 7 $PERCY_TOKEN)(set_color normal)
+    set -a output (set_color blue --background magenta)PERCY:(string shorten -m 7 -- $PERCY_TOKEN)(set_color normal)
   end
 
   if present $NODE_ENV

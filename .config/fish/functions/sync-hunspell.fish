@@ -28,7 +28,7 @@ function sync-hunspell
   end
 
   for dictionary in $dictionaries
-    if string match -rq '\\.gz$' $dictionary
+    if string match -rq '\\.gz$' -- $dictionary
       set dynamic_cat 'gzcat'
     else
       set dynamic_cat 'cat'

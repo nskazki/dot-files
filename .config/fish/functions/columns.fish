@@ -40,9 +40,9 @@ function columns
     set updated 0
     set line_index (math $line_index + 1)
 
-    for char in (string split '' $line)
+    for char in (string split '' -- $line)
       set index (math 1 + $index)
-      if test $last_empty -eq 1 && string match -q -v -r $_flag_column_delimiter $char
+      if test $last_empty -eq 1 && string match -q -v -r -- $_flag_column_delimiter $char
         set column (math $column + 1)
         set last_empty 0
         if blank $starting_indexes[$column] || test $index -lt $starting_indexes[$column]
@@ -51,7 +51,7 @@ function columns
             set updated 1
           end
         end
-      else if string match -q -r $_flag_column_delimiter $char
+      else if string match -q -r -- $_flag_column_delimiter $char
         set last_empty 1
       end
     end
@@ -69,7 +69,7 @@ function columns
     echo
     echo padded starting_indexes:
     for starting_index in $starting_indexes
-      echo \t\'(string sub -s $starting_index -l 1 $table[1])\' $starting_index
+      echo \t\'(string sub -s $starting_index -l 1 -- $table[1])\' $starting_index
     end
     echo
     echo columns: $columns
@@ -85,7 +85,7 @@ function columns
   set matched 0
 
   for line in $table
-    if test $override -eq 1 || blank $_flag_line_filter || string match -q -r $_flag_line_filter $line
+    if test $override -eq 1 || blank $_flag_line_filter || string match -q -r -- $_flag_line_filter $line
       set matched (math $matched + 1)
       set override 0
 
@@ -98,9 +98,9 @@ function columns
           end
 
           if present $ending_index
-            echo -n (string sub -s $starting_index -e (math $ending_index - 1) $line)
+            echo -n (string sub -s $starting_index -e (math $ending_index - 1) -- $line)
           else
-            echo -n (string sub -s $starting_index $line)
+            echo -n (string sub -s $starting_index -- $line)
           end
         end
       end

@@ -2,7 +2,7 @@ function __git_base_branch__ -a target_ref
   if blank $target_ref
     set target_ref (git rev-parse --revs-only --abbrev-ref HEAD)
   else
-    set target_ref (string match -g -r '^(?:remotes/)?(\S+)' $target_ref)
+    set target_ref (string match -g -r '^(?:remotes/)?(\S+)' -- $target_ref)
   end
 
   set branch_names (git branch -l -a | string match -g -r '^(?:\*)?\s+(?:remotes/)?(\S+)')
@@ -15,10 +15,10 @@ function __git_base_branch__ -a target_ref
   end
 
   if contains $target_ref $branch_names
-    set target_branch (string match -g -r '^(?:remotes/[^/]+/)?(.+)$' $target_ref)
+    set target_branch (string match -g -r '^(?:remotes/[^/]+/)?(.+)$' -- $target_ref)
   end
 
-  if string match -q $target_branch $default_branch
+  if string match -q -- $target_branch $default_branch
     color black "debug: using fallback right away" >&2
     echo $default_branch
     return 0
@@ -37,7 +37,7 @@ function __git_base_branch__ -a target_ref
       continue
     end
 
-    if string match -q $parent_ref $target_branch || string match -q $parent_ref "*/$target_branch" || string match -q "*/$parent_ref" $target_branch
+    if string match -q -- $parent_ref $target_branch || string match -q -- $parent_ref "*/$target_branch" || string match -q -- "*/$parent_ref" $target_branch
       color black "debug: $parent_ref matches $target_branch" >&2
       continue
     end
@@ -60,11 +60,11 @@ function __git_base_branch__ -a target_ref
       continue
     end
 
-    if string match -q $result $default_branch
+    if string match -q -- $result $default_branch
       continue
     end
 
-    if string match -q $parent_ref $default_branch
+    if string match -q -- $parent_ref $default_branch
       color black "debug: $parent_ref is better than $result" >&2
       set result $parent_ref
       continue
