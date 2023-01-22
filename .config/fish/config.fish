@@ -99,6 +99,10 @@ if [ -e ~/.iterm2_shell_integration.fish ]
   source ~/.iterm2_shell_integration.fish
 end
 
+if [ -f ~/.scripts/kill_lonely_webpack_postexec.fish ]
+  source ~/.scripts/kill_lonely_webpack_postexec.fish
+end
+
 # https://fishshell.com/docs/current/index.html?highlight=fish_color_selection#variables-for-changing-highlighting-colors
 
 set fish_color_cancel            -r
@@ -132,3 +136,4 @@ set fish_pager_color_completion  normal
 set fish_pager_color_description yellow
 set fish_pager_color_prefix      --bold
 set fish_pager_color_progress    green --background=303030
+
