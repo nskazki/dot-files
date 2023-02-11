@@ -20,8 +20,8 @@ function r
   echo
   for path in $paths
     if present $path
-      echo (color brblack '$') 'gio trash -f --' (color red $path)
-      gio trash -f -- (git root)/$path || return $status
+      echo (color brblack '$') trash (color red $path)
+      trash (git root)/$path || return $status
     end
   end
 
