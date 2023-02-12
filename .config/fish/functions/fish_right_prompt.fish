@@ -14,12 +14,19 @@ function fish_right_prompt
     set -a output 'done in' (color yellow (human-interval $last_duration))
   end
 
-  if present $DIRECTUS_TOKEN
-    set -a output (set_color -b blue)DT:(string shorten -m 6 -- $DIRECTUS_TOKEN)(set_color normal)
+  if present $DIRECTUS_URL
+    set domain (string match -g -r '^(?:https?://)?(\w+)' -- $DIRECTUS_URL)
+    if string match -q -r gleam -- $domain
+      set color red
+    else
+      set color blue
+    end
+
+    set -a output (set_color -b $color)DU:$domain(set_color normal)
   end
 
-  if present $DIRECTUS_URL
-    set -a output (set_color -b blue)DU:(string match -g -r '^(?:https?://)?(\w+)' -- $DIRECTUS_URL)(set_color normal)
+  if present $DIRECTUS_TOKEN
+    set -a output (set_color -b blue)DT:(string shorten -m 6 -- $DIRECTUS_TOKEN)(set_color normal)
   end
 
   if present $PERCY_TOKEN
@@ -31,7 +38,7 @@ function fish_right_prompt
   end
 
   if present $RAILS_ENV
-    set -a output (set_color -b red)R:$RAILS_ENV(set_color normal)
+    set -a output (set_color -b yellow)R:$RAILS_ENV(set_color normal)
   end
 
   if present $output
