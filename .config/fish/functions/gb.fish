@@ -4,9 +4,8 @@ function gb
   end
 
   git branch -a --color=always \
-    | string match -vr '\\bHEAD\\W' \
+    | string match -vr "\bHEAD\W|\(no branch," \
     | SHELL=bash fzf --preview-window right:70% --preview 'git log-hist -n 100 $(echo {} | cut -c 3- | cut -d" " -f1)' \
-    | string sub -s 3 \
-    | string match -r '^.*?(?:\s|$)' \
-    | string replace -r '^remotes/(?:origin|upstream)/' ''
+    | cut -c 3- | cut -d" " -f1 \
+    | string replace -r "^remotes/[^/]+/" ''
 end
