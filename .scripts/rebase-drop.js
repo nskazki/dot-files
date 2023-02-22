@@ -12,7 +12,7 @@ const rawLines = rawText.split('\n')
 const lines = rawLines.filter((rawLine) => {
   return !/^update-ref\s/.test(rawLine)
 }).map(rawLine => {
-  const match = /^(\w+)\s+(\w+)\s+(.+)\s*$/.exec(rawLine)
+  const match = /^(\w+)\s+(\w+)\s+(.+?)\s*(#.*)?$/.exec(rawLine)
   return {
     cmd: match[1],
     hash: match[2],
