@@ -13,14 +13,9 @@ function c
     end
   end
 
-  set last (git log --format='%s' -n1 HEAD | string replace -r '^(fixup! )+' '' | string match -r '^[[:digit:]]+$')
-  if present $last
-    set next (math 1 + $last)
-  else
-    set next 1
-  end
+  set next (__git_next_tmp_message__)
 
-  echo (color brblack '$') 'git commit -m' (color cyan $next)
+  echo (color brblack '$') 'git commit --quiet -m' (color cyan $next)
   git commit --quiet -m $next || return $status
 
   __git_show__
