@@ -19,7 +19,7 @@ function __git_base_branch__ -a target_ref
   end
 
   if string match -q -- $target_branch $default_branch
-    color black "debug: using fallback right away" >&2
+    color brblack "debug: using fallback right away" >&2
     echo $default_branch
     return 0
   end
@@ -33,26 +33,26 @@ function __git_base_branch__ -a target_ref
 
   for parent_ref in $parent_refs
     if not contains $parent_ref $branch_names
-      color black "debug: $parent_ref is not a branch name" >&2
+      color brblack "debug: $parent_ref is not a branch name" >&2
       continue
     end
 
     if string match -q -- $parent_ref $target_branch || string match -q -- $parent_ref "*/$target_branch" || string match -q -- "*/$parent_ref" $target_branch
-      color black "debug: $parent_ref matches $target_branch" >&2
+      color brblack "debug: $parent_ref matches $target_branch" >&2
       continue
     end
 
     set target_ahead (git rev-list --count $parent_ref..$target_commit)
 
     if test $target_ahead -eq 0
-      color black "debug: $parent_ref is ahead or up-to-date with $target_ref" >&2
+      color brblack "debug: $parent_ref is ahead or up-to-date with $target_ref" >&2
       continue
     end
 
     if blank $min || test $target_ahead -lt $min
       set min $target_ahead
       set result $parent_ref
-      color black "debug: $parent_ref is $target_ahead commits behind $target_ref  " >&2
+      color brblack "debug: $parent_ref is $target_ahead commits behind $target_ref  " >&2
       continue
     end
 
@@ -65,7 +65,7 @@ function __git_base_branch__ -a target_ref
     end
 
     if string match -q -- $parent_ref $default_branch
-      color black "debug: $parent_ref is better than $result" >&2
+      color brblack "debug: $parent_ref is better than $result" >&2
       set result $parent_ref
       continue
     end
@@ -74,7 +74,7 @@ function __git_base_branch__ -a target_ref
     set result_length (echo -n $result | wc -m | string trim)
 
     if test $branch_length -lt $result_length
-      color black "debug: $parent_ref is shorter than $result" >&2
+      color brblack "debug: $parent_ref is shorter than $result" >&2
       set result $parent_ref
       continue
     end
@@ -83,7 +83,7 @@ function __git_base_branch__ -a target_ref
   if present $result
     echo $result
   else
-    color black "debug: using fallback" >&2
+    color brblack "debug: using fallback" >&2
     echo $default_branch
   end
 end
