@@ -39,6 +39,9 @@ set -x LESS FRSX # quit if one screen, colors, truncate lines, inline mode
 set -x EDITOR micro
 set -x VISUAL subl
 
+set -x LANG en_US.UTF-8
+set -x LC_COLLATE C
+
 if [ -d /opt/homebrew/bin/brew ]
   eval (/opt/homebrew/bin/brew shellenv)
 end
