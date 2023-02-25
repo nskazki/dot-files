@@ -5,7 +5,8 @@ function fish_greeting
   # for file in (find ~/Documents/catset_gifs -name '*.gif'); convert $file $file.png; end
   # find ~/Documents/catset_gifs \( -name '*[12][0-9].png' -or -name '*8.png' -or -name '*9.png' \) -print -delete
 
-  if test -d ~/Documents/catset_gifs && test $PWD = $HOME
-    imgcat (random choice (find ~/Documents/catset_gifs -name '*.png')) # TODO: replace with gif when iterm2 fixes the startup delay
+  # TODO: try again after the v3.5 release
+  if false && test -d ~/Documents/catset_gifs && test $PWD = $HOME
+    imgcat (random choice (find ~/Documents/catset_gifs -name '*.png'))
   end
 end
