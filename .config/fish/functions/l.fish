@@ -1,5 +1,5 @@
 function l
   echo
-  git log-last $argv
+  git log-last --first-parent $argv
   echo
 end
