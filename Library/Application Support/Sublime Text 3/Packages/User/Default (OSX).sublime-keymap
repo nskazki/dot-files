@@ -441,12 +441,12 @@
   {
     "keys": ["super+shift+2"],
     "command": "set_layout",
-    "args": { "cols": [0.0, 0.5, 1.0], "rows": [0.0, 1.0], "cells": [[0, 0, 1, 1], [1, 0, 2, 1]] }
+    "args": { "cols": [0.0, 0.8, 1.0], "rows": [0.0, 1.0], "cells": [[0, 0, 1, 1], [1, 0, 2, 1]] }
   },
   {
     "keys": ["super+shift+3"],
     "command": "set_layout",
-    "args": { "cols": [0.0, 0.8, 1.0], "rows": [0.0, 1.0], "cells": [[0, 0, 1, 1], [1, 0, 2, 1]] }
+    "args": { "cols": [0.0, 0.5, 1.0], "rows": [0.0, 1.0], "cells": [[0, 0, 1, 1], [1, 0, 2, 1]] }
   },
   {
     "keys": ["super+shift+4"],
