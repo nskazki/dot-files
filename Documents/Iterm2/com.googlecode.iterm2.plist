@@ -1659,7 +1659,7 @@ Marks and Annotations.Next Mark</string>
 			<key>Close Sessions On End</key>
 			<true/>
 			<key>Columns</key>
-			<integer>80</integer>
+			<integer>185</integer>
 			<key>Command</key>
 			<string></string>
 			<key>Cursor Boost</key>
@@ -2760,7 +2760,7 @@ Marks and Annotations.Next Mark</string>
 			<key>Visual Bell</key>
 			<true/>
 			<key>Window Type</key>
-			<integer>2</integer>
+			<integer>9</integer>
 			<key>Working Directory</key>
 			<string>/Users/nskazki</string>
 		</dict>
