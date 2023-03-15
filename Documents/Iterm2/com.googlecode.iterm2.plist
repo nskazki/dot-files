@@ -1168,12 +1168,11 @@ Undo</string>
 		<key>0x70-0x100000-0x23</key>
 		<dict>
 			<key>Action</key>
-			<integer>25</integer>
+			<integer>13</integer>
 			<key>Label</key>
 			<string></string>
 			<key>Text</key>
-			<string>Set Mark
-Marks and Annotations.Set Mark</string>
+			<string></string>
 			<key>Version</key>
 			<integer>1</integer>
 		</dict>
