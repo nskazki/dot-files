@@ -5,7 +5,7 @@
 	<key>Actions</key>
 	<array/>
 	<key>AddNewTabAtEndOfTabs</key>
-	<false/>
+	<true/>
 	<key>AllowClipboardAccess</key>
 	<true/>
 	<key>AppleAntiAliasingThreshold</key>
