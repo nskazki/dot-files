@@ -93,12 +93,16 @@ if command -v direnv > /dev/null
   direnv hook fish | source
 end
 
+if command -v zoxide > /dev/null
+  zoxide init fish | source
+end
+
 if [ -d ~/.bun ]
   set -x BUN_INSTALL $HOME/.bun
   fish_add_path ~.bun/bin
 end
 
-if [ -e ~/.iterm2_shell_integration.fish ]
+if [ -f ~/.iterm2_shell_integration.fish ]
   source ~/.iterm2_shell_integration.fish
 end
 
