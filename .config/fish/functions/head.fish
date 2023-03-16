@@ -1,5 +1,5 @@
 function head
-  if [ -x (command -v ghead) ]
+  if command -v ghead > /dev/null
     ghead $argv
   else
     command head $argv
