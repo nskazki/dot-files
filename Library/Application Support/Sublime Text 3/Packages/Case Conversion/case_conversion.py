@@ -60,9 +60,9 @@ def to_separate_words(text, detectAcronyms, acronyms):
     words, case, sep = case_parse.parseVariable(text, detectAcronyms, acronyms, True)
     return ' '.join(words)
 
-def toggle_dash_to_camel(text, detectAcronyms, acronyms):
+def toggle_dash_to_pascal(text, detectAcronyms, acronyms):
     if re.search(r"[-_]", text):
-        return to_camel_case(text, detectAcronyms, acronyms)
+        return to_pascal_case(text, detectAcronyms, acronyms)
     else:
         return to_dash_case(text, detectAcronyms, acronyms)
 
@@ -108,9 +108,9 @@ def run_on_selections(view, edit, func):
             view.replace(edit, region, new_text)
 
 
-class ToggleDashToCamel(sublime_plugin.TextCommand):
+class ToggleDashToPascal(sublime_plugin.TextCommand):
     def run(self, edit):
-        run_on_selections(self.view, edit, toggle_dash_to_camel)
+        run_on_selections(self.view, edit, toggle_dash_to_pascal)
 
 
 class ToggleAll(sublime_plugin.TextCommand):
