@@ -37,6 +37,7 @@ webm
 # brands
 
 bugsnag
+cloudflare
 facebook
 googleplus
 ipod
@@ -44,9 +45,11 @@ pinterest
 soundcloud
 youtu
 youtube
+instagram
 
 # terms
 
+auths
 backport
 buggyfill
 cacheable
