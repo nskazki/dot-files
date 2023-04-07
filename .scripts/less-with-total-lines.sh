@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-if [[ -n "$@" ]]; then
+if [ -t 0 ]; then
   less -M -- "$@"
 else
   shopt -s extglob # https://stackoverflow.com/a/3015564/16062729

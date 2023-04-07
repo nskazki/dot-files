@@ -33,7 +33,7 @@ padleft() {
   done
 }
 
-if [[ -n "$@" ]]; then
+if [ -t 0 ]; then
   input="$(cat -- "$@")"
 else
   input="$(cat -)"
