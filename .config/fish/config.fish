@@ -106,7 +106,7 @@ end
 
 if [ -d ~/.bun ]
   set -x BUN_INSTALL $HOME/.bun
-  fish_add_path ~.bun/bin
+  fish_add_path ~/.bun/bin
 end
 
 if [ -f ~/.iterm2_shell_integration.fish ]
