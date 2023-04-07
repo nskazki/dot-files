@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+upper() {
+  printf '%s\n' "${1^^}"
+}
+
+branch() {
+  fast_branch="$(git rev-parse --abbrev-ref HEAD)"
+  if [[ "$fast_branch" = "HEAD" ]]; then
+    git branch | grep -e "^*" | sed -E "s/\* //g;s/\(no branch, rebasing (.+)\)/\1/g"
+  else
+    echo "$fast_branch"
+  fi
+}
+
 # don't fuck around merge\fixup\etc commits
 
 message_path="$1"
@@ -15,12 +28,9 @@ rm -f "$message_path"
 
 # injecting the prefix
 
-if [[ ! "$message_text" =~ ^\[[0-9]+|[A-Z]+-[0-9]+\] && ! "$message_text" =~ ^[0-9]+([[:space:]]+#|$) ]]; then
-  branch="$(git rev-parse --abbrev-ref HEAD)"
-  if [[ "$branch" =~ ^([0-9]+|[A-Z]+-[0-9]+) ]]; then
-    prefix="[${BASH_REMATCH[1]}]"
-    echo "$prefix" >> "$message_path"
-  fi
+if [[ "$(branch)" =~ ^([0-9]+|[A-Za-z]+-[0-9]+) ]]; then
+  prefix="$(upper [${BASH_REMATCH[1]}])"
+  echo "$prefix" >> "$message_path"
 fi
 
 # injecting the uncommited message
