@@ -11,7 +11,7 @@ if [ -n "$mistakes" ]; then
 fi
 
 limit=72
-subject="$(git show -s --format=%s | grep -vE '^#')"
+subject="$(git show -s --format=%s | sed -E "s/#.*//g")"
 charcount="$(echo -n "$subject" | wc -c)"
 charcount="${charcount##*( )}"
 
