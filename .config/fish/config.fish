@@ -43,7 +43,7 @@ set -x LANG en_US.UTF-8
 set -x LC_COLLATE C
 
 # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-set -x TZ_LIST 'America/Los_Angeles,Los Angeles; UTC; Europe/Lisbon,Portugal; Europe/Belgrade,Serbia; Europe/Moscow,Moscow; Asia/Bangkok,Thailand; Asia/Makassar,Bali; Australia/Melbourne,Melbourne'
+set -x TZ_LIST 'America/Los_Angeles,Los Angeles; PST8PDT; Etc/GMT+5,Peru; UTC; GMT; Europe/Lisbon,Portugal; CET; Europe/Belgrade,Serbia; Europe/Moscow,Moscow; Asia/Bangkok,Thailand; Asia/Makassar,Bali; Australia/Melbourne,Melbourne'
 
 if [ -d /opt/homebrew/bin/brew ]
   eval (/opt/homebrew/bin/brew shellenv)
