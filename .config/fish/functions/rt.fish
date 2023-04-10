@@ -29,7 +29,7 @@ function rt
 
   if test $status -eq 0
     __git_show__
-  else if set -q checkpoint && gum confirm 'Try soft reset?'
+  else if set -q checkpoint
     set next (__git_next_tmp_message__ $commit^)
 
     echo
