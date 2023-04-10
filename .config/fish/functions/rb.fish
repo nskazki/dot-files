@@ -33,11 +33,11 @@ function rb
     if present $argv
       set commit $argv
     else
-      set commit (gh)
+      set commit (__git_most_distant_commit__ (gh))
     end
 
     if blank $commit
-      color blue input was interrupted!
+      color blue 'input was interrupted!'
       return 1
     end
 
