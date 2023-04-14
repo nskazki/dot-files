@@ -1,5 +1,5 @@
 function bound
-  set output (eval $argv[1] | string escape | string join ' ')
+  set output (eval (string escape $argv) | string escape | string join ' ')
   if present $output
     commandline -it -- $output
     commandline -it -- ' '
