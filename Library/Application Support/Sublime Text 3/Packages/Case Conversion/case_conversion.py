@@ -60,6 +60,12 @@ def to_separate_words(text, detectAcronyms, acronyms):
     words, case, sep = case_parse.parseVariable(text, detectAcronyms, acronyms, True)
     return ' '.join(words)
 
+def toggle_dash_to_camel(text, detectAcronyms, acronyms):
+    if re.search(r"[-_]", text):
+        return to_camel_case(text, detectAcronyms, acronyms)
+    else:
+        return to_dash_case(text, detectAcronyms, acronyms)
+
 def toggle_dash_to_pascal(text, detectAcronyms, acronyms):
     if re.search(r"[-_]", text):
         return to_pascal_case(text, detectAcronyms, acronyms)
@@ -107,51 +113,45 @@ def run_on_selections(view, edit, func):
         if new_text != text:
             view.replace(edit, region, new_text)
 
+class ToggleDashToCamel(sublime_plugin.TextCommand):
+    def run(self, edit):
+        run_on_selections(self.view, edit, toggle_dash_to_camel)
 
 class ToggleDashToPascal(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, toggle_dash_to_pascal)
 
-
 class ToggleAll(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, toggle_all)
-
 
 class ConvertToSnakeCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, to_snake_case)
 
-
 class ConvertToScreamingSnakeCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, to_screaming_snake_case)
-
 
 class ConvertToCamel(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, to_camel_case)
 
-
 class ConvertToPascal(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, to_pascal_case)
-
 
 class ConvertToDot(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, to_dot_case)
 
-
 class ConvertToDash(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, to_dash_case)
 
-
 class ConvertToSeparateWords(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, to_separate_words)
-
 
 class ConvertToSlash(sublime_plugin.TextCommand):
     def run(self, edit):
