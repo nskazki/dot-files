@@ -50,6 +50,8 @@ instagram
 # terms
 
 auths
+autofocus
+autoupdate
 backport
 buggyfill
 cacheable
@@ -88,8 +90,10 @@ linters
 mixins
 popout
 popouts
+preload
 promisified
 promisify
+rerere
 rgb
 scrollbar
 scrollbars
@@ -108,8 +112,10 @@ yamls
 # apps
 
 direnv
+hubstaff
 iterm
 mailcatcher
+rubocop
 
 # npm
 
