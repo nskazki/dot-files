@@ -1,5 +1,5 @@
 function clip-set
-  if present $argv
+  if isatty
     echo -n -- $argv | pbcopy
   else
     pbcopy
