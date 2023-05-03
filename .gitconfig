@@ -127,7 +127,7 @@
 
 [rerere]
   enabled = true
-  autoupdate = true
+  autoupdate = false
 
 [cola]
   spellcheck = false
