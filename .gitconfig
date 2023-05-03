@@ -129,6 +129,9 @@
   enabled = true
   autoupdate = false
 
+[advice]
+  detachedHead = false
+
 [cola]
   spellcheck = false
   theme = flat-light-blue
