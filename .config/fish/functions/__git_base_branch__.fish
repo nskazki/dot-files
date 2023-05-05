@@ -1,13 +1,13 @@
 function __git_base_branch__ -a target_ref
   if blank $target_ref
-    set target_ref (git rev-parse --revs-only --abbrev-ref HEAD)
+    set target_ref (__git_current_branch__)
   else
-    set target_ref (string match -g -r '^(?:remotes/)?(\S+)' -- $target_ref)
+    set target_ref (__git_clean_branch_name__ $target_ref)
   end
 
-  set branch_names (git branch -l -a | string match -g -r '^(?:\*)?\s+(?:remotes/)?(\S+)')
-  set target_commit (git rev-parse --revs-only $target_ref)
-  set default_branch (git config --get init.defaultBranch || echo 'master')
+  set branch_names (__git_clean_branch_name__ (git branch -l -a))
+  set target_commit (__git_resolve__ $target_ref)
+  set default_branch (__git_default_branch__)
 
   if blank $target_commit
     color red "cannot find $target_ref!"
@@ -15,8 +15,19 @@ function __git_base_branch__ -a target_ref
   end
 
   if contains $target_ref $branch_names
-    set target_branch (string match -g -r '^(?:remotes/[^/]+/)?(.+)$' -- $target_ref)
+    set target_branch (__git_local_branch_name__ $target_ref)
+  else
+    for branch_name in $branch_names
+      if string match -q -- (__git_resolve__ $branch_name) $target_commit
+        set target_branch (__git_local_branch_name__ $branch_name)
+        break
+      end
+    end
   end
+
+  color brblack "debug: target ref: $target_ref" >&2
+  color brblack "       target commit: $target_commit" >&2
+  color brblack "       target branch: $target_branch" >&2
 
   if string match -q -- $target_branch $default_branch
     color brblack "debug: using fallback right away" >&2
@@ -37,12 +48,12 @@ function __git_base_branch__ -a target_ref
       continue
     end
 
-    if string match -q -- $parent_ref $target_branch || string match -q -- $parent_ref "*/$target_branch" || string match -q -- "*/$parent_ref" $target_branch
+    if string match -q -- (__git_local_branch_name__ $parent_ref) $target_branch
       color brblack "debug: $parent_ref matches $target_branch" >&2
       continue
     end
 
-    set target_ahead (git rev-list --count $parent_ref..$target_commit)
+    set target_ahead (__git_distance__ $parent_ref $target_commit)
 
     if test $target_ahead -eq 0
       color brblack "debug: $parent_ref is ahead or up-to-date with $target_ref" >&2
@@ -52,7 +63,7 @@ function __git_base_branch__ -a target_ref
     if blank $min || test $target_ahead -lt $min
       set min $target_ahead
       set result $parent_ref
-      color brblack "debug: $parent_ref is $target_ahead commits behind $target_ref  " >&2
+      color brblack "debug: $parent_ref is $target_ahead commits behind $target_ref" >&2
       continue
     end
 
@@ -70,8 +81,8 @@ function __git_base_branch__ -a target_ref
       continue
     end
 
-    set branch_length (echo -n $parent_ref | wc -m | string trim)
-    set result_length (echo -n $result | wc -m | string trim)
+    set branch_length (string length $parent_ref)
+    set result_length (string length $result)
 
     if test $branch_length -lt $result_length
       color brblack "debug: $parent_ref is shorter than $result" >&2
