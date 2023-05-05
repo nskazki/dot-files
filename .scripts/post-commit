@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if [ "$GIT_HOOKS" = 0 ]; then
+  exit
+fi
+
 shopt -s extglob # https://stackoverflow.com/a/3015564/16062729
 
 mistakes="$(git show -s --format=%s%n%n%b | ~/.scripts/spellcheck.sh)"

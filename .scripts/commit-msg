@@ -13,6 +13,10 @@ branch() {
   fi
 }
 
+if [ "$GIT_HOOKS" = 0 ]; then
+  exit
+fi
+
 message="$(cat "$1")"
 if [[
       -n "$message" &&

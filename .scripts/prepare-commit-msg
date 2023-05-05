@@ -13,6 +13,10 @@ branch() {
   fi
 }
 
+if [ "$GIT_HOOKS" = 0 ]; then
+  exit
+fi
+
 # don't fuck around merge\fixup\etc commits
 
 message_path="$1"
