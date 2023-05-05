@@ -1,4 +1,4 @@
-function __git_friends__ -a path pattern flags
+function __git_friends__ -a path
   for hash in (git log --pretty=%H -- $path)
     for file in (git diff-tree --no-commit-id --name-only -r $hash)
       if test $file = $path

@@ -28,6 +28,11 @@ function f
     return 1
   end
 
+  if ! string match -- 1 (count $commit)
+    color red 'cannot process several targets!'
+    return 1
+  end
+
   echo
   for path in $paths
     if present $path
