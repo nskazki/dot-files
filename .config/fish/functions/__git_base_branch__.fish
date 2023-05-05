@@ -55,6 +55,12 @@ function __git_base_branch__ -a target_ref
 
     set target_ahead (__git_distance__ $parent_ref $target_commit)
 
+    if test $target_ahead -eq 0 && string match -q -- $parent_ref $default_branch
+      color brblack "debug: the default branch is ahead or up-to-date with $target_ref - exiting early" >&2
+      set result $parent_ref
+      break
+    end
+
     if test $target_ahead -eq 0
       color brblack "debug: $parent_ref is ahead or up-to-date with $target_ref" >&2
       continue
