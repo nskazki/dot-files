@@ -1,10 +1,10 @@
-function __git_gt_commit__
-  if [ (count $argv) -ne 2 ]
+function __git_gt_commit__ -a a b
+  if blank $a || blank $b
     return 0
   end
 
-  set distance_a (git rev-list --count $argv[1]..HEAD)
-  set distance_b (git rev-list --count $argv[2]..HEAD)
+  set distance_a (__git_distance__ $a)
+  set distance_b (__git_distance__ $b)
 
   test $distance_a -gt $distance_b
 end
