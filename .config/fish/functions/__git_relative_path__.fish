@@ -1,4 +1,9 @@
 function __git_relative_path__
-  isatty || read -az argv
-  realpath --relative-to=$PWD (string replace -r -- '^' (git root)/ $argv)
+  while read -l line
+    set -a argv $line
+  end
+
+  if present $argv
+    realpath --relative-to=$PWD (string replace -r -- '^' (git root)/ $argv)
+  end
 end

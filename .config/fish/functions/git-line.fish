@@ -1,4 +1,4 @@
-function git-line -a base_branch
+function git-line -a orig_branch base_branch
   if ! __in_git_repo__
     return 1
   end
@@ -9,31 +9,42 @@ function git-line -a base_branch
     return 1
   end
 
-  set orig_branch (__git_clean_line__ (__git_current_branch__))
+  if blank $orig_branch
+    set orig_branch (__git_clean_line__ (__git_current_branch__))
+  end
 
-  if string match -q (__git_default_branch__) $orig_branch
+  if blank $base_branch
+    set base_branch (__git_default_branch__)
+  end
+
+  if string match -q -- (__git_default_branch__) $orig_branch
     color red 'cannot line-up the default branch!'
     return 1
   end
 
-  set orig_commit (__git_resolve__ $orig_branch)
-
-  if blank $base_branch
-    set base_branch (__git_base_branch__ $orig_commit)
+  if ! __git_exists__ $orig_branch || ! __git_exists__ $base_branch
+    color red 'could not resolve the given arguments!'
+    return 1
   end
 
-  set base_commit (git merge-base $base_branch $orig_commit)
-  set line_branch {$orig_branch}__line
-  set line_commits (git log --pretty=%h $base_commit..$orig_commit | tac)
+  set orig_commit (__git_resolve__ $orig_branch)
+  set base_commit (__git_base_commit__ $orig_commit $base_branch)
 
-  color brblack "debug: orig branch: $orig_branch"
-  color brblack "       base branch: $base_branch"
-  color brblack "       line commits:" (count $line_commits)
+  if blank $base_commit
+    color red 'could not figure out the base commit!'
+    return 1
+  end
+
+  set line_range $base_commit..$orig_commit
+  set line_branch __line__{$orig_branch}
+  set line_commits (git log --pretty=%h $line_range | tac)
 
   if blank $line_commits
     color yellow 'nothing to do!'
     return 1
   end
+
+  color brblack "debug: processing $(__git_pluralize_commits__ (count $line_commits)) of $line_range"
 
   if __git_branch_exists__ $line_branch
     if ! string match -q -- (__git_current_branch__) $line_branch
@@ -49,8 +60,17 @@ function git-line -a base_branch
     git checkout -b $line_branch $base_commit >/dev/null || return $status
   end
 
-  echo (color brblack '$') (color magenta 'GIT_HOOKS=0') 'git cherry-pick -x -m1' (color cyan $line_commits)
-  GIT_HOOKS=0 git cherry-pick -x -m1 $line_commits >/dev/null 2>&1
+  set line_tag __line__start__
+  if __git_tag_exists__ $line_tag
+    echo (color brblack '$') 'git tag -d' (color blue $line_tag)
+    git tag -d $line_tag >/dev/null
+  end
+
+  echo (color brblack '$') 'git tag' (color blue $line_tag) (color cyan $base_commit)
+  git tag $line_tag $base_commit
+
+  echo (color brblack '$') (color magenta 'GIT_HOOKS=0') 'git cherry-pick -x -m1  --strategy-option theirs' (color cyan $line_commits)
+  GIT_HOOKS=0 git cherry-pick -x -m1  --strategy-option theirs $line_commits >/dev/null 2>&1
 
   git-lineup
 end
