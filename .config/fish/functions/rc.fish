@@ -1,4 +1,8 @@
 function rc
+  if ! __in_git_repo__
+    return 1
+  end
+
   if [ "$argv" = '.' ]
     set paths (__git_stageable_list__)
   end

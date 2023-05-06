@@ -1,4 +1,8 @@
 function rf
+  if ! __in_git_repo__
+    return 1
+  end
+
   if __git_dirty__
     __git_status__
     color red 'cleanup project first!'

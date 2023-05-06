@@ -1,4 +1,8 @@
 function rt
+  if ! __in_git_repo__
+    return 1
+  end
+
   if [ "$argv" = '.' ]
     set commit (__git_find_oldest_tmp__)
   else if present $argv

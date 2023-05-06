@@ -1,6 +1,6 @@
 function gf
   if ! __in_git_repo__
-    return
+    return 1
   end
 
   git -c color.status=always status --short \

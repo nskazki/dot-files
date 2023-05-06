@@ -1,4 +1,8 @@
 function git-lineup
+  if ! __in_git_repo__
+    return 1
+  end
+
   set line_branch (__git_current_branch__)
   set orig_branch (__git_clean_line__ $line_branch)
 

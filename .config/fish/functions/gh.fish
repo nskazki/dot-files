@@ -1,6 +1,6 @@
 function gh
   if ! __in_git_repo__
-    return
+    return 1
   end
 
   git log --first-parent --color=always --format='%C(magenta)%h%C(auto)%d%C(reset) %s' \

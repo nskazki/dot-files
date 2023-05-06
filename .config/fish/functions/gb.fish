@@ -1,6 +1,6 @@
 function gb
   if ! __in_git_repo__
-    return
+    return 1
   end
 
   git branch -a --color=always \

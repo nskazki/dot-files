@@ -1,4 +1,8 @@
 function rb
+  if ! __in_git_repo__
+    return 1
+  end
+
   if [ "$argv" = '.' ]
     set messages (__git_fixup_targets__)
     if blank $messages

@@ -1,4 +1,8 @@
 function f
+  if ! __in_git_repo__
+    return 1
+  end
+
   if ! __git_dirty__
     color yellow 'nothing to do!'
     return 1

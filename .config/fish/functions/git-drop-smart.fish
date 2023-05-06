@@ -1,4 +1,8 @@
 function git-drop-smart
+  if ! __in_git_repo__
+    return 1
+  end
+
   if present $argv
     set commits $argv
   else

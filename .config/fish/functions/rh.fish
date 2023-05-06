@@ -1,4 +1,8 @@
 function rh
+  if ! __in_git_repo__
+    return 1
+  end
+
   if [ "$argv" = '.' ] && blank (__git_find_every_tmp__)
     color yellow 'nothing to do!'
     return 1
