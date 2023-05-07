@@ -29,9 +29,9 @@ function rb
     end
 
     echo
-    echo (color brblack '$') (color magenta 'GIT_SEQUENCE_EDITOR=/usr/bin/true') 'git rebase -i' (color cyan $most_distant_commit)^
+    echo (color brblack '$') (color magenta 'GIT_SEQUENCE_EDITOR=/usr/bin/true') (color magenta 'GIT_HOOKS=0') 'git rebase -i' (color cyan $most_distant_commit)^
     echo
-    GIT_SEQUENCE_EDITOR=/usr/bin/true git rebase --autosquash -i $most_distant_commit^ || return $status
+    GIT_SEQUENCE_EDITOR=/usr/bin/true GIT_HOOKS=0 git rebase --autosquash -i $most_distant_commit^ || return $status
     echo
   else
     if present $argv

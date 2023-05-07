@@ -24,8 +24,8 @@ function rh
   set most_distant_commit (__git_most_distant_commit__ $commits)
 
   echo
-  echo (color brblack '$') (color magenta COMMITS=\""$commits"\") (color magenta 'GIT_SEQUENCE_EDITOR=~/.scripts/rebase-hoist.js') 'git rebase -i' (color cyan $most_distant_commit)^
+  echo (color brblack '$') (color magenta COMMITS=\""$commits"\") (color magenta 'GIT_SEQUENCE_EDITOR=~/.scripts/rebase-hoist.js') (color magenta 'GIT_HOOKS=0') 'git rebase -i' (color cyan $most_distant_commit)^
   echo
-  COMMITS="$commits" GIT_SEQUENCE_EDITOR='$HOME/.scripts/rebase-hoist.js' git rebase -i $most_distant_commit^ || return $status
+  COMMITS="$commits" GIT_SEQUENCE_EDITOR='$HOME/.scripts/rebase-hoist.js' GIT_HOOKS=0 git rebase -i $most_distant_commit^ || return $status
   echo
 end
