@@ -6,12 +6,10 @@ function package-upgrade
   end
 
   if test -e yarn.lock
-    set yarn 1
-  else
-    set yarn 0
+    set yarn
   end
 
-  if test $yarn -eq 1
+  if set -q yarn
     set outdated (yarn --cwd "$cmd" outdated --color 2>&1 | string collect)
   else
     set outdated (npm --prefix "$cmd" --color=always outdated 2>&1 | string collect)
@@ -27,7 +25,7 @@ function package-upgrade
     return 1
   end
 
-  if test $yarn -eq 1
+  if set -q yarn
     set lines (echo $outdated | tail -n +7 | head -n -1 | fzf --multi)
   else
     set lines (echo $outdated | tail -n +1 | fzf --multi)
@@ -58,7 +56,7 @@ function package-upgrade
     set -a packages "$name@$prefix$latest"
   end
 
-  if test $yarn -eq 1
+  if set -q yarn
     echo 'yarn --cwd' \"$cmd\" 'add --' $packages
     yarn --cwd "$cmd" add -- $packages
   else
