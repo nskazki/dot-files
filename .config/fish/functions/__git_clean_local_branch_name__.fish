@@ -1,4 +1,4 @@
-function __git_local_branch_name__
+function __git_clean_local_branch_name__
   if ! isatty
     while read -l line
       set -a argv $line
