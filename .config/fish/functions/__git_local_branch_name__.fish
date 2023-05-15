@@ -1,6 +1,8 @@
 function __git_local_branch_name__
-  while read -l line
-    set -a argv $line
+  if ! isatty
+    while read -l line
+      set -a argv $line
+    end
   end
 
   set remotes (string join '|' (git remote))
