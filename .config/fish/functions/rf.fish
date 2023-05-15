@@ -5,7 +5,7 @@ function rf
 
   if __git_dirty__
     __git_status__
-    color red 'cleanup project first!'
+    color red 'cleanup the project first!'
     return 1
   end
 
