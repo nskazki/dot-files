@@ -24,7 +24,7 @@ function f
   else if present $argv
     set commit $argv
   else
-    set commit (gh)
+    set commit (gh $paths)
   end
 
   if blank $commit
