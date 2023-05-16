@@ -8,7 +8,7 @@ function __e_args__ -a lang
     set clean_ext (path extension $clean_arg)
 
     if ! path filter -f -q -- $clean_arg
-      color brblack "debug: couldn't find $arg" >&2
+      color brblack "eargs: couldn't find $arg" >&2
       continue
     end
 

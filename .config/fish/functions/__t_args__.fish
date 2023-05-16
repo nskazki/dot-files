@@ -13,7 +13,7 @@ function __t_args__ -a lang
     set clean_ext (path extension $clean_arg)
 
     if ! path filter -f -q -- $clean_arg
-      color brblack "debug: couldn't find $arg" >&2
+      color brblack "targs: couldn't find $arg" >&2
       continue
     end
 
@@ -52,7 +52,7 @@ function __t_args__ -a lang
           set -p parts (path basename $source)
           set source (path dirname $source)
         else
-          color brblack "debug: couldn't find a match for $arg" >&2
+          color brblack "targs: couldn't find a match for $arg" >&2
           break
         end
       end
