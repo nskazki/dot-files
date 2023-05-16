@@ -24,7 +24,7 @@ function f
   else if present $argv
     set commit $argv
   else
-    set commit (gh $paths)
+    set commit (gh $paths (__git_staged_list__))
   end
 
   if blank $commit

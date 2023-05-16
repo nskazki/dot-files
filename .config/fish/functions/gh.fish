@@ -3,9 +3,13 @@ function gh
     return 1
   end
 
+  set logs (git log --first-parent -n100 --color=always --format='%C(magenta)%h%C(auto)%d%C(reset) %s')
+  set commit_pattern '^.\[\d+m([a-z0-9]{7,}).\[m'
+
   if present $argv
+    set last_commmit (string match -r -g -- $commit_pattern $logs[-1])
     for arg in $argv
-      for commit in (git log --first-parent -n10 --no-merges --pretty=%h -- $arg)
+      for commit in (git log --first-parent --no-merges --pretty=%h $last_commmit..HEAD -- $arg)
         set -e commit_index
         if set -q commits
           set commit_index (contains -i $commit $commits)
@@ -21,10 +25,7 @@ function gh
     end
   end
 
-  set logs (git log --first-parent -n100 --color=always --format='%C(magenta)%h%C(auto)%d%C(reset) %s')
-
   if present $commits
-    set commit_pattern '^.\[\d+m([a-z0-9]{7,}).\[m'
     set opening_bracket (color yellow \()
     set closing_bracket (color yellow \))
 
