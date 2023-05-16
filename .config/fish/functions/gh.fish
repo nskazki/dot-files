@@ -42,7 +42,7 @@ function gh
   end
 
   string collect -- $logs \
-    | SHELL=bash fzf --preview \
+    | SHELL=bash fzf --exact --preview \
         'commit="$(echo {} | grep --color=never -o "^[a-z0-9]\{7,\}")"
 
          if [ -n "$commit" ]; then

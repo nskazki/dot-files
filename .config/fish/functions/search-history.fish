@@ -7,7 +7,7 @@ function search-history
 
   set commands (
     builtin history --null |
-    fzf --read0 --print0 --multi --tiebreak=index --query=(commandline) |
+    fzf --exact --read0 --print0 --multi --tiebreak=index --query=(commandline) |
     string split0
   )
 
