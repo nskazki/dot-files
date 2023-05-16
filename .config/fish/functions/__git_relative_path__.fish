@@ -5,7 +5,13 @@ function __git_relative_path__
     end
   end
 
-  if present $argv
-    realpath --relative-to=$PWD (string replace -r -- '^' (git root)/ $argv)
+  for arg in $argv
+    if string match -r -q -- '^/' $arg
+      set abs $arg
+    else
+      set abs (string replace -r -- '^' (git root)/ $arg)
+    end
+
+    realpath --relative-to=$PWD $abs
   end
 end
