@@ -3,13 +3,22 @@ function gh
     return 1
   end
 
+  argparse 'skip-first' -- $argv || return $status
+
   set logs (git log --first-parent -n100 --color=always --format='%C(magenta)%h%C(auto)%d%C(reset) %s')
   set commit_pattern '^.\[\d+m([a-z0-9]{7,}).\[m'
 
   if present $argv
     set last_commmit (string match -r -g -- $commit_pattern $logs[-1])
+
+    if set -q _flag_skip_first
+      set range $last_commmit..HEAD^
+    else
+      set range $last_commmit..HEAD
+    end
+
     for arg in $argv
-      for commit in (git log --first-parent --no-merges --pretty=%h $last_commmit..HEAD -- $arg)
+      for commit in (git log --first-parent --no-merges --pretty=%h $range -- $arg)
         set -e commit_index
         if set -q commits
           set commit_index (contains -i $commit $commits)

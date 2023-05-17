@@ -20,7 +20,7 @@ function rf
   else if present $argv
     set commit $argv
   else
-    set commit (gh)
+    set commit (gh --skip-first (git diff --name-only HEAD^ | __git_relative_path__))
   end
 
   if blank $commit
