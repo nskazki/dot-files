@@ -11,18 +11,26 @@ kek
 mek
 fixup
 
-# edge cases
+# contractions
 
+aren
+couldn
 doesn
 isn
-aren
 wasn
+didn
+wouldn
+
+# common words
+
+declutter
+reskin
 
 # branch prefixes
 
 glm
 
-# sign
+# names
 
 nskazki
 dropbear
@@ -34,18 +42,25 @@ md
 weba
 webm
 
+# british
+
+colours
+optimisations
+
 # brands
 
 bugsnag
 cloudflare
 facebook
+figma
 googleplus
+iframely
+instagram
 ipod
 pinterest
 soundcloud
 youtu
 youtube
-instagram
 
 # terms
 
@@ -53,6 +68,8 @@ auths
 autofocus
 autoupdate
 backport
+breakpoint
+breakpoints
 buggyfill
 cacheable
 cli
@@ -85,6 +102,7 @@ hardcoded
 idlize
 idlized
 javascripts
+laggy
 leftclick
 linters
 mixins
@@ -93,6 +111,7 @@ popouts
 preload
 promisified
 promisify
+reflows
 rerere
 rgb
 scrollbar
@@ -102,6 +121,7 @@ sourcemap
 sourcemaps
 ui
 unamd
+upsell
 uuid
 viewports
 webfont

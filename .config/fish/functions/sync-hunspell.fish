@@ -17,8 +17,8 @@ function sync-hunspell
 
   set node_modules (yarn global dir)/node_modules
   set dictionaries\
-    $node_modules/@cspell/dict-fullstack/fullstack.txt.gz\
-    $node_modules/@cspell/dict-software-terms/softwareTerms.txt.gz
+    $node_modules/@cspell/dict-fullstack/dict/fullstack.txt\
+    $node_modules/@cspell/dict-software-terms/dict/softwareTerms.txt
 
   set custom ~/.hunspell/custom
   set complete ~/.hunspell/complete
