@@ -50,7 +50,7 @@ function __git_base_branch_for_recent_changes__ -a target_ref
   end
 
   if present $result
-    color brblack "base: $target_ref" >&2
+    color brblack "base: $result" >&2
     echo $result
   else
     color brblack "base: using fallback" >&2
