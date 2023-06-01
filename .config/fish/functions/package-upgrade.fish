@@ -9,11 +9,7 @@ function package-upgrade
     set yarn
   end
 
-  if set -q yarn
-    set outdated (yarn --cwd "$cmd" outdated --color 2>&1 | string collect)
-  else
-    set outdated (npm --prefix "$cmd" --color=always outdated 2>&1 | string collect)
-  end
+  set outdated (FORCE_COLOR=3 node /Volumes/Repos/outdated | string collect)
 
   if string match -qr '\\berror ' -- (uncolor $outdated)
     echo -- $outdated
@@ -25,11 +21,7 @@ function package-upgrade
     return 1
   end
 
-  if set -q yarn
-    set lines (echo $outdated | tail -n +7 | head -n -1 | fzf --multi)
-  else
-    set lines (echo $outdated | tail -n +1 | fzf --multi)
-  end
+  set lines (echo $outdated | tail -n +2 | fzf --multi)
 
   if blank $lines
     color yellow 'nothing is selected'
@@ -37,7 +29,7 @@ function package-upgrade
   end
 
   for line in $lines
-    set match (string match -r '^(.+?)\\s+.+?\\s+.+?\\s+(.+?)\\s+' -- $line)
+    set match (string match -r '^(.+?)\\s+.+?\\s+(.+?)\\s+' -- $line)
     set name $match[2]
     set latest $match[3]
 
