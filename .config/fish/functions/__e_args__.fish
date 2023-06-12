@@ -12,8 +12,10 @@ function __e_args__ -a lang
       continue
     end
 
-    if set -q ruby && ! string match -q -- '.rb' $clean_ext
-      continue
+    if set -q ruby
+      if ! string match -q -- '.rb' $clean_ext || string match -q -r -- '^db/' (relative $clean_arg)
+        continue
+      end
     end
 
     if ! set -q ruby && ! string match -q -r -- '.js|.vue' $clean_ext
