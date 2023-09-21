@@ -1447,7 +1447,7 @@ Marks and Annotations.Next Mark</string>
 	<key>HotkeyModifiers</key>
 	<integer>262401</integer>
 	<key>IRMemory</key>
-	<integer>10</integer>
+	<integer>100</integer>
 	<key>LeftCommand</key>
 	<integer>7</integer>
 	<key>NeverWarnAboutShortLivedSessions_411FA847-F7FE-43E5-B8F9-B82E82B66922</key>
@@ -2696,7 +2696,7 @@ Marks and Annotations.Next Mark</string>
 			<key>Send Code When Idle</key>
 			<false/>
 			<key>Session Close Undo Timeout</key>
-			<integer>600</integer>
+			<integer>43200</integer>
 			<key>Shortcut</key>
 			<string></string>
 			<key>Show Mark Indicators</key>
