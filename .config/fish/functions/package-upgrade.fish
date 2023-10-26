@@ -21,7 +21,7 @@ function package-upgrade
     return 1
   end
 
-  set lines (echo $outdated | tail -n +2 | fzf --multi)
+  set lines (echo $outdated | fzf --multi)
 
   if blank $lines
     color yellow 'nothing is selected'
