@@ -29,7 +29,7 @@ function package-upgrade
   end
 
   for line in $lines
-    set match (string match -r '^(.+?)\\s+.+?\\s+(.+?)\\s+' -- $line)
+    set match (string match -r '^(.+?)\\s+.+?\\s+(.+?)\\s*$' -- $line)
     set name $match[2]
     set latest $match[3]
 
