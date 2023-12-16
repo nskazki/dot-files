@@ -56,7 +56,6 @@
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
-		"Hippie Autocomplete",
 		"LSP",
 		"LSP-typescript",
 		"LSP-vue",
@@ -64,6 +63,7 @@
 		"SublimeLinter-ruby",
 		"Vintage"
 	],
+	"index_files": true,
 	"move_to_limit_on_up_down": true,
 	"open_files_in_new_window": false,
 	"save_on_focus_lost": true,
