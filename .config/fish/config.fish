@@ -124,6 +124,10 @@ if [ -f ~/.scripts/kill_lonely_webpack_postexec.fish ]
   source ~/.scripts/kill_lonely_webpack_postexec.fish
 end
 
+if [ -f ~/.asdf/asdf.fish ]
+  source ~/.asdf/asdf.fish
+end
+
 # https://fishshell.com/docs/current/index.html?highlight=fish_color_selection#variables-for-changing-highlighting-colors
 
 set fish_color_cancel            -r
