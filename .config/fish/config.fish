@@ -48,6 +48,8 @@ set -x VISUAL subl
 set -x LANG en_US.UTF-8
 set -x LC_COLLATE C
 
+set -x HOMEBREW_NO_AUTO_UPDATE 1
+
 # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 set -x TZ_LIST 'America/Los_Angeles,Los Angeles; PST8PDT; US/Central; Etc/GMT+5,Peru; UTC; GMT; Europe/Lisbon,Portugal; CET; Europe/Belgrade,Serbia; Europe/Moscow,Moscow; Asia/Jakarta,Indonesia; Australia/Melbourne,Melbourne'
 
