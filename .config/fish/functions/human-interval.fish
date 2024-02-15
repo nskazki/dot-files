@@ -8,7 +8,7 @@ function human-interval
   if [ "$h" -ne 0 ]
     printf "%02d:%02d:%02d\n" $h $m $s
   else if [ "$m" -ne 0 ]
-    echo $m'm'$s's'
+    echo $m'm'$s
   else
     echo $s's'
   end
