@@ -6,6 +6,10 @@
 	<array/>
 	<key>AddNewTabAtEndOfTabs</key>
 	<true/>
+	<key>AiMaxTokens</key>
+	<integer>16384</integer>
+	<key>AiModel</key>
+	<string>gpt-3.5-turbo</string>
 	<key>AllowClipboardAccess</key>
 	<true/>
 	<key>BadgeRightMargin</key>
@@ -1447,9 +1451,11 @@ Marks and Annotations.Next Mark</string>
 	<key>HotkeyModifiers</key>
 	<integer>262401</integer>
 	<key>IRMemory</key>
-	<integer>100</integer>
+	<integer>10</integer>
 	<key>LeftCommand</key>
 	<integer>7</integer>
+	<key>NeverBlockSystemShutdown</key>
+	<true/>
 	<key>NeverWarnAboutShortLivedSessions_411FA847-F7FE-43E5-B8F9-B82E82B66922</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_411FA847-F7FE-43E5-B8F9-B82E82B66922_selection</key>
@@ -2701,6 +2707,8 @@ Marks and Annotations.Next Mark</string>
 			<string></string>
 			<key>Show Mark Indicators</key>
 			<true/>
+			<key>Show Offscreen Command line</key>
+			<false/>
 			<key>Show Status Bar</key>
 			<false/>
 			<key>Show Timestamps</key>
@@ -2863,6 +2871,8 @@ Marks and Annotations.Next Mark</string>
 			<string>/Users/nskazki</string>
 		</dict>
 	</array>
+	<key>NotifyOnlyForCriticalShellIntegrationUpdates</key>
+	<false/>
 	<key>OpenArrangementAtStartup</key>
 	<false/>
 	<key>OpenBookmark</key>
@@ -2931,6 +2941,8 @@ Marks and Annotations.Next Mark</string>
 	<false/>
 	<key>UseLionStyleFullscreen</key>
 	<false/>
+	<key>UseMetal</key>
+	<false/>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
 	<key>WindowNumber</key>
@@ -2948,7 +2960,7 @@ Marks and Annotations.Next Mark</string>
 	<key>kTurnOffSlowTriggersOfferUserDefaultsKey</key>
 	<false/>
 	<key>metalMaximizeThroughput</key>
-	<true/>
+	<false/>
 	<key>preferIntegratedGPU</key>
 	<true/>
 </dict>
