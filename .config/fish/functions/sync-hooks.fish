@@ -7,6 +7,7 @@ function sync-hooks
 
   set hooks 'commit-msg'\
             'post-commit'\
+            'post-checkout'\
             'prepare-commit-msg'
 
   for hook in $hooks

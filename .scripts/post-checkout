@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+if [ "$GIT_HOOKS" = 0 ]; then
+  exit
+fi
+
+shopt -s extglob # https://stackoverflow.com/a/3015564/16062729
+
+branch() {
+  fast_branch="$(git rev-parse --abbrev-ref HEAD)"
+  if [[ "$fast_branch" = "HEAD" ]]; then
+    git branch | grep -e "^*" | sed -E "s/\* //g;s/\(no branch, rebasing (.+)\)/\1/g"
+  else
+    echo "$fast_branch"
+  fi
+}
+
+mistakes="$(branch | ~/.scripts/spellcheck.sh)"
+
+if [ -n "$mistakes" ]; then
+  echo
+  echo "$mistakes"
+  echo
+fi
