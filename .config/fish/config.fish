@@ -128,6 +128,12 @@ if [ -f ~/.asdf/asdf.fish ]
   source ~/.asdf/asdf.fish
 end
 
+if [ -d /opt/homebrew/opt/llvm@14/bin ]
+  fish_add_path /opt/homebrew/opt/llvm@14/bin
+  set -gx LDFLAGS "-L/opt/homebrew/opt/llvm@14/lib"
+  set -gx CPPFLAGS "-I/opt/homebrew/opt/llvm@14/include"
+end
+
 # https://fishshell.com/docs/current/index.html?highlight=fish_color_selection#variables-for-changing-highlighting-colors
 
 set fish_color_cancel            -r
