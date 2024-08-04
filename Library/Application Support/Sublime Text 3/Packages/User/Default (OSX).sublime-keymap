@@ -395,6 +395,10 @@
 
   { "keys": ["super+t"], "command": "new_file" },
 
+  { "keys": ["super+7"], "command": "service_name_to_clipboard" },
+  { "keys": ["super+8"], "command": "service_with_method_name_to_clipboard" },
+  { "keys": ["super+9"], "command": "method_name_to_clipboard" },
+
   { "keys": ["super+y"], "command": "sublime_linter_panel_toggle" },
   // { "keys": ["super+shift+y"], "command": "sublime_linter_panel_toggle" },
 
