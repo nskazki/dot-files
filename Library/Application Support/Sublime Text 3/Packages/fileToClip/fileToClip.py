@@ -76,12 +76,8 @@ def get_selected_lines(self):
 
   if rowStart == rowEnd and colStart == colEnd:
     return ''
-  elif rowStart == rowEnd:
-    return ':{}'.format(rowStart + 1)
-  elif colEnd == 0:
-    return ':{}'.format(rowStart + 1)
   else:
-    return ':{}-{}'.format(rowStart + 1, rowEnd + 1)
+    return ':{}'.format(rowStart + 1)
 
 class DirToClipboard(sublime_plugin.TextCommand):
   def run(self, edit):
