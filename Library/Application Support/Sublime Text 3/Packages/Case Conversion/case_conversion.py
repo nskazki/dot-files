@@ -66,17 +66,11 @@ def toggle_dash_to_camel(text, detectAcronyms, acronyms):
     else:
         return to_dash_case(text, detectAcronyms, acronyms)
 
-def toggle_to_pascal(text, detectAcronyms, acronyms):
-    return to_pascal_case(text, detectAcronyms, acronyms)
-
 def toggle_camel_to_snake(text, detectAcronyms, acronyms):
     if re.search(r"^[0-9a-z_]+$", text):
         return to_camel_case(text, detectAcronyms, acronyms)
     else:
         return to_snake_case(text, detectAcronyms, acronyms)
-
-def toggle_to_screaming_snake_case(text, detectAcronyms, acronyms):
-    return to_screaming_snake_case(text, detectAcronyms, acronyms)
 
 def run_on_selections(view, edit, func):
     settings = sublime.load_settings(SETTINGS_FILE)
@@ -102,23 +96,15 @@ class ToggleDashToCamel(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, toggle_dash_to_camel)
 
-class ToggleToPascal(sublime_plugin.TextCommand):
-    def run(self, edit):
-        run_on_selections(self.view, edit, toggle_to_pascal)
-
 class ToggleCamelToSnake(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, toggle_camel_to_snake)
 
-class ToggleToScreamingSnakeCase(sublime_plugin.TextCommand):
-    def run(self, edit):
-        run_on_selections(self.view, edit, toggle_to_screaming_snake_case)
-
-class ConvertToSnakeCommand(sublime_plugin.TextCommand):
+class ConvertToSnake(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, to_snake_case)
 
-class ConvertToScreamingSnakeCommand(sublime_plugin.TextCommand):
+class ConvertToScreamingSnake(sublime_plugin.TextCommand):
     def run(self, edit):
         run_on_selections(self.view, edit, to_screaming_snake_case)
 
