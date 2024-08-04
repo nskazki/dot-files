@@ -382,6 +382,7 @@
   { "keys": ["super+'"], "command": "change_quotes" },
 
   { "keys": ["super+,"], "command": "append_comma" },
+  { "keys": ["super+."], "command": "append_full_stop" },
 
   { "keys": ["super+i"], "command": "text_highlighter_toggle" },
   { "keys": ["super+k"], "command": "text_highlighter_clear_all" },
