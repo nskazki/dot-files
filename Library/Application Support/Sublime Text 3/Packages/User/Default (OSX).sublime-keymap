@@ -397,7 +397,7 @@
   { "keys": ["super+y"], "command": "sublime_linter_panel_toggle" },
   // { "keys": ["super+shift+y"], "command": "sublime_linter_panel_toggle" },
 
-  { "keys": ["super+."], "command": "split_selection_into_lines" },
+  { "keys": ["super+\\"], "command": "split_selection_into_lines" },
 
   // ST4: { "keys": ["super+shift+m"], "command": "expand_selection", "args": { "to": "smart" } }
   { "keys": ["super+shift+m"], "command": "expand_selection", "args": {"to": "scope" } },
