@@ -429,7 +429,7 @@
   { "keys": ["super+f1"], "command": "full_dir_to_clipboard" },
   { "keys": ["super+f2"], "command": "full_path_to_clipboard" },
 
-  { "keys": ["ctrl+f3"], "command": "full_name_to_clipboard" },
+  { "keys": ["option+f3"], "command": "full_name_to_clipboard" },
   { "keys": ["shift+f3"], "command": "pascal_name_to_clipboard" },
   { "keys": ["super+f3"], "command": "dash_name_to_clipboard" },
 
