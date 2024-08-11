@@ -2718,7 +2718,7 @@ Marks and Annotations.Next Mark</string>
 			<key>Show Timestamps</key>
 			<integer>0</integer>
 			<key>Silence Bell</key>
-			<false/>
+			<true/>
 			<key>Smart Selection Rules</key>
 			<array>
 				<dict>
