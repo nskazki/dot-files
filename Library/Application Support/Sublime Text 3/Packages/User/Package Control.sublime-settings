@@ -32,6 +32,7 @@
 		"SublimeLinter-rubocop",
 		"SublimeLinter-ruby",
 		"Text Highlighter",
+		"TOML",
 		"Vue Syntax Highlight"
 	]
 }
