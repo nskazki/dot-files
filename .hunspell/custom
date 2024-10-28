@@ -53,6 +53,7 @@ bugsnag
 cloudflare
 facebook
 figma
+github
 googleplus
 iframely
 instagram
@@ -119,6 +120,7 @@ scrollbars
 serializers
 sourcemap
 sourcemaps
+timezones
 ui
 unamd
 upsell
@@ -132,6 +134,7 @@ yamls
 # apps
 
 direnv
+ghostty
 hubstaff
 iterm
 mailcatcher
