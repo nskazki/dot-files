@@ -70,10 +70,6 @@ if [ -d ~/.rbenv ]
   fish_add_path ~/.rbenv/bin
 end
 
-if [ -d /opt/homebrew/opt/node@16 ]
-  fish_add_path /opt/homebrew/opt/node@16/bin
-end
-
 if [ -d /Applications/Postgres.app/Contents/Versions/latest ]
   fish_add_path /Applications/Postgres.app/Contents/Versions/latest/bin
 end
@@ -95,13 +91,6 @@ end
 
 if command -v node > /dev/null
   set -x npm_config_userconfig $HOME/.npm_auth
-  fish_add_path node_modules/.bin
-  fish_add_path (npm -g bin)
-  fish_add_path (yarn global --cwd=$HOME bin)
-end
-
-if command -v thefuck > /dev/null
-  thefuck --alias | source
 end
 
 if command -v direnv > /dev/null
@@ -127,12 +116,6 @@ end
 
 if [ -f ~/.asdf/asdf.fish ]
   source ~/.asdf/asdf.fish
-end
-
-if [ -d /opt/homebrew/opt/llvm@14/bin ]
-  fish_add_path /opt/homebrew/opt/llvm@14/bin
-  set -gx LDFLAGS "-L/opt/homebrew/opt/llvm@14/lib"
-  set -gx CPPFLAGS "-I/opt/homebrew/opt/llvm@14/include"
 end
 
 # https://fishshell.com/docs/current/index.html?highlight=fish_color_selection#variables-for-changing-highlighting-colors
