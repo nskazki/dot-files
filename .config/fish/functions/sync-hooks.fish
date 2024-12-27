@@ -17,6 +17,8 @@ function sync-hooks
   echo 'cwd is' $cwd
   echo 'paths are' $paths
 
+  mkdir $cwd/.git/hooks/
+
   for path in $paths
     cp $path $cwd/.git/hooks/
   end
