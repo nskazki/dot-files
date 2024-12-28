@@ -4,9 +4,9 @@ function fish_prompt
     set git_ps1_cr green
 
     if string match (basename $PWD) '.git'
-      set git_ps1_cr --background yellow
+      set git_ps1_cr black --background yellow
     else if string match (git rev-parse --is-bare-repository) 'true'
-      set git_ps1_cr --background green
+      set git_ps1_cr black --background green
     else
       set stash_list (git stash list | count)
       set status_short (git -c color.status=never status -s)
@@ -26,7 +26,7 @@ function fish_prompt
       # modified
       set modified (string match -r '^.M' $status_short | count)
       if [ "$modified" -ne 0 ]
-        set git_ps1_cr --background blue
+        set git_ps1_cr black --background blue
         set -p git_files (set_color $git_ps1_cr)'[M'$modified']'(set_color normal)
       end
 
@@ -47,7 +47,7 @@ function fish_prompt
       # added
       set added (string match -r '^\\?\\?' $status_short | count)
       if [ "$added" -ne 0 ]
-        set git_ps1_cr --background red
+        set git_ps1_cr black --background red
         set -p git_files (set_color $git_ps1_cr)'[A'$added']'(set_color normal)
       end
 
@@ -61,14 +61,14 @@ function fish_prompt
       # deleted
       set deleted (string match -r '^.D' $status_short | count)
       if [ "$deleted" -ne 0 ]
-        set git_ps1_cr --bold --background magenta
+        set git_ps1_cr black --background magenta
         set -p git_files (set_color $git_ps1_cr)'[D'$deleted']'(set_color normal)
       end
 
       # unmerged
       set unmerged (string match -r '^(?:.U|U.)' $status_short | count)
       if [ "$unmerged" -ne 0 ]
-        set git_ps1_cr --background green
+        set git_ps1_cr black --background green
         set -p git_files (set_color $git_ps1_cr)'[U'$unmerged']'(set_color normal)
       end
     end
