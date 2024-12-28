@@ -12,62 +12,62 @@ function fish_prompt
       set status_short (git -c color.status=never status -s)
 
       # git_stash
-      if [ "$stash_list" -ne 0 ]
+      if test "$stash_list" -ne 0
         set git_stash (set_color yellow)'stash['$stash_list']'(set_color normal)
       end
 
       # modified_staged
       set modified_staged (string match -r '^M' $status_short | count)
-      if [ "$modified_staged" -ne 0 ]
+      if test "$modified_staged" -ne 0
         set git_ps1_cr blue --bold
         set -p git_files (set_color $git_ps1_cr)'[M'$modified_staged']'(set_color normal)
       end
 
       # modified
       set modified (string match -r '^.M' $status_short | count)
-      if [ "$modified" -ne 0 ]
+      if test "$modified" -ne 0
         set git_ps1_cr black --background blue
         set -p git_files (set_color $git_ps1_cr)'[M'$modified']'(set_color normal)
       end
 
       # renamed
       set renamed (string match -r '^R' $status_short | count)
-      if [ "$renamed" -ne 0 ]
+      if test "$renamed" -ne 0
         set git_ps1_cr cyan --bold
         set -p git_files (set_color $git_ps1_cr)'[R'$renamed']'(set_color normal)
       end
 
       # added_staged
       set added_staged (string match -r '^A' $status_short | count)
-      if [ "$added_staged" -ne 0 ]
+      if test "$added_staged" -ne 0
         set git_ps1_cr red --bold
         set -p git_files (set_color $git_ps1_cr)'[A'$added_staged']'(set_color normal)
       end
 
       # added
       set added (string match -r '^\\?\\?' $status_short | count)
-      if [ "$added" -ne 0 ]
+      if test "$added" -ne 0
         set git_ps1_cr black --background red
         set -p git_files (set_color $git_ps1_cr)'[A'$added']'(set_color normal)
       end
 
       # deleted_staged
       set deleted_staged (string match -r '^D' $status_short | count)
-      if [ "$deleted_staged" -ne 0 ]
+      if test "$deleted_staged" -ne 0
         set git_ps1_cr magenta --bold
         set -p git_files (set_color $git_ps1_cr)'[D'$deleted_staged']'(set_color normal)
       end
 
       # deleted
       set deleted (string match -r '^.D' $status_short | count)
-      if [ "$deleted" -ne 0 ]
+      if test "$deleted" -ne 0
         set git_ps1_cr black --background magenta
         set -p git_files (set_color $git_ps1_cr)'[D'$deleted']'(set_color normal)
       end
 
       # unmerged
       set unmerged (string match -r '^(?:.U|U.)' $status_short | count)
-      if [ "$unmerged" -ne 0 ]
+      if test "$unmerged" -ne 0
         set git_ps1_cr black --background green
         set -p git_files (set_color $git_ps1_cr)'[U'$unmerged']'(set_color normal)
       end
@@ -77,7 +77,7 @@ function fish_prompt
     set git_files (string join '' $git_files)
   end
 
-  if [ "$SHLVL" -gt 1 ]
+  if test "$SHLVL" -gt 1
     set level (set_color magenta)fish#$SHLVL(set_color normal)
   end
 
