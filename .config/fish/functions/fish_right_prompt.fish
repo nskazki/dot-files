@@ -14,10 +14,6 @@ function fish_right_prompt
     set -a output 'done in' (color yellow (human-interval $last_duration))
   end
 
-  if present $PERCY_TOKEN
-    set -a output (set_color -b magenta)P:(string shorten -m 6 -- $PERCY_TOKEN)(set_color normal)
-  end
-
   if present $NODE_ENV
     set -a output (set_color -b green)N:$NODE_ENV(set_color normal)
   end
