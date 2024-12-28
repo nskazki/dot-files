@@ -15,11 +15,11 @@ function fish_right_prompt
   end
 
   if present $NODE_ENV
-    set -a output (set_color -b green)N:$NODE_ENV(set_color normal)
+    set -a output (set_color black -b green)N:$NODE_ENV(set_color normal)
   end
 
   if present $RAILS_ENV
-    set -a output (set_color -b yellow)R:$RAILS_ENV(set_color normal)
+    set -a output (set_color black -b yellow)R:$RAILS_ENV(set_color normal)
   end
 
   if present $output
