@@ -9,7 +9,7 @@ function fish_prompt
       set git_ps1_cr black --background green
     else
       set stash_list (git stash list | count)
-      set status_short (git -c color.status=never status -s)
+      set status_short (git status -s --porcelain)
 
       # git_stash
       if test "$stash_list" -ne 0
@@ -17,28 +17,28 @@ function fish_prompt
       end
 
       # modified_staged
-      set modified_staged (string match -r '^M' $status_short | count)
+      set modified_staged (string match -r '^M[^U]' $status_short | count)
       if test "$modified_staged" -ne 0
         set git_ps1_cr blue --bold
         set -p git_files (set_color $git_ps1_cr)'[M'$modified_staged']'(set_color normal)
       end
 
       # modified
-      set modified (string match -r '^.M' $status_short | count)
+      set modified (string match -r '^[^U]M' $status_short | count)
       if test "$modified" -ne 0
         set git_ps1_cr black --background blue
         set -p git_files (set_color $git_ps1_cr)'[M'$modified']'(set_color normal)
       end
 
       # renamed
-      set renamed (string match -r '^R' $status_short | count)
+      set renamed (string match -r '^R[^U]' $status_short | count)
       if test "$renamed" -ne 0
         set git_ps1_cr cyan --bold
         set -p git_files (set_color $git_ps1_cr)'[R'$renamed']'(set_color normal)
       end
 
       # added_staged
-      set added_staged (string match -r '^A' $status_short | count)
+      set added_staged (string match -r '^A[^U]' $status_short | count)
       if test "$added_staged" -ne 0
         set git_ps1_cr red --bold
         set -p git_files (set_color $git_ps1_cr)'[A'$added_staged']'(set_color normal)
@@ -52,14 +52,14 @@ function fish_prompt
       end
 
       # deleted_staged
-      set deleted_staged (string match -r '^D' $status_short | count)
+      set deleted_staged (string match -r '^D[^U]' $status_short | count)
       if test "$deleted_staged" -ne 0
         set git_ps1_cr magenta --bold
         set -p git_files (set_color $git_ps1_cr)'[D'$deleted_staged']'(set_color normal)
       end
 
       # deleted
-      set deleted (string match -r '^.D' $status_short | count)
+      set deleted (string match -r '^[^U]D' $status_short | count)
       if test "$deleted" -ne 0
         set git_ps1_cr black --background magenta
         set -p git_files (set_color $git_ps1_cr)'[D'$deleted']'(set_color normal)
