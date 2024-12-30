@@ -2219,7 +2219,7 @@ Marks and Annotations.Next Mark</string>
 	<key>HideTabNumber</key>
 	<false/>
 	<key>Hotkey</key>
-	<false/>
+	<true/>
 	<key>HotkeyChar</key>
 	<integer>32</integer>
 	<key>HotkeyCode</key>
@@ -2605,7 +2605,7 @@ Marks and Annotations.Next Mark</string>
 			<key>Guid</key>
 			<string>411FA847-F7FE-43E5-B8F9-B82E82B66922</string>
 			<key>Has Hotkey</key>
-			<true/>
+			<false/>
 			<key>Hide After Opening</key>
 			<false/>
 			<key>Horizontal Spacing</key>
