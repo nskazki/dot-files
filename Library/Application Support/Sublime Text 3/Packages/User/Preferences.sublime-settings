@@ -48,7 +48,9 @@
 		"coverage",
 		".coverage",
 		"public",
-		"node_modules"
+		"node_modules",
+		"packages/gleam-ui/dist",
+		"packages/gleam-ui/dist-icons"
 	],
 	"font_face": "Hack",
 	"font_size": 12,
