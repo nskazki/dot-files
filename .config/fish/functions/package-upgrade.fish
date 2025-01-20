@@ -1,12 +1,15 @@
 function package-upgrade
-  if present $argv
-    set cmd $argv
-  else
-    set cmd '.'
+  set package (upward package.json)
+  set package_lock (upward package-lock.json)
+
+  if blank $package
+    color red 'could not find the package.json'
+    return 1
   end
 
-  if test -e yarn.lock
-    set yarn
+  if blank $package_lock
+    color red 'could not find the package-lock.json'
+    return 1
   end
 
   set outdated (FORCE_COLOR=3 node /Volumes/Repos/outdated | string collect)
@@ -34,25 +37,42 @@ function package-upgrade
     set latest $match[3]
 
     if blank $name || blank $latest
-      color red 'something is off about the' $line
+      color red 'could not extract the name or the version from' $line
       return 1
     end
 
-    set current (jq ".dependencies.\"$name\",.devDependencies.\"$name\"" $cmd/package.json | string match -v null | string unescape)
+    set current (__read_field__ $package dependencies $name || __read_field__ $package devDependencies $name)
+    set range (string match -r '^[~^]' -- $current)
+    set latest_ranged "$range$latest"
+    set -a names $name
+
+    if blank $current
+      color red 'could not find the current version of' $name
+      return 1
+    end
+
     if ! string match -qr '^([~^])?\\d+\.\\d+\.\\d+$' -- $current
-      color red 'better upgrade it manually from' $name@$current 'to' $latest
+      color red 'would not override the non-standard version' $current
       return 1
     end
 
-    set prefix (string match -r '^[~^]' -- $current)
-    set -a packages "$name@$prefix$latest"
+    if __has_field__ $package overrides $name
+      color blue 'updating' $name 'override to' $latest_ranged
+      __write_field__ $package overrides $name $latest_ranged || return $status
+    end
+
+    if __has_field__ $package dependencies $name
+      color blue 'updating' $name 'dependency to' $latest_ranged
+      __write_field__ $package dependencies $name $latest_ranged || return $status
+    end
+
+    if __has_field__ $package devDependencies $name
+      color blue 'updating' $name 'dev dependency to' $latest_ranged
+      __write_field__ $package devDependencies $name $latest_ranged || return $status
+    end
   end
 
-  if set -q yarn
-    echo 'yarn --cwd' \"$cmd\" 'add --' $packages
-    yarn --cwd "$cmd" add -- $packages
-  else
-    echo 'npm --prefix' \"$cmd\" 'add --' $packages
-    npm --prefix "$cmd" add -- $packages
-  end
+  npm install || return $status
+  git add -- $package $package_lock || return $status
+  git commit -m "Upgrade $(oxford-comma $names)"
 end
