@@ -78,6 +78,10 @@ if [ -d /Volumes/Repos/tz ]
   fish_add_path /Volumes/Repos/tz
 end
 
+if [ -d /opt/homebrew/opt/node@22 ]
+  fish_add_path /opt/homebrew/opt/node@22/bin
+end
+
 if command -v rbenv > /dev/null
   rbenv init - fish | source
 end
