@@ -29,9 +29,9 @@ function __t_args__ -a lang
 
     if string match -q -r -- $pattern $clean_arg
       if set -q ruby
-        set result (relative $arg)
+        set result $arg
       else
-        set result (relative $clean_arg)
+        set result $clean_arg
       end
 
       if ! contains $result $results
@@ -39,7 +39,7 @@ function __t_args__ -a lang
         echo $result
       end
     else
-      for result in (relative (__t_args_lookup__ $pattern $clean_arg $arg))
+      for result in (__t_args_lookup__ $pattern $clean_arg $arg)
         if ! contains $result $results
           set -a results $result
           echo $result
@@ -52,16 +52,17 @@ end
 function __t_args_lookup__ -a pattern clean_arg arg
   set -e parts
   set -p parts (path change-extension -- '' (path basename -- $clean_arg))
-  set source (path dirname (path resolve $clean_arg))
+  set reminder (path dirname (path resolve $clean_arg))
 
   # prefixing with the directory right away to avoid matching index.js files
-  set -p parts (path basename $source)
-  set source (path dirname $source)
+  set -p parts (path basename $reminder)
+  set reminder (path dirname $reminder)
 
   while true
+    set root (git root)
     set base (string join -- / $parts)
     set query "$base$pattern"
-    set results (fd -p -s -t f -- $query $specdir)
+    set results (fd -p -s -t f -- $query $root)
 
     if blank $results
       break
@@ -73,9 +74,9 @@ function __t_args_lookup__ -a pattern clean_arg arg
       end
 
       break
-    else if present $source && ! string match -q -- / $source
-      set -p parts (path basename $source)
-      set source (path dirname $source)
+    else if present $reminder && ! string match -q -- / $reminder
+      set -p parts (path basename $reminder)
+      set reminder (path dirname $reminder)
     else
       color brblack "targs: couldn't find an exact match for $arg" >&2
       break
