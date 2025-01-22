@@ -21,7 +21,7 @@ function a
   for path in $paths
     if present $path
       echo (color brblack '$') 'git add -f --' (color yellow $path)
-      git add -f -- (git root)/$path || return $status
+      git add -f -- $path || return $status
     end
   end
 
