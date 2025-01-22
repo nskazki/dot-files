@@ -25,7 +25,7 @@ function u
   for path in $paths
     if present $path
       echo (color brblack '$') 'git unstage' (color yellow $path)
-      git unstage (git root)/$path > /dev/null || return $status
+      git unstage $path > /dev/null || return $status
     end
   end
 

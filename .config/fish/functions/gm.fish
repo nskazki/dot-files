@@ -16,7 +16,7 @@ function gm
   end
 
   for commit in $commits
-    set -a files (git diff --name-only $commit^..$commit | __git_relative_path__)
+    set -a files (git diff --name-only $commit^..$commit | __git_root_relative__)
   end
 
   set true_files "$(path filter -f $files | sort | uniq)"

@@ -25,7 +25,7 @@ function git-lineup
       continue
     end
 
-    set conflicts (git diff --name-only --diff-filter=U | __git_relative_path__)
+    set conflicts (git diff --name-only --diff-filter=U | __git_root_relative__)
 
     if present $conflicts
       echo (color brblack '$') 'git checkout ' (color cyan $picked_commit) -- (color yellow $conflicts)

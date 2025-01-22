@@ -3,16 +3,7 @@ function gf
     return 1
   end
 
-  set pwd (pwd)
-  set git_root (git root)
-
-  for file in (__gf__)
-    if string match -q -- $pwd $git_root
-      echo -- $file
-    else
-      echo -- $git_root/$file
-    end
-  end
+  __gf__ | __git_root_relative__
 end
 
 function __gf__

@@ -25,7 +25,7 @@ function r
   for path in $paths
     if present $path
       echo (color brblack '$') trash (color red $path)
-      trash (git root)/$path || return $status
+      trash $path || return $status
     end
   end
 

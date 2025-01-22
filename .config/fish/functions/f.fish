@@ -24,7 +24,7 @@ function f
   else if present $argv
     set commit $argv
   else
-    set commit (gh (__git_relative_path__ $paths (__git_staged_list__)))
+    set commit (gh $paths (__git_staged_list__))
   end
 
   if blank $commit
@@ -41,7 +41,7 @@ function f
   for path in $paths
     if present $path
       echo (color brblack '$') 'git add -f --' (color yellow $path)
-      git add -f -- (git root)/$path || return $status
+      git add -f -- $path || return $status
     end
   end
 
