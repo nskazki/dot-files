@@ -1,6 +1,7 @@
 function package-upgrade
   set package (upward package.json)
   set package_lock (upward package-lock.json)
+  set package_name (__read_field__ $package name)
 
   if blank $package
     color red 'could not find the package.json'
@@ -9,6 +10,11 @@ function package-upgrade
 
   if blank $package_lock
     color red 'could not find the package-lock.json'
+    return 1
+  end
+
+  if blank $package_name
+    color red 'could not read the pacakge name'
     return 1
   end
 
@@ -74,5 +80,5 @@ function package-upgrade
 
   npm install || return $status
   git add -- $package $package_lock || return $status
-  git commit -m "Upgrade $(oxford-comma $names)"
+  git commit -m "Upgrade $(oxford-comma $names) in $package_name"
 end
