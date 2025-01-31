@@ -2240,6 +2240,10 @@ Marks and Annotations.Next Mark</string>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_411FA847-F7FE-43E5-B8F9-B82E82B66922_selection</key>
 	<integer>0</integer>
+	<key>NeverWarnAboutShortLivedSessions_BFE46F2F-9DE4-432E-986D-8442FC6064FA</key>
+	<true/>
+	<key>NeverWarnAboutShortLivedSessions_BFE46F2F-9DE4-432E-986D-8442FC6064FA_selection</key>
+	<integer>0</integer>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
