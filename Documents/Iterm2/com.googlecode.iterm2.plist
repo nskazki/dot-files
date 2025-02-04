@@ -5274,7 +5274,7 @@ Marks and Annotations.Next Mark</string>
 	<key>WindowNumber</key>
 	<false/>
 	<key>WordCharacters</key>
-	<string>/~_.-?&amp;=:#()</string>
+	<string>/~_.-?&amp;=:#()@</string>
 	<key>disableMetalInLowPowerMode</key>
 	<false/>
 	<key>disableMetalWhenUnplugged</key>
