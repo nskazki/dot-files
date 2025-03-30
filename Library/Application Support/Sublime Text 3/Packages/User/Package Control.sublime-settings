@@ -2,6 +2,7 @@
 	"bootstrapped": true,
 	"in_process_packages":
 	[
+		"ChangeQuotes"
 	],
 	"installed_packages":
 	[
@@ -19,9 +20,6 @@
 		"Google Spell Check",
 		"JavaScriptNext - ES6 Syntax",
 		"Less",
-		"LSP",
-		"LSP-typescript",
-		"LSP-vue",
 		"MoveTab",
 		"Package Control",
 		"PackageResourceViewer",
@@ -33,6 +31,6 @@
 		"SublimeLinter-ruby",
 		"Text Highlighter",
 		"TOML",
-		"Vue Syntax Highlight"
+		"Vue"
 	]
 }

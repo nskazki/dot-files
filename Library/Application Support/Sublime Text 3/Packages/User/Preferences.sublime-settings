@@ -58,6 +58,7 @@
 	"highlight_modified_tabs": true,
 	"ignored_packages":
 	[
+		"ChangeQuotes",
 		"LSP",
 		"LSP-typescript",
 		"LSP-vue",
