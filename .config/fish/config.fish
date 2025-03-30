@@ -54,7 +54,7 @@ set -x HUSKY 0
 # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 set -x TZ_LIST 'US/Pacific; UTC; GMT; Europe/Lisbon,Portugal; CET; Europe/Belgrade,Belgrade; Europe/Moscow,Moscow; Asia/Jakarta,Jakarta; Australia/Melbourne,Melbourne'
 
-if [ -d /opt/homebrew/bin/brew ]
+if [ -d /opt/homebrew ]
   eval (/opt/homebrew/bin/brew shellenv)
 end
 
