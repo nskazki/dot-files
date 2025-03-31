@@ -23,19 +23,27 @@ wouldn
 
 # common words
 
-seo
+admins
+configs
 declutter
-reskin
 proxied
+reskin
+seo
 
 # branch prefixes
 
 glm
 
+# domains
+
+io
+
 # names
 
 nskazki
 dropbear
+emily
+martinek
 
 # filetypes
 
@@ -61,16 +69,21 @@ github
 googleplus
 iframely
 instagram
+ios
 ipod
 pinterest
 shopify
 sidekiq
 soundcloud
+tiktok
+tik
+tok
 youtu
 youtube
 
 # terms
 
+aot
 auths
 autofocus
 autoupdate
@@ -94,6 +107,7 @@ devcert
 devcerts
 devtool
 devtools
+dom
 endline
 entrypoints
 env
@@ -124,6 +138,7 @@ rgb
 scrollbar
 scrollbars
 serializers
+sitemap
 sourcemap
 sourcemaps
 timezones
@@ -139,13 +154,15 @@ webhooks
 xxx
 yamls
 
-# apps
+# apps & libs
 
+coreutils
 direnv
 ghostty
 hubstaff
 iterm
 mailcatcher
+nodash
 rubocop
 
 # npm
