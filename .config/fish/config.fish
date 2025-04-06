@@ -122,6 +122,10 @@ if [ -f ~/.asdf/asdf.fish ]
   source ~/.asdf/asdf.fish
 end
 
+# https://github.com/meaningful-ooo/sponge?tab=readme-ov-file#-adjusting-delay
+
+set sponge_delay 10
+
 # https://fishshell.com/docs/current/index.html?highlight=fish_color_selection#variables-for-changing-highlighting-colors
 
 set fish_color_cancel            -r
