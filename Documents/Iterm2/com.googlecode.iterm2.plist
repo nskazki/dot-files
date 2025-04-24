@@ -2598,6 +2598,8 @@ Marks and Annotations.Next Mark</string>
 			<string>No</string>
 			<key>Description</key>
 			<string>Default</string>
+			<key>Disable Printing</key>
+			<true/>
 			<key>Disable Window Resizing</key>
 			<false/>
 			<key>Draw Powerline Glyphs</key>
