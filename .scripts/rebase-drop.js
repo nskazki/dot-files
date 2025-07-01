@@ -12,7 +12,7 @@ const rawLines = rawText.split('\n')
 const lines = rawLines.filter((rawLine) => {
   return !/^update-ref\s/.test(rawLine)
 }).map(rawLine => {
-  const match = /^(\w+)\s+(\w+)\s+(.+?)\s*(#.*)?$/.exec(rawLine)
+  const match = /^(\w+)\s+(\w+)\s+#\s+(.+?)(\s+#\s+empty)?$/.exec(rawLine)
   return {
     cmd: match[1],
     hash: match[2],
@@ -44,6 +44,6 @@ const output = lines.map(({ cmd, hash, msg }) =>
     ? { cmd, hash, msg }
     : { cmd: 'd', hash, msg })
 
-const rawOutput = output.map(({ cmd, hash, msg }) => `${cmd} ${hash} ${msg}`).join('\n')
+const rawOutput = output.map(({ cmd, hash, msg }) => `${cmd} ${hash} # ${msg}`).join('\n')
 console.log(rawOutput)
 writeFileSync(filePath, rawOutput)

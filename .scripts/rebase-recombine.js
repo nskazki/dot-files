@@ -10,7 +10,7 @@ const filePath = process.argv[2]
 const rawText = readFileSync(filePath).toString().replace(/^#.*$/gm, '').trim()
 const rawLines = rawText.split('\n')
 const lines = rawLines.map(rawLine => {
-  const match = /^(\w+)\s+(\w+)\s+(.+?)\s*(#.*)?$/.exec(rawLine)
+  const match = /^(\w+)\s+(\w+)\s+#\s+(.+?)(\s+#\s+empty)?$/.exec(rawLine)
   return {
     cmd: match[1],
     hash: match[2],
@@ -61,6 +61,6 @@ const output = [
   ...lastOutLines
 ]
 
-const rawOutput = output.map(({ cmd, hash, msg }) => `${cmd} ${hash} ${msg}`).join('\n')
+const rawOutput = output.map(({ cmd, hash, msg }) => `${cmd} ${hash} # ${msg}`).join('\n')
 console.log(rawOutput)
 writeFileSync(filePath, rawOutput)
