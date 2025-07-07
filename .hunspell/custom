@@ -20,12 +20,18 @@ isn
 wasn
 didn
 wouldn
+shouldn
 
 # common words
 
+admin
 admins
+backlink
+backlinks
 configs
 declutter
+hashtag
+pre
 proxied
 reskin
 seo
@@ -141,6 +147,7 @@ serializers
 sitemap
 sourcemap
 sourcemaps
+ssr
 timezones
 ui
 unamd
@@ -164,6 +171,11 @@ iterm
 mailcatcher
 nodash
 rubocop
+
+# gems
+
+activerecord
+activestorage
 
 # npm
 
@@ -220,10 +232,13 @@ simplebar
 socialshare
 storysource
 svgo
+swc
 tiptap
 treeify
 unassert
 uuidv
+vite
+vitejs
 vue
 vuejs
 vuelidate
