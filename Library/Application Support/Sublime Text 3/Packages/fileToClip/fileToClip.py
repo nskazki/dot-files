@@ -68,7 +68,9 @@ def get_base_name(path):
     if control == result:
        break
 
-  return re.sub(r'_spec$', '', result)
+  clean = re.sub(r'_spec$', '', result)
+  clean = re.sub(r'^_+', '', clean)
+  return clean
 
 def get_selected_lines(self):
   (rowStart, colStart) = self.view.rowcol(self.view.sel()[0].begin())
