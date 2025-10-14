@@ -2762,6 +2762,20 @@ Marks and Annotations.Next Mark</string>
 					<key>Version</key>
 					<integer>2</integer>
 				</dict>
+				<key>0x74-0x100000-0x11</key>
+				<dict>
+					<key>Action</key>
+					<integer>25</integer>
+					<key>Apply Mode</key>
+					<integer>0</integer>
+					<key>Escaping</key>
+					<integer>2</integer>
+					<key>Text</key>
+					<string>Show Timestamps
+Show Timestamps</string>
+					<key>Version</key>
+					<integer>2</integer>
+				</dict>
 				<key>0x7a-0x100000-0x6</key>
 				<dict>
 					<key>Action</key>
@@ -4234,16 +4248,17 @@ Marks and Annotations.Next Mark</string>
 					<key>Version</key>
 					<integer>2</integer>
 				</dict>
-				<key>0x74-0x100000</key>
+				<key>0x74-0x100000-0x11</key>
 				<dict>
 					<key>Action</key>
-					<integer>27</integer>
+					<integer>25</integer>
 					<key>Apply Mode</key>
 					<integer>0</integer>
 					<key>Escaping</key>
 					<integer>2</integer>
 					<key>Text</key>
-					<string>BFE46F2F-9DE4-432E-986D-8442FC6064FA</string>
+					<string>Show Timestamps
+Show Timestamps</string>
 					<key>Version</key>
 					<integer>2</integer>
 				</dict>
