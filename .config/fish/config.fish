@@ -51,6 +51,8 @@ set -x LC_COLLATE C
 set -x HOMEBREW_NO_AUTO_UPDATE 1
 set -x HUSKY 0
 
+set -x SSH_AUTH_SOCK ~/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+
 # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 set -x TZ_LIST 'US/Pacific; UTC; GMT; Europe/Lisbon,Portugal; CET; Europe/Belgrade,Belgrade; Europe/Moscow,Moscow; Asia/Jakarta,Jakarta; Australia/Melbourne,Melbourne'
 
