@@ -28,10 +28,6 @@ function t
 
   if present $rb_specs
     echo (color brblack '$') 'rspec' (color yellow $rb_specs)
-    if __git_in_root__
-      rspec $rb_specs || return $status
-    else
-      fish -c "cd $(git root); rspec $rb_specs" || return $status
-    end
+    env -C (git root) rspec $rb_specs || return $status
   end
 end
