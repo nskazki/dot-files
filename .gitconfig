@@ -12,7 +12,7 @@
     git reset --soft HEAD^; \
   }; f"
 
-  recreate-conflict = "checkout --conflict=diff3"
+  recreate-conflict = "checkout --conflict=zdiff3"
   ignore = "!f() { echo "$@" >> "$(git git-dir)/info/exclude"; }; f"
 
   # paths
@@ -57,6 +57,11 @@
   ignorecase = true
   editor = micro
 
+[code]
+  # faster git status
+  fsmonitor = true
+  untrackedCache = true
+
 [core]
   # https://github.com/git/git/blob/master/contrib/diff-highlight
   # https://github.com/dandavison/delta
@@ -65,9 +70,6 @@
 
 [am]
   threeWay = true
-
-[add "interactive"]
-  useBuiltin = true
 
 [apply]
   whitespace = fix
@@ -88,21 +90,27 @@
   changed = green
   untracked = cyan
 
+[column]
+  ui = auto
+
 [diff]
   renames = copies
-  algorithm = minimal
+  algorithm = histogram
+
+[tag]
+  sort = version:refname # v10 sorts after v9
+
 
 [merge]
   ff = false
   log = true
   autostash = true
-  conflictstyle = diff3
+  conflictstyle = zdiff3
 
 [pull]
   ff = only
 
 [push]
-  default = simple
   followTags = true
   autoSetupRemote = true
   useForceIfIncludes = true
@@ -139,3 +147,5 @@
   theme = flat-light-blue
   icontheme = light
   fontdiff = Hack,14,-1,5,50,0,0,0,0,0
+[maintenance]
+	repo = /Volumes/Repos/Gleam
