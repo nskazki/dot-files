@@ -9,33 +9,54 @@ const {
 const filePath = process.argv[2]
 const rawText = readFileSync(filePath).toString().replace(/^#.*$/gm, '').trim()
 const rawLines = rawText.split('\n')
-const lines = rawLines.map(rawLine => {
+const lines = rawLines.filter((rawLine) => rawLine.length).map(rawLine => {
   const match = /^(\w+)\s+(\w+)\s+#\s+(.+?)(\s+#\s+empty)?$/.exec(rawLine)
-  return {
-    cmd: match[1],
-    hash: match[2],
-    msg: match[3],
-    raw: rawLine
+  const marker = /^update-ref.+$/.test(rawLine)
+
+  if (marker) {
+    return {
+      marker: true,
+      raw: rawLine
+    }
+  } else {
+    return {
+      cmd: match[1],
+      hash: match[2],
+      msg: match[3],
+      raw: rawLine
+    }
   }
 })
 
-if (lines.length <= 1) {
+const commandLines = lines.filter(({ marker }) => {
+  return !marker
+})
+
+if (commandLines.length <= 1) {
   console.error(`unexpected number of lines=${lines.length}`)
   console.error('nothing to do!')
   process.exit(2)
 }
 
-lines.forEach(({ cmd, hash, msg, raw }) => {
-  if (cmd !== 'pick') {
-    console.error(`[${raw}] contain unexpected [cmd=${cmd}]`)
-    process.exit(1)
-  } else if (!/^\d+$/.test(msg)) {
-    console.error(`[${raw}] contain unexpected [msg=${msg}]`)
+lines.forEach(({ marker, cmd, hash, msg, raw }) => {
+  if (!marker && (cmd !== 'pick' || !/^\d+$/.test(msg))) {
+    console.error(`[${raw}] contains unexpected [cmd=${cmd}]`)
     process.exit(1)
   }
 })
 
-const output = [lines[0], ...lines.slice(1).map(({ hash, msg }) => ({ cmd: 'f', hash, msg }))]
-const rawOutput = output.map(({ cmd, hash, msg }) => `${cmd} ${hash} # ${msg}`).join('\n')
-console.log(rawOutput)
-writeFileSync(filePath, rawOutput)
+const firstCommandLine = commandLines[0]
+
+const output = lines.map(({ marker, cmd, hash, msg, raw }) => {
+  if (marker) {
+    return raw
+  } else if (hash === firstCommandLine.hash) {
+    return raw
+  } else {
+    return `f ${hash} # ${msg}`
+  }
+}).join('\n')
+
+console.log(output)
+
+writeFileSync(filePath, output)

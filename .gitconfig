@@ -118,7 +118,7 @@
 [rebase]
   autostash = true
   autosquash = false
-  updateRefs = false # https://andrewlock.net/working-with-stacked-branches-in-git-is-easier-with-update-refs/
+  updateRefs = true # https://andrewlock.net/working-with-stacked-branches-in-git-is-easier-with-update-refs/
   missingCommitsCheck = error
 
 [status]

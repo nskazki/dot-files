@@ -9,25 +9,34 @@ const {
 const filePath = process.argv[2]
 const rawText = readFileSync(filePath).toString().replace(/^#.*$/gm, '').trim()
 const rawLines = rawText.split('\n')
-const lines = rawLines.map(rawLine => {
+const lines = rawLines.filter((rawLine) => rawLine.length).map(rawLine => {
   const match = /^(\w+)\s+(\w+)\s+#\s+(.+?)(\s+#\s+empty)?$/.exec(rawLine)
-  return {
-    cmd: match[1],
-    hash: match[2],
-    msg: match[3],
-    raw: rawLine
+  const marker = /^update-ref.+$/.test(rawLine)
+
+  if (marker) {
+    return {
+      marker: true,
+      raw: rawLine
+    }
+  } else {
+    return {
+      cmd: match[1],
+      hash: match[2],
+      msg: match[3],
+      raw: rawLine
+    }
   }
 })
 
-lines.forEach(({ cmd, hash, msg, raw }) => {
-  if (cmd !== 'pick') {
+lines.forEach(({ marker, cmd, hash, msg, raw }) => {
+  if (!marker && cmd !== 'pick') {
     console.error(`[${raw}] contain unexpected [cmd=${cmd}]`)
     process.exit(1)
   }
 })
 
 const commits = process.env.COMMITS.split(/\s+/)
-const hashes = lines.map(({ hash }) => hash)
+const hashes = lines.filter(({ hash }) => !!hash).map(({ hash }) => hash)
 commits.sort((a, b) => hashes.indexOf(a) - hashes.indexOf(b))
 
 commits.forEach(commit => {
@@ -37,11 +46,15 @@ commits.forEach(commit => {
   }
 })
 
-const output = lines.map(({ cmd, hash, msg }) =>
-  !commits.includes(hash)
-    ? { cmd, hash, msg }
-    : { cmd: 'r', hash, msg })
+const output = lines.map(({ marker, cmd, hash, msg, raw }) => {
+  if (marker) {
+    return raw
+  } else if (commits.includes(hash)) {
+    return `r ${hash} # ${msg}`
+  } else {
+    return raw
+  }
+}).join('\n')
 
-const rawOutput = output.map(({ cmd, hash, msg }) => `${cmd} ${hash} # ${msg}`).join('\n')
-console.log(rawOutput)
-writeFileSync(filePath, rawOutput)
+console.log(output)
+writeFileSync(filePath, output)
