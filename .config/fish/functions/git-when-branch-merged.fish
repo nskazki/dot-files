@@ -33,7 +33,7 @@ function git-when-branch-merged -a what where base_branch limit
     set range $base_commit..$what
   end
 
-  set commits (git log --format=%H $range | tac)
+  set commits (git rev-list --reverse --topo-order $range)
   set commit_count (count $commits)
 
   if [ $commit_count -eq 0 ]
@@ -62,7 +62,7 @@ function git-when-branch-merged -a what where base_branch limit
     end
 
     set range "$merges[1]^..$merges[1]"
-    set -a merged_commits (git log --format=%H $range)
+    set -a merged_commits (git rev-list $range)
 
     set -e descriptions
     for merge in $merges
@@ -80,8 +80,8 @@ function git-when-branch-merged -a what where base_branch limit
   if contains $where (git branch -a -l | __git_clean_branch_name__)
     color brblack "debug: validating the output"
 
-    set directly_in_what (git log --format=%H --first-parent $base_commit..$what)
-    set directly_in_where (git log --format=%H --first-parent $base_commit..$where)
+    set directly_in_what (git rev-list --first-parent $base_commit..$what)
+    set directly_in_where (git rev-list --first-parent $base_commit..$where)
 
     for commit in $commits
       if contains $where (git branch -a --contains $commit | __git_clean_branch_name__)

@@ -7,7 +7,7 @@ function __git_stack__ -a target_branch base_branch
     set base_branch (__git_default_branch__)
   end
 
-  for hash in (git log --format=%H --first-parent $base_branch..$target_branch)
+  for hash in (git rev-list --first-parent $base_branch..$target_branch)
     __git_local_branch_name__ $hash
   end
 end

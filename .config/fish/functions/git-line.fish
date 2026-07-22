@@ -37,7 +37,7 @@ function git-line -a orig_branch base_branch
 
   set line_range $base_commit..$orig_commit
   set line_branch __line__{$orig_branch}
-  set line_commits (git log --pretty=%h $line_range | tac)
+  set line_commits (git log --pretty=%h --topo-order $line_range | tac)
 
   if blank $line_commits
     color yellow 'nothing to do!'
