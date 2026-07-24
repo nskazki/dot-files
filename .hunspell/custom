@@ -15,26 +15,13 @@ fixup
 
 aren
 couldn
-doesn
-isn
-wasn
 didn
-wouldn
+doesn
+hasn
+isn
 shouldn
-
-# common words
-
-admin
-admins
-backlink
-backlinks
-configs
-declutter
-hashtag
-pre
-proxied
-reskin
-seo
+wasn
+wouldn
 
 # branch prefixes
 
@@ -43,6 +30,10 @@ glm
 # domains
 
 io
+
+# extensions
+
+rb
 
 # names
 
@@ -60,10 +51,14 @@ webm
 
 # british
 
-cancellation
+actualise
 cancelling
 colours
+enrolments
+materialise
+modernise
 optimisations
+travelling
 
 # brands
 
@@ -74,6 +69,7 @@ figma
 github
 googleplus
 iframely
+indiegogo
 instagram
 ios
 ipod
@@ -81,18 +77,22 @@ pinterest
 shopify
 sidekiq
 soundcloud
-tiktok
+spotify
 tik
+tiktok
 tok
+trustpilot
 youtu
 youtube
 
-# terms
+# tech terms
 
 aot
 auths
 autofocus
 autoupdate
+backlink
+backlinks
 backport
 breakpoint
 breakpoints
@@ -101,6 +101,8 @@ cacheable
 cli
 cms
 composables
+configs
+cookieless
 csrf
 cwd
 debounced
@@ -124,25 +126,29 @@ flyout
 flyouts
 fns
 fullscreen
-hacky
 hardcoded
 idlize
 idlized
+ip
 javascripts
-laggy
 leftclick
 linters
+microcopy
 mixins
 popout
 popouts
+pre
 preload
 promisified
 promisify
+proxied
 reflows
 rerere
+reskin
 rgb
 scrollbar
 scrollbars
+seo
 serializers
 sitemap
 sourcemap
@@ -151,7 +157,6 @@ ssr
 timezones
 ui
 unamd
-upsell
 uuid
 viewports
 webfont
@@ -160,6 +165,21 @@ webhook
 webhooks
 xxx
 yamls
+
+# normal words
+
+adhd
+admin
+admins
+backdoor
+cancellation
+cashable
+declutter
+hacky
+hashtag
+laggy
+unpermitted
+upsell
 
 # apps & libs
 
@@ -170,6 +190,7 @@ hubstaff
 iterm
 mailcatcher
 nodash
+redis
 rubocop
 
 # gems
