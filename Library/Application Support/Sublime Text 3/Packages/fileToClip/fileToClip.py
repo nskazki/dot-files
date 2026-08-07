@@ -114,6 +114,12 @@ class PascalNameToClipboard(sublime_plugin.TextCommand):
     sublime.set_clipboard(result)
     sublime.status_message('Copied the pascal name: {}'.format(result))
 
+class PascalDirToClipboard(sublime_plugin.TextCommand):
+  def run(self, edit):
+    result = pascal_case(get_base_name(os.path.dirname(get_file_path(self, True))))
+    sublime.set_clipboard(result)
+    sublime.status_message('Copied the pascal dir: {}'.format(result))
+
 class FullDirToClipboard(sublime_plugin.TextCommand):
   def run(self, edit):
     result = os.path.dirname(get_file_path(self, True))
