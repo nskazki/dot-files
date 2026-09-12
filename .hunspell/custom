@@ -1,8 +1,6 @@
 # git
 
 ok
-tos
-tod
 tof
 idk
 lol
@@ -30,6 +28,7 @@ glm
 # domains
 
 io
+com
 
 # extensions
 
@@ -49,17 +48,6 @@ md
 weba
 webm
 
-# british
-
-actualise
-cancelling
-colours
-enrolments
-materialise
-modernise
-optimisations
-travelling
-
 # brands
 
 bugsnag
@@ -73,6 +61,7 @@ indiegogo
 instagram
 ios
 ipod
+mozilla
 pinterest
 shopify
 sidekiq
@@ -88,29 +77,17 @@ youtube
 # tech terms
 
 aot
-auths
-autofocus
 autoupdate
-backlink
-backlinks
-backport
-breakpoint
-breakpoints
 buggyfill
-cacheable
 cli
 cms
 composables
-configs
 cookieless
 csrf
 cwd
-debounced
-debouncing
 debuggable
 deline
 deps
-dev
 devcert
 devcerts
 devtool
@@ -126,31 +103,20 @@ flyout
 flyouts
 fns
 fullscreen
-hardcoded
 idlize
 idlized
 ip
 javascripts
 leftclick
-linters
-microcopy
 mixins
 popout
 popouts
-pre
-preload
 promisified
 promisify
-proxied
 reflows
 rerere
-reskin
 rgb
-scrollbar
-scrollbars
 seo
-serializers
-sitemap
 sourcemap
 sourcemaps
 ssr
@@ -158,27 +124,16 @@ timezones
 ui
 unamd
 uuid
-viewports
 webfont
 webfonts
 webhook
 webhooks
-xxx
 yamls
 
 # normal words
 
 adhd
-admin
-admins
-backdoor
-cancellation
 cashable
-declutter
-hacky
-hashtag
-laggy
-unpermitted
 upsell
 
 # apps & libs
@@ -201,7 +156,6 @@ activestorage
 # npm
 
 ajv
-angular
 angularjs
 axios
 blankshield
@@ -242,7 +196,6 @@ ngclipboard
 percy
 perfnow
 plyr
-processer
 qs
 rewiremock
 screenfull
