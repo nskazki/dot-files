@@ -40,6 +40,8 @@
 	<false/>
 	<key>BadgeRightMargin</key>
 	<integer>10</integer>
+	<key>ClaudeCodeWorkgroupUpsellSuppressed</key>
+	<true/>
 	<key>ClickToSelectCommand</key>
 	<false/>
 	<key>Control</key>
