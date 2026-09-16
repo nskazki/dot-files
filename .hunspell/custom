@@ -50,6 +50,7 @@ webm
 
 # brands
 
+benchmarkemail
 bugsnag
 cloudflare
 facebook
@@ -62,7 +63,12 @@ instagram
 ios
 ipod
 mozilla
+myshopify
 pinterest
+restforce
+salesforce
+sendlane
+sendy
 shopify
 sidekiq
 soundcloud
@@ -82,6 +88,7 @@ buggyfill
 cli
 cms
 composables
+conf
 cookieless
 csrf
 cwd
@@ -122,6 +129,7 @@ sourcemaps
 ssr
 timezones
 ui
+uid
 unamd
 uuid
 webfont
