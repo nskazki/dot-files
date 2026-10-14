@@ -23,12 +23,10 @@
 		"Package Control",
 		"PackageResourceViewer",
 		"Sass",
-		"sublime-github",
 		"SublimeLinter",
 		"SublimeLinter-eslint",
 		"SublimeLinter-rubocop",
 		"SublimeLinter-ruby",
-		"Text Highlighter",
 		"TOML",
 		"Vue"
 	]
